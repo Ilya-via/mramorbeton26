@@ -1,0 +1,253 @@
+.page-projects .site-footer {
+  background: var(--bg-soft);
+}
+
+.projects-main {
+  padding: 39px 0 80px;
+}
+
+.projects-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 40px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.1504px;
+  color: #1a1a1a;
+}
+
+.projects-breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.projects-breadcrumbs a:hover,
+.projects-breadcrumbs a:focus-visible {
+  color: var(--accent);
+}
+
+.projects-breadcrumbs-current {
+  color: var(--accent);
+}
+
+.projects-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-bottom: 39px;
+  max-width: 1200px;
+}
+
+.projects-kicker {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.projects-title {
+  margin: 0;
+  font-size: 45px;
+  line-height: 52.8px;
+  font-weight: 700;
+  letter-spacing: -0.9px;
+  color: #2b2727;
+}
+
+.projects-lead {
+  margin: 0;
+  max-width: 920px;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 500;
+  letter-spacing: -0.36px;
+  color: var(--text-soft);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 378px));
+  gap: 33px;
+  justify-content: space-between;
+}
+
+.page-projects .project-card::after {
+  content: none;
+  display: none;
+}
+
+.project-card {
+  position: relative;
+  height: 382px;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.project-card__media {
+  position: absolute;
+  inset: 0;
+  background: #e8edf2;
+}
+
+.project-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card__gradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 131px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.project-card__title {
+  position: absolute;
+  left: 26px;
+  right: 20px;
+  bottom: 24px;
+  margin: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: 0.0703px;
+  color: #fff;
+  z-index: 2;
+}
+
+.page-projects .footer-brand p {
+  max-width: 284px;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: -0.1504px;
+}
+
+.page-projects .footer-column h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.page-projects .footer-column a,
+.page-projects .footer-column strong {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.1504px;
+}
+
+.page-projects .footer-contact strong {
+  font-weight: 600;
+}
+
+.page-projects .footer-contact small {
+  font-size: 12px;
+  line-height: 14.286px;
+  letter-spacing: 0.1172px;
+  text-transform: uppercase;
+}
+
+.page-projects .socials-contacts {
+  gap: 9.684px;
+  margin-top: 4px;
+}
+
+.page-projects .socials-contacts a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38.737px;
+  height: 38.737px;
+  border-radius: 50%;
+  font-size: 0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.page-projects .socials-contacts a svg {
+  width: 20px;
+  height: 20px;
+}
+
+.page-projects .social--whatsapp {
+  background: #25d366;
+}
+
+.page-projects .social--viber {
+  background: #754a91;
+}
+
+.page-projects .social--telegram {
+  background: #2aabee;
+}
+
+.page-projects .social--instagram {
+  background: linear-gradient(
+    -45deg,
+    #fbe18a 0.96%,
+    #fcbb45 21.96%,
+    #f75274 38.96%,
+    #d53692 52.96%,
+    #8f39ce 74.96%,
+    #5b4fe9 100.96%
+  );
+}
+
+.page-projects .social--instagram svg {
+  stroke: #fff;
+}
+
+@media (max-width: 1240px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+}
+
+@media (max-width: 900px) {
+  .projects-title {
+    font-size: 36px;
+    line-height: 1.15;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .project-card {
+    height: 340px;
+  }
+}
+
+@media (max-width: 600px) {
+  .projects-main {
+    padding-top: 24px;
+  }
+
+  .projects-kicker {
+    font-size: 16px;
+  }
+}
