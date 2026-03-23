@@ -1,12 +1,19 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/includes/catalog-data.php';
+
+$categories = catalog_get_categories();
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Контакты — MRAMORBETON</title>
+  <title>Каталог — MRAMORBETON</title>
   <meta
     name="description"
-    content="Контактные данные MRAMORBETON: адрес, режим работы, телефон, e-mail и реквизиты."
+    content="Каталог бетонных изделий MRAMORBETON: накладные проступи, тротуарная плитка, фасадные панели, бордюры, ритуальные и пошаговые плиты."
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,9 +22,9 @@
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="contacts.css">
+  <link rel="stylesheet" href="catalog.css">
 </head>
-<body class="page-contacts">
+<body class="page-catalog">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="MRAMORBETON">
@@ -33,12 +40,12 @@
       </button>
 
       <nav class="site-nav" id="site-nav">
-        <a href="catalog.php">Каталог</a>
+        <a href="catalog.php" aria-current="page">Каталог</a>
         <a href="index.html#about">О нас</a>
         <a href="projects.html">Проекты</a>
         <a href="index.html#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
-        <a href="contacts.html" aria-current="page">Контакты</a>
+        <a href="contacts.html">Контакты</a>
       </nav>
 
       <div class="header-contacts">
@@ -51,64 +58,35 @@
     </div>
   </header>
 
-  <main class="contacts-main">
+  <main class="catalog-page-main">
     <div class="container">
-      <nav class="contacts-breadcrumbs" aria-label="Хлебные крошки">
+      <nav class="catalog-breadcrumbs" aria-label="Хлебные крошки">
         <a href="index.html">Главная</a>
-        <span class="contacts-breadcrumbs-sep" aria-hidden="true">/</span>
-        <span class="contacts-breadcrumbs-current">Контакты</span>
+        <span aria-hidden="true">/</span>
+        <span class="catalog-breadcrumbs-current">Каталог</span>
       </nav>
 
-      <h1 class="contacts-page-title">Контактные данные</h1>
+      <header class="catalog-intro">
+        <p class="catalog-kicker">Каталог продукции 2026</p>
+        <h1 class="catalog-title">Бетонные изделия для благоустройства и строительства</h1>
+        <p class="catalog-lead">Полный ассортимент бетонных изделий с характеристиками и актуальными ценами</p>
+      </header>
 
-      <div class="contacts-columns">
-        <div class="contacts-info">
-          <section class="contacts-section" aria-labelledby="contacts-addr">
-            <h2 id="contacts-addr" class="contacts-section__title">Адрес:</h2>
-            <p class="contacts-section__body">
-              Минская обл., Минский р-н, Хатежинский с/с, д. Васьковщина
-            </p>
-          </section>
-
-          <section class="contacts-section" aria-labelledby="contacts-hours">
-            <h2 id="contacts-hours" class="contacts-section__title">Режим работы:</h2>
-            <p class="contacts-section__body contacts-section__body--tight">Пн-Вс: 09:00 — 20:00</p>
-          </section>
-
-          <section class="contacts-section" aria-labelledby="contacts-tel">
-            <h2 id="contacts-tel" class="contacts-section__title">Контактные телефоны:</h2>
-            <a class="contacts-section__phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
-          </section>
-
-          <section class="contacts-section" aria-labelledby="contacts-mail">
-            <h2 id="contacts-mail" class="contacts-section__title">E-mail:</h2>
-            <p class="contacts-section__body contacts-section__body--tight">
-              <a class="contacts-email-link" href="mailto:mramorbeton@gmail.com">mramorbeton@gmail.com</a>
-            </p>
-          </section>
-
-          <section class="contacts-section contacts-section--requisites" aria-labelledby="contacts-req">
-            <h2 id="contacts-req" class="contacts-section__title">Реквизиты:</h2>
-            <div class="contacts-req-list">
-              <p class="contacts-req-name">ИП Хальчицкий Илья Михайлович</p>
-              <p class="contacts-req-line">УНП 693332072</p>
-              <p class="contacts-req-line">Банк: ЗАО &quot;АЛЬФА-БАНК&quot;</p>
-              <p class="contacts-req-line">SWIFT: ALFABY2X</p>
-              <p class="contacts-req-line">р/с: BY30ALFA30132F12530010270000</p>
-              <p class="contacts-req-line">Адрес банка: г. Минск, ул. Сурганова, 43-47</p>
+      <div class="catalog-grid">
+        <?php foreach ($categories as $slug => $cat) : ?>
+          <a
+            class="catalog-card catalog-page-card catalog-card-link"
+            href="category.php?c=<?= catalog_esc($slug) ?>"
+          >
+            <div class="catalog-page-card-media">
+              <img src="<?= catalog_esc($cat['image']) ?>" alt="<?= catalog_esc($cat['title']) ?>" loading="lazy">
             </div>
-          </section>
-        </div>
-
-        <div class="contacts-map" aria-label="Карта проезда">
-          <iframe
-            title="Карта — Mramorbeton, д. Васьковщина"
-            src="https://yandex.by/map-widget/v1/-/CPRkuRNp"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen
-          ></iframe>
-        </div>
+            <div class="catalog-page-card-content">
+              <h3><?= catalog_esc($cat['title']) ?></h3>
+              <p class="catalog-card-desc"><?= catalog_esc($cat['description']) ?></p>
+            </div>
+          </a>
+        <?php endforeach; ?>
       </div>
     </div>
   </main>
@@ -154,7 +132,7 @@
           <a href="index.html#about">О нас</a>
           <a href="projects.html">Проекты</a>
           <a href="index.html#process">Как мы работаем</a>
-          <a href="contacts.html" aria-current="page">Контакты</a>
+          <a href="contacts.html">Контакты</a>
         </div>
       </nav>
 

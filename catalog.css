@@ -1,5 +1,3 @@
-/* Страница «Каталог» — отдельная сетка по Figma (81:8394) */
-
 .page-catalog .site-footer {
   background: var(--bg-soft);
 }
@@ -92,6 +90,10 @@
   color: #2b2727;
 }
 
+.page-catalog a.catalog-page-card.catalog-card-link:focus-visible {
+  outline-offset: 4px;
+}
+
 .page-catalog .catalog-page-card::after {
   content: none;
 }
@@ -137,93 +139,6 @@
   font-weight: 500;
   letter-spacing: 0;
   color: #6a7282;
-}
-
-/* Футер как на других внутренних страницах */
-.page-catalog .footer-brand p {
-  max-width: 284px;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 600;
-  letter-spacing: -0.1504px;
-}
-
-.page-catalog .footer-column h3 {
-  margin: 0 0 10px;
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-}
-
-.page-catalog .footer-column a,
-.page-catalog .footer-column strong {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  letter-spacing: -0.1504px;
-}
-
-.page-catalog .footer-contact strong {
-  font-weight: 600;
-}
-
-.page-catalog .footer-contact small {
-  font-size: 12px;
-  line-height: 14.286px;
-  letter-spacing: 0.1172px;
-  text-transform: uppercase;
-}
-
-.page-catalog .socials-contacts {
-  gap: 9.684px;
-  margin-top: 4px;
-}
-
-.page-catalog .socials-contacts a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38.737px;
-  height: 38.737px;
-  border-radius: 50%;
-  font-size: 0;
-  text-decoration: none;
-  color: #fff;
-}
-
-.page-catalog .socials-contacts a svg {
-  width: 20px;
-  height: 20px;
-}
-
-.page-catalog .social--whatsapp {
-  background: #25d366;
-}
-
-.page-catalog .social--viber {
-  background: #754a91;
-}
-
-.page-catalog .social--telegram {
-  background: #2aabee;
-}
-
-.page-catalog .social--instagram {
-  background: linear-gradient(
-    -45deg,
-    #fbe18a 0.96%,
-    #fcbb45 21.96%,
-    #f75274 38.96%,
-    #d53692 52.96%,
-    #8f39ce 74.96%,
-    #5b4fe9 100.96%
-  );
-}
-
-.page-catalog .social--instagram svg {
-  stroke: #fff;
 }
 
 @media (max-width: 900px) {

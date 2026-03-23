@@ -1,41 +1,50 @@
+const CATEGORY_PAGE_BASE = "category.php?c=";
+
 const homeCatalogItems = [
   {
+    slug: "nakladnye-prostupi",
     title: "Армированные накладные проступи",
     description: "Решение для облицовки и усиления лестничных ступеней",
     image: "assets/images/catalog-1.png",
     className: "catalog-card-large",
   },
   {
+    slug: "trotuarnaya-plitka",
     title: "Тротуарная плитка",
     description: "Прочные решения для мощения",
     image: "assets/images/catalog-2.png",
     className: "catalog-card-top-center",
   },
   {
+    slug: "fasadnye-paneli",
     title: "Фасадные панели",
     description: "Современная облицовка фасадов",
     image: "assets/images/catalog-3.png",
     className: "catalog-card-top-right",
   },
   {
+    slug: "bordyury-i-vodostoki",
     title: "Бордюры и водостоки",
     description: "Функциональное оформление территории",
     image: "assets/images/catalog-4.png",
     className: "catalog-card-middle-center",
   },
   {
+    slug: "ritualnye-plity",
     title: "Армированные ритуальные плиты",
     description: "Функциональное оформление территории",
     image: "assets/images/catalog-5.png",
     className: "catalog-card-middle-right",
   },
   {
+    slug: "poshagovye-plity",
     title: "Армированные пошаговые плиты",
     description: "Долговечные мемориальные изделия",
     image: "assets/images/catalog-6.png",
     className: "catalog-card-bottom-left",
   },
   {
+    slug: "parapetnye-plity",
     title: "Армированные парапетные плиты",
     description: "Для садовых и ландшафтных дорожек",
     image: "assets/images/catalog-7.png",
@@ -45,36 +54,43 @@ const homeCatalogItems = [
 
 const catalogPageItems = [
   {
+    slug: "trotuarnaya-plitka",
     title: "Тротуарная плитка",
     description: "Надёжные бетонные изделия для благоустройства и строительства",
     image: "assets/images/catalog-1.png",
   },
   {
+    slug: "fasadnye-paneli",
     title: "Фасадные панели",
     description: "Декоративная отделка фасадов и цоколей",
     image: "assets/images/catalog-2.png",
   },
   {
+    slug: "nakladnye-prostupi",
     title: "Армированные накладные проступи",
     description: "Бетонные элементы для облицовки лестниц",
     image: "assets/images/catalog-3.png",
   },
   {
+    slug: "bordyury-i-vodostoki",
     title: "Бордюры и водостоки",
     description: "Организация границ и отвода воды",
     image: "assets/images/catalog-4.png",
   },
   {
+    slug: "ritualnye-plity",
     title: "Армированные ритуальные плиты",
     description: "Плиты и элементы для благоустройства мемориальных зон",
     image: "assets/images/catalog-5.png",
   },
   {
+    slug: "parapetnye-plity",
     title: "Армированные парапетные плиты",
     description: "Защитные бетонные крышки для заборов и ограждений",
     image: "assets/images/catalog-6.png",
   },
   {
+    slug: "poshagovye-plity",
     title: "Армированные пошаговые плиты",
     description: "Плиты для декоративных садовых дорожек",
     image: "assets/images/catalog-7.png",
@@ -118,7 +134,8 @@ const processItems = [
   {
     number: "02",
     title: "Расчет и договор",
-    text: "Составляем подробную смету, фиксируем сроки и стоимость в договоре. Никаких скрытых платежей.",
+    text: "Составляем подробную смету, фиксируем сроки и стоимость в договоре.",
+    textExtra: "Никаких скрытых платежей.",
   },
   {
     number: "03",
@@ -132,59 +149,85 @@ const processItems = [
   },
 ];
 
+const PRODUCT_PAGE_BASE = "product.php?p=";
+
 const productItems = [
   {
+    slug: "fasad-tsvetok-elit",
     title: "Каменный цветок элит",
-    meta: "Размеры(мм): 40 Вес(кг/м2): 90",
-    price: "от 30.00 руб./m2",
+    metaLines: ["Размеры(мм): 40", "Вес(кг/м2): 90"],
+    pricePerSqm: true,
+    priceAmount: "от 30.00 руб.",
     image: "assets/images/product-flower-elite.png",
   },
   {
+    slug: "kaliforniya-kamen",
     title: "Калифорния камень",
-    meta: "Размеры(мм): 300x300x40",
-    price: "от 30.00 руб./m2",
+    metaLines: ["Размеры(мм): 300х300х40"],
+    pricePerSqm: true,
+    priceAmount: "от 30.00 руб.",
     image: "assets/images/product-california-stone.png",
   },
   {
-    title: "Бордюр тротуарный 1000x220",
-    meta: "Размеры(мм): 1000x220x75",
-    price: "от 10 руб./шт",
+    slug: "bordyur-1000-220",
+    title: "Бордюр тротуарный 1000х220",
+    metaLines: ["Размеры(мм): 1000х220х75"],
+    pricePerSqm: false,
+    priceAmount: "от 10 руб./шт",
     image: "assets/images/product-curb.png",
   },
   {
+    slug: "poshagovaya-gladkaya",
     title: "Пошаговая плита гладкая",
-    meta: "Размеры(мм): 800x400x50",
-    price: "от 35 руб./шт",
+    metaLines: ["Размеры(мм): 800х400х50"],
+    pricePerSqm: false,
+    priceAmount: "от 35 руб./шт",
     image: "assets/images/product-step-slab.png",
   },
 ];
+
+const PRODUCT_CARD_ARROW_SRC = "assets/images/arrow.svg";
+
+function formatProductPrice(item) {
+  if (item.pricePerSqm) {
+    return `${item.priceAmount}/m<sup class="product-price__sq">2</sup>`;
+  }
+  return item.priceAmount;
+}
+
+function formatProductMeta(item) {
+  const lines = item.metaLines && item.metaLines.length ? item.metaLines : [item.meta || ""];
+  return lines.map((line) => `<p>${line}</p>`).join("");
+}
 
 function renderCatalog() {
   const homeRoot = document.querySelector("#catalog-grid");
   const pageRoot = document.querySelector("#catalog-page-grid");
 
   if (homeRoot) {
-    homeRoot.innerHTML = homeCatalogItems
-      .map(
-        (item) => `
-          <article class="catalog-card ${item.className}" tabindex="0">
+    const items = homeCatalogItems;
+    const cardMarkup = (item) => `
+          <a class="catalog-card ${item.className} catalog-card-link" href="${CATEGORY_PAGE_BASE}${item.slug}">
             <img src="${item.image}" alt="${item.title}" loading="lazy">
             <div class="catalog-card-content">
               <h3>${item.title}</h3>
-              <p class="catalog-card-desc">${item.description}</p>
               <span class="link-line">В каталог</span>
             </div>
-          </article>
-        `
-      )
+          </a>
+        `;
+    const top = items.slice(0, 5).map((item) => cardMarkup(item)).join("");
+    const row3 = items
+      .slice(5, 7)
+      .map((item) => cardMarkup({ ...item, className: "catalog-card--row3-tile" }))
       .join("");
+    homeRoot.innerHTML = `${top}<div class="catalog-grid__row3">${row3}</div>`;
   }
 
   if (pageRoot) {
     pageRoot.innerHTML = catalogPageItems
       .map(
         (item) => `
-          <article class="catalog-card catalog-page-card">
+          <a class="catalog-card catalog-page-card catalog-card-link" href="${CATEGORY_PAGE_BASE}${item.slug}">
             <div class="catalog-page-card-media">
               <img src="${item.image}" alt="${item.title}" loading="lazy">
             </div>
@@ -192,7 +235,7 @@ function renderCatalog() {
               <h3>${item.title}</h3>
               <p class="catalog-card-desc">${item.description}</p>
             </div>
-          </article>
+          </a>
         `
       )
       .join("");
@@ -241,15 +284,23 @@ function renderProcess() {
 
   root.innerHTML = processItems
     .map(
-      (item) => `
-        <article class="process-step">
-          <strong>${item.number}</strong>
-          <div>
-            <h3>${item.title}</h3>
-            <p>${item.text}</p>
+      (item, index) => {
+        const extra = item.textExtra
+          ? `<p class="process-step__text">${item.textExtra}</p>`
+          : "";
+        return `
+        <article class="process-step${index === 0 ? " process-step--current" : ""}">
+          <span class="process-step__number" aria-hidden="true">${item.number}</span>
+          <div class="process-step__body">
+            <h3 class="process-step__title">${item.title}</h3>
+            <div class="process-step__text-block">
+              <p class="process-step__text">${item.text}</p>
+              ${extra}
+            </div>
           </div>
         </article>
-      `
+      `;
+      }
     )
     .join("");
 }
@@ -262,17 +313,21 @@ function renderProducts() {
     .map(
       (item) => `
         <article class="product-card">
-          <div class="product-media image-frame">
-            <img src="${item.image}" alt="${item.title}" loading="lazy">
-          </div>
-          <div class="product-content">
-            <h3>${item.title}</h3>
-            <p class="product-meta">${item.meta}</p>
-            <div class="product-bottom">
-              <span class="product-price">${item.price}</span>
-              <a class="product-action" href="#contact-form" aria-label="Заказать ${item.title}">+</a>
+          <a class="product-card-link" href="${PRODUCT_PAGE_BASE}${item.slug}">
+            <div class="product-media image-frame">
+              <img src="${item.image}" alt="${item.title}" loading="lazy">
             </div>
-          </div>
+            <div class="product-content">
+              <h3>${item.title}</h3>
+              <div class="product-meta">${formatProductMeta(item)}</div>
+              <div class="product-bottom">
+                <span class="product-price">${formatProductPrice(item)}</span>
+                <span class="product-action" aria-hidden="true">
+                  <img class="product-action__icon" src="${PRODUCT_CARD_ARROW_SRC}" width="18" height="18" alt="" decoding="async">
+                </span>
+              </div>
+            </div>
+          </a>
         </article>
       `
     )

@@ -15,6 +15,7 @@
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lead-form.css">
 </head>
 <body>
   <header class="site-header">
@@ -32,7 +33,7 @@
       </button>
 
       <nav class="site-nav" id="site-nav">
-        <a href="catalog.html">Каталог</a>
+        <a href="catalog.php">Каталог</a>
         <a href="#about">О нас</a>
         <a href="projects.html">Проекты</a>
         <a href="#process">Как мы работаем</a>
@@ -63,7 +64,7 @@
             Надёжные бетонные изделия для благоустройства и строительства
           </p>
           <div class="hero-actions">
-            <a class="button button-dark button-icon" href="catalog.html">
+            <a class="button button-dark button-icon" href="catalog.php">
               <span>Перейти в каталог</span>
               <span class="button-arrow" aria-hidden="true"></span>
             </a>
@@ -105,33 +106,39 @@
       </div>
     </section>
 
-    <section class="section" id="about">
-      <div class="container about-grid">
-        <div class="about-media image-frame">
-          <img
-            src="assets/images/about-production.png"
-            alt="Производство бетонных изделий"
-            loading="lazy"
-          >
-          <div class="about-badge">
-            <strong>100+</strong>
-            <span>довольных клиентов</span>
+    <section class="section section-about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-visual">
+            <span class="about-visual__square" aria-hidden="true"></span>
+            <div class="about-photo image-frame">
+              <img
+                src="assets/images/about-production.png"
+                alt="Производство бетонных изделий"
+                loading="lazy"
+              >
+            </div>
+            <div class="about-badge">
+              <strong>100+</strong>
+              <span>довольных клиентов</span>
+            </div>
           </div>
-        </div>
 
-        <div class="about-copy">
-          <p class="section-tag">о нас</p>
-          <h2>Промышленный масштаб с вниманием к деталям</h2>
-          <p>
-            Наша компания специализируется на производстве и продаже продукции из
-            высокопрочного бетона в Минске. Мы предлагаем широкий ассортимент
-            тротуарной плитки, брусчатки, искусственного камня и фасадных панелей.
-          </p>
-          <p>
-            Благодаря собственному производству, мы контролируем каждый этап
-            изготовления, что позволяет гарантировать высокое качество и долговечность
-            нашей продукции.
-          </p>
+          <div class="about-copy">
+            <p class="section-tag">о нас</p>
+            <h2>
+              Промышленный масштаб с вниманием<br>
+              к деталям
+            </h2>
+            <p class="about-copy__lead">
+              Наша компания специализируется на производстве и продаже продукции из
+              высокопрочного бетона в Минске. Мы предлагаем широкий ассортимент
+              тротуарной плитки, брусчатки, искусственного камня и фасадных панелей.
+              Благодаря собственному производству, мы контролируем каждый этап
+              производства, что позволяет нам гарантировать высокое качество и долговечность
+              нашей продукции.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -147,7 +154,7 @@
         </div>
 
         <div class="projects-grid">
-          <article class="project-card project-card-large image-frame">
+          <article class="project-card project-card-large">
             <img
               src="assets/images/project-industrial.png"
               alt="ЖК Индустриальный"
@@ -160,7 +167,7 @@
           </article>
 
           <div class="projects-stack">
-            <article class="project-card image-frame">
+            <article class="project-card">
               <img
                 src="assets/images/project-residence.png"
                 alt="Частная резиденция"
@@ -171,7 +178,7 @@
               </div>
             </article>
 
-            <article class="project-card image-frame">
+            <article class="project-card">
               <img
                 src="assets/images/project-park.png"
                 alt='Парк "Монолит"'
@@ -203,16 +210,19 @@
     </section>
 
     <section class="section section-process" id="process">
-      <div class="container process-grid">
-        <div class="process-copy">
-          <p class="section-tag">Процесс</p>
-          <h2>Как мы работаем</h2>
-          <p>
-            Мы выстроили прозрачную систему взаимодействия, чтобы вы получили
-            идеальный результат точно в срок.
-          </p>
+      <div class="container">
+        <div class="process-layout">
+          <div class="process-copy">
+            <p class="section-tag">Процесс</p>
+            <h2>Как мы работаем</h2>
+            <p class="process-intro">
+              Мы выстроили прозрачную систему взаимодействия, чтобы вы получили идеальный результат точно в срок
+            </p>
+          </div>
+          <div class="process-steps-panel">
+            <div class="process-steps" id="process-steps"></div>
+          </div>
         </div>
-        <div class="process-steps" id="process-steps"></div>
       </div>
     </section>
 
@@ -230,12 +240,12 @@
       <div class="container">
         <div class="contact-banner">
           <div class="contact-copy">
-            <p class="section-tag section-tag-light">контакты</p>
-            <h2>Готовы начать проект? Давайте обсудим.</h2>
-            <p>
-              Заполните форму, и наш главный инженер свяжется с вами для
-              бесплатной консультации по вашему объекту.
-            </p>
+            <div class="contact-copy-lead">
+              <h2>Готовы начать проект?<br />Давайте обсудим.</h2>
+              <p>
+                Заполните форму, и наш главный инженер свяжется с вами для бесплатной консультации по вашему объекту.
+              </p>
+            </div>
 
             <div class="contact-phone-card">
               <span class="contact-icon" aria-hidden="true">
@@ -243,34 +253,59 @@
                   <path d="M7.5 4.5H4.8A1.8 1.8 0 0 0 3 6.3c0 8.118 6.582 14.7 14.7 14.7a1.8 1.8 0 0 0 1.8-1.8v-2.7a1.2 1.2 0 0 0-.87-1.154l-3.252-.93a1.2 1.2 0 0 0-1.214.353l-.713.871a12.035 12.035 0 0 1-5.084-5.084l.871-.713a1.2 1.2 0 0 0 .353-1.214l-.93-3.252A1.2 1.2 0 0 0 7.5 4.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
-              <div>
+              <div class="contact-phone-card__text">
                 <small>связаться с нами</small>
                 <a href="tel:+375293258259">+375 29 325-82-59</a>
               </div>
             </div>
           </div>
 
-          <form class="contact-form" id="contact-form">
-            <label>
-              <span>Ваше имя</span>
-              <input type="text" name="name" placeholder="Александр">
-            </label>
-            <label>
-              <span>Номер телефона</span>
-              <input type="tel" name="phone" placeholder="+375 (__) ___-__-__">
-            </label>
-            <label>
-              <span>Ваше сообщение</span>
-              <textarea name="message" rows="4" placeholder="Введите сообщение"></textarea>
-            </label>
-            <button class="button button-dark button-submit button-icon" type="submit">
-              <span>Отправить заявку</span>
-              <span class="button-arrow" aria-hidden="true"></span>
-            </button>
-            <p class="form-policy">
-              Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности.
-            </p>
-            <p class="form-status" id="form-status" aria-live="polite"></p>
+          <form class="lead-form" id="contact-form" action="#" method="post" novalidate>
+            <div class="lead-form__inner">
+              <div class="lead-form__field">
+                <label class="lead-form__label" for="contact-name">Ваше имя</label>
+                <input
+                  class="lead-form__control"
+                  type="text"
+                  name="name"
+                  id="contact-name"
+                  placeholder="Александр"
+                  autocomplete="name"
+                >
+              </div>
+              <div class="lead-form__field">
+                <label class="lead-form__label" for="contact-phone">Номер телефона</label>
+                <input
+                  class="lead-form__control"
+                  type="tel"
+                  name="phone"
+                  id="contact-phone"
+                  placeholder="+375 (___) ___-__-__"
+                  autocomplete="tel"
+                  inputmode="tel"
+                >
+              </div>
+              <div class="lead-form__field">
+                <label class="lead-form__label" for="contact-message">Ваше сообщение</label>
+                <textarea
+                  class="lead-form__control lead-form__control--message"
+                  name="message"
+                  id="contact-message"
+                  rows="2"
+                  placeholder="Введите сообщение"
+                ></textarea>
+              </div>
+              <button class="lead-form__submit" type="submit">
+                <span>Отправить заявку</span>
+                <svg class="lead-form__submit-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </button>
+              <p class="lead-form__policy">
+                Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности и обработки персональных данных
+              </p>
+              <p class="lead-form__status" id="form-status" aria-live="polite"></p>
+            </div>
           </form>
         </div>
       </div>
@@ -280,84 +315,101 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="#hero" aria-label="MRAMORBETON">
-          <img class="brand-logo" src="assets/images/logo.svg" alt="Логотип MRAMORBETON">
-          <span class="brand-copy">
-            <strong>MRAMORBETON</strong>
-            <small>Производство бетонных изделий</small>
-          </span>
-        </a>
-        <p>
-          Профессиональное производство бетонных изделий для благоустройства
-          частных и коммерческих объектов.
+        <div class="footer-brand-top">
+          <a class="brand footer-brand-logo" href="#hero" aria-label="MRAMORBETON">
+            <img class="brand-logo" src="assets/images/logo.svg" alt="" width="45" height="45" decoding="async">
+            <span class="brand-copy">
+              <strong>MRAMORBETON</strong>
+              <small>Производство бетонных изделий</small>
+            </span>
+          </a>
+        </div>
+        <p class="footer-brand-text">
+          Профессиональное производство<br>
+          бетонных изделий для современной<br>
+          городской и частной инфраструктуры.<br>
+          Гарантия качества на века.
         </p>
       </div>
 
-      <div class="footer-column">
-        <h3>Продукция</h3>
-        <a href="catalog.html">Брусчатка</a>
-        <a href="catalog.html">Тротуарная плитка</a>
-        <a href="catalog.html">Фасадные панели</a>
-        <a href="catalog.html">Бордюры и водостоки</a>
-        <a href="catalog.html">Накладные проступи</a>
-        <a href="catalog.html">Ритуальные плиты</a>
-        <a href="catalog.html">Пошаговые плиты</a>
-        <a href="catalog.html">Накрывные элементы</a>
-      </div>
+      <nav class="footer-column" aria-label="Продукция">
+        <p class="footer-heading">Продукция</p>
+        <div class="footer-links">
+          <a href="category.php?c=trotuarnaya-plitka">Брусчатка</a>
+          <a href="category.php?c=trotuarnaya-plitka">Тротуарная плитка</a>
+          <a href="category.php?c=fasadnye-paneli">Фасадные панели</a>
+          <a href="category.php?c=bordyury-i-vodostoki">Бордюры и водостоки</a>
+          <a href="category.php?c=nakladnye-prostupi">Накладные проступи</a>
+          <a href="category.php?c=ritualnye-plity">Ритуальные плиты</a>
+          <a href="category.php?c=poshagovye-plity">Пошаговые плиты</a>
+          <a href="category.php?c=parapetnye-plity">Накрывные элементы</a>
+        </div>
+      </nav>
 
-      <div class="footer-column">
-        <h3>Компания</h3>
-        <a href="catalog.html">Каталог</a>
-        <a href="#about">О нас</a>
-        <a href="projects.html">Проекты</a>
-        <a href="#process">Как мы работаем</a>
-        <a href="useful-info.html">Полезная информация</a>
-        <a href="contacts.html">Контакты</a>
-      </div>
+      <nav class="footer-column" aria-label="Компания">
+        <p class="footer-heading">Компания</p>
+        <div class="footer-links">
+          <a href="catalog.php">Каталог</a>
+          <a href="#about">О нас</a>
+          <a href="projects.html">Проекты</a>
+          <a href="#process">Как мы работаем</a>
+          <a href="contacts.html">Контакты</a>
+        </div>
+      </nav>
 
       <div class="footer-column footer-column-contacts">
-        <h3>Контакты</h3>
-        <a class="footer-contact" href="tel:+375293258259">
-          <span class="footer-contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M7.5 4.5H4.8A1.8 1.8 0 0 0 3 6.3c0 8.118 6.582 14.7 14.7 14.7a1.8 1.8 0 0 0 1.8-1.8v-2.7a1.2 1.2 0 0 0-.87-1.154l-3.252-.93a1.2 1.2 0 0 0-1.214.353l-.713.871a12.035 12.035 0 0 1-5.084-5.084l.871-.713a1.2 1.2 0 0 0 .353-1.214l-.93-3.252A1.2 1.2 0 0 0 7.5 4.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span>
-            <strong>+375 29 325-82-59</strong>
-            <small>Пн-Пт: 9:00 - 20:00</small>
-          </span>
-        </a>
+        <p class="footer-heading">Контакты</p>
+        <div class="footer-contacts-stack">
+          <a class="footer-contact" href="tel:+375293258259">
+            <span class="footer-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7.5 4.5H4.8A1.8 1.8 0 0 0 3 6.3c0 8.118 6.582 14.7 14.7 14.7a1.8 1.8 0 0 0 1.8-1.8v-2.7a1.2 1.2 0 0 0-.87-1.154l-3.252-.93a1.2 1.2 0 0 0-1.214.353l-.713.871a12.035 12.035 0 0 1-5.084-5.084l.871-.713a1.2 1.2 0 0 0 .353-1.214l-.93-3.252A1.2 1.2 0 0 0 7.5 4.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="footer-contact-body">
+              <span class="footer-contact-primary">+375 29 325-82-59</span>
+              <span class="footer-contact-meta">Пн-Пт: 9:00 — 20:00</span>
+            </span>
+          </a>
 
-        <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
-          <span class="footer-contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </span>
-          <span>
-            <strong>Mramorbeton.by@gmail.com</strong>
-          </span>
-        </a>
+          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
+            <span class="footer-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/>
+              </svg>
+            </span>
+            <span class="footer-contact-body">
+              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
+            </span>
+          </a>
 
-        <div class="footer-contact">
-          <span class="footer-contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M12 20c3.333-3.895 5-6.727 5-8.5a5 5 0 1 0-10 0c0 1.773 1.667 4.605 5 8.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="12" cy="11" r="1.8" fill="currentColor"/>
-            </svg>
-          </span>
-          <span>
-            <strong>Минский р-н, Хатежинский c.c., д. Васьковщина</strong>
-          </span>
-        </div>
+          <div class="footer-contact">
+            <span class="footer-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 20c3.333-3.895 5-6.727 5-8.5a5 5 0 1 0-10 0c0 1.773 1.667 4.605 5 8.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="11" r="1.8" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="footer-contact-body">
+              <span class="footer-contact-primary footer-contact-primary--wide">Минский р-н, Хатежинский c.c., д.Васьковщина</span>
+            </span>
+          </div>
 
-        <div class="socials">
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="Telegram">TG</a>
-          <a href="#" aria-label="VK">VK</a>
-          <a href="#" aria-label="WhatsApp">WA</a>
+          <div class="socials socials-contacts" aria-label="Соцсети">
+            <a class="social social--whatsapp" href="#" aria-label="WhatsApp">
+              <img src="assets/images/footer-icon-1.svg" width="39" height="39" alt="" decoding="async">
+            </a>
+            <a class="social social--viber" href="#" aria-label="Viber">
+              <img src="assets/images/footer-icon-2.svg" width="39" height="39" alt="" decoding="async">
+            </a>
+            <a class="social social--telegram" href="#" aria-label="Telegram">
+              <img src="assets/images/footer-icon-3.svg" width="39" height="39" alt="" decoding="async">
+            </a>
+            <a class="social social--instagram" href="#" aria-label="Instagram">
+              <img src="assets/images/footer-icon-4.svg" width="39" height="39" alt="" decoding="async">
+            </a>
+          </div>
         </div>
       </div>
     </div>

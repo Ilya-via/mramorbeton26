@@ -161,26 +161,12 @@
   min-height: 0;
 }
 
-.useful-contact-copy h2 {
-  color: #fff;
-}
-
-.useful-contact-copy p {
-  margin-top: 16px;
-  max-width: 485px;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 600;
-  letter-spacing: -0.4492px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .useful-contact-phone .contact-icon {
   background: rgba(255, 255, 255, 0.1);
 }
 
 .useful-contact-phone small {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
   font-weight: 700;
   letter-spacing: 1.2px;
@@ -193,6 +179,7 @@
   line-height: 32px;
   font-weight: 700;
   letter-spacing: 0.0703px;
+  color: #fff;
 }
 
 .contact-form.contact-form--underline {
@@ -256,92 +243,6 @@
   max-width: 360px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.page-useful-info .footer-brand p {
-  max-width: 284px;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 600;
-  letter-spacing: -0.1504px;
-}
-
-.page-useful-info .footer-column h3 {
-  margin: 0 0 10px;
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-}
-
-.page-useful-info .footer-column a,
-.page-useful-info .footer-column strong {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  letter-spacing: -0.1504px;
-}
-
-.page-useful-info .footer-contact strong {
-  font-weight: 600;
-}
-
-.page-useful-info .footer-contact small {
-  font-size: 12px;
-  line-height: 14.286px;
-  letter-spacing: 0.1172px;
-  text-transform: uppercase;
-}
-
-.page-useful-info .socials-contacts {
-  gap: 9.684px;
-  margin-top: 4px;
-}
-
-.page-useful-info .socials-contacts a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38.737px;
-  height: 38.737px;
-  border-radius: 50%;
-  font-size: 0;
-  text-decoration: none;
-  color: #fff;
-}
-
-.page-useful-info .socials-contacts a svg {
-  width: 20px;
-  height: 20px;
-}
-
-.page-useful-info .social--whatsapp {
-  background: #25d366;
-}
-
-.page-useful-info .social--viber {
-  background: #754a91;
-}
-
-.page-useful-info .social--telegram {
-  background: #2aabee;
-}
-
-.page-useful-info .social--instagram {
-  background: linear-gradient(
-    -45deg,
-    #fbe18a 0.96%,
-    #fcbb45 21.96%,
-    #f75274 38.96%,
-    #d53692 52.96%,
-    #8f39ce 74.96%,
-    #5b4fe9 100.96%
-  );
-}
-
-.page-useful-info .social--instagram svg {
-  stroke: #fff;
 }
 
 @media (max-width: 1240px) {

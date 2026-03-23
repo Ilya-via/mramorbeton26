@@ -1,0 +1,39 @@
+.page-category-overhead-steps .paving-tile-card {
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 4px 32.9px rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.page-category-overhead-steps .paving-tile-card__link {
+  min-height: 460px;
+}
+
+.page-category-overhead-steps .paving-tile-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  line-height: 1.25;
+  min-height: 3.75em;
+  font-size: 24px;
+}
+
+.page-category-overhead-steps .paving-tile-card__specs,
+.page-category-overhead-steps .paving-tile-card__row {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.page-category-overhead-steps .paving-tile-card__row dd {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.page-category-overhead-steps .paving-tile-card__cta {
+  border-radius: 14px;
+}
+
+.page-category-overhead-steps .paving-category-heading {
+  max-width: 900px;
+}

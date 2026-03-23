@@ -1,0 +1,244 @@
+.page-category-paving .category-page-main {
+  padding-top: 32px;
+}
+
+.page-category-paving .catalog-breadcrumbs {
+  margin-bottom: 38px;
+}
+
+.paving-category-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin: 0 0 43px;
+  max-width: 1100px;
+}
+
+.paving-category-kicker {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+.paving-category-heading {
+  margin: 0;
+  max-width: 720px;
+  font-size: 45px;
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: -0.9px;
+  color: #2b2727;
+}
+
+.paving-category-lead {
+  margin: 0;
+  max-width: 1082px;
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-soft);
+}
+
+.paving-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 378px));
+  gap: 33px;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.paving-tile-card {
+  margin: 0;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #f9fafb;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.paving-tile-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 435px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.paving-tile-card__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.paving-tile-card__media {
+  flex: 0 0 240px;
+  height: 240px;
+  background: #eceff1;
+  overflow: hidden;
+}
+
+.paving-tile-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.paving-tile-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 18px 18px 21px;
+  gap: 10px;
+}
+
+.paving-tile-card__title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.48px;
+  color: #2b2727;
+}
+
+.paving-tile-card__specs {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1 1 auto;
+}
+
+.paving-tile-card__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 8px;
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.paving-tile-card__row dt {
+  margin: 0;
+  flex: 0 0 auto;
+  color: #6a7282;
+  font-weight: 600;
+}
+
+.paving-tile-card__row dd {
+  margin: 0;
+  flex: 1 1 140px;
+  min-width: 0;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.paving-tile-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto;
+  min-height: 58px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 16px;
+  background: #2b2727;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+
+.paving-tile-card__cta-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  position: relative;
+}
+
+.paving-tile-card__cta-icon::before,
+.paving-tile-card__cta-icon::after {
+  content: "";
+  position: absolute;
+  display: block;
+  background: currentColor;
+}
+
+.paving-tile-card__cta-icon::before {
+  left: 1px;
+  top: 8px;
+  width: 14px;
+  height: 2px;
+}
+
+.paving-tile-card__cta-icon::after {
+  right: 1px;
+  top: 4px;
+  width: 7px;
+  height: 7px;
+  background: transparent;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.paving-tile-card__link:hover .paving-tile-card__cta {
+  background: #1a1a1a;
+}
+
+@media (max-width: 1240px) {
+  .paving-tiles-grid {
+    grid-template-columns: repeat(2, minmax(0, 378px));
+    justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .paving-category-heading {
+    font-size: 36px;
+    letter-spacing: -0.6px;
+  }
+
+  .paving-category-kicker {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-category-paving .category-page-main {
+    padding-top: 20px;
+  }
+
+  .paving-category-intro {
+    margin-bottom: 28px;
+  }
+
+  .paving-tiles-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .paving-tile-card__link {
+    min-height: 0;
+  }
+
+  .paving-tile-card__title {
+    font-size: 22px;
+  }
+
+  .paving-tile-card__row {
+    font-size: 15px;
+  }
+}
