@@ -1,45 +1,83 @@
-const catalogItems = [
+const homeCatalogItems = [
   {
     title: "Армированные накладные проступи",
     description: "Решение для облицовки и усиления лестничных ступеней",
-    image: "assets/images/catalog-main-steps.png",
+    image: "assets/images/catalog-1.png",
     className: "catalog-card-large",
   },
   {
     title: "Тротуарная плитка",
     description: "Прочные решения для мощения",
-    image: "assets/images/catalog-paving.png",
+    image: "assets/images/catalog-2.png",
     className: "catalog-card-top-center",
   },
   {
     title: "Фасадные панели",
     description: "Современная облицовка фасадов",
-    image: "assets/images/catalog-facade.png",
+    image: "assets/images/catalog-3.png",
     className: "catalog-card-top-right",
   },
   {
     title: "Бордюры и водостоки",
     description: "Функциональное оформление территории",
-    image: "assets/images/catalog-curbs.png",
+    image: "assets/images/catalog-4.png",
     className: "catalog-card-middle-center",
   },
   {
     title: "Армированные ритуальные плиты",
     description: "Функциональное оформление территории",
-    image: "assets/images/catalog-ritual.png",
+    image: "assets/images/catalog-5.png",
     className: "catalog-card-middle-right",
   },
   {
     title: "Армированные пошаговые плиты",
     description: "Долговечные мемориальные изделия",
-    image: "assets/images/catalog-step-plates.png",
+    image: "assets/images/catalog-6.png",
     className: "catalog-card-bottom-left",
   },
   {
     title: "Армированные парапетные плиты",
     description: "Для садовых и ландшафтных дорожек",
-    image: "assets/images/catalog-parapet.png",
+    image: "assets/images/catalog-7.png",
     className: "catalog-card-bottom-center",
+  },
+];
+
+const catalogPageItems = [
+  {
+    title: "Тротуарная плитка",
+    description: "Надёжные бетонные изделия для благоустройства и строительства",
+    image: "assets/images/catalog-1.png",
+  },
+  {
+    title: "Фасадные панели",
+    description: "Декоративная отделка фасадов и цоколей",
+    image: "assets/images/catalog-2.png",
+  },
+  {
+    title: "Армированные накладные проступи",
+    description: "Бетонные элементы для облицовки лестниц",
+    image: "assets/images/catalog-3.png",
+  },
+  {
+    title: "Бордюры и водостоки",
+    description: "Организация границ и отвода воды",
+    image: "assets/images/catalog-4.png",
+  },
+  {
+    title: "Армированные ритуальные плиты",
+    description: "Плиты и элементы для благоустройства мемориальных зон",
+    image: "assets/images/catalog-5.png",
+  },
+  {
+    title: "Армированные парапетные плиты",
+    description: "Защитные бетонные крышки для заборов и ограждений",
+    image: "assets/images/catalog-6.png",
+  },
+  {
+    title: "Армированные пошаговые плиты",
+    description: "Плиты для декоративных садовых дорожек",
+    image: "assets/images/catalog-7.png",
   },
 ];
 
@@ -122,23 +160,43 @@ const productItems = [
 ];
 
 function renderCatalog() {
-  const root = document.querySelector("#catalog-grid");
-  if (!root) return;
+  const homeRoot = document.querySelector("#catalog-grid");
+  const pageRoot = document.querySelector("#catalog-page-grid");
 
-  root.innerHTML = catalogItems
-    .map(
-      (item) => `
-        <article class="catalog-card ${item.className}" tabindex="0">
-          <img src="${item.image}" alt="${item.title}" loading="lazy">
-          <div class="catalog-card-content">
-            <h3>${item.title}</h3>
-            <p class="catalog-card-desc">${item.description}</p>
-            <span class="link-line">В каталог</span>
-          </div>
-        </article>
-      `
-    )
-    .join("");
+  if (homeRoot) {
+    homeRoot.innerHTML = homeCatalogItems
+      .map(
+        (item) => `
+          <article class="catalog-card ${item.className}" tabindex="0">
+            <img src="${item.image}" alt="${item.title}" loading="lazy">
+            <div class="catalog-card-content">
+              <h3>${item.title}</h3>
+              <p class="catalog-card-desc">${item.description}</p>
+              <span class="link-line">В каталог</span>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  if (pageRoot) {
+    pageRoot.innerHTML = catalogPageItems
+      .map(
+        (item) => `
+          <article class="catalog-card catalog-page-card">
+            <div class="catalog-page-card-media">
+              <img src="${item.image}" alt="${item.title}" loading="lazy">
+            </div>
+            <div class="catalog-page-card-content">
+              <h3>${item.title}</h3>
+              <p class="catalog-card-desc">${item.description}</p>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+  }
 }
 
 function renderFeatures() {
