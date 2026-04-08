@@ -1,4 +1,5 @@
 (function () {
+  const pageBody = document.body;
   const mainImg = document.querySelector("#product-main-img");
   const mainTrigger = document.querySelector(".product-gallery__main");
   const pageThumbs = document.querySelectorAll(".product-thumb[data-full-src]");
@@ -7,22 +8,53 @@
   const lightboxThumbsRoot = document.getElementById("product-lightbox-thumbs");
 
   const thicknessBtns = document.querySelectorAll(".product-thickness-option[data-thickness-option]");
+  let productPageRevealed = false;
 
-  if (!lightbox || !lightboxImg || !lightboxThumbsRoot || pageThumbs.length === 0) {
+  function revealLoadedProductPage() {
+    if (
+      productPageRevealed ||
+      !pageBody ||
+      !pageBody.classList.contains("page-product--loading")
+    ) {
+      return;
+    }
+
+    productPageRevealed = true;
+    pageBody.classList.remove("page-product--loading");
+    pageBody.classList.add("page-product--ready");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", revealLoadedProductPage, { once: true });
+  } else {
+    revealLoadedProductPage();
+  }
+
+  window.addEventListener("load", revealLoadedProductPage, { once: true });
+  window.setTimeout(revealLoadedProductPage, 800);
+
+  if (!lightbox || !lightboxImg || !lightboxThumbsRoot || !mainImg) {
     if (thicknessBtns.length) initThickness();
     return;
   }
 
-  const slides = Array.from(pageThumbs).map((btn) => ({
-    full: btn.getAttribute("data-full-src") || "",
-    alt: btn.getAttribute("data-alt") || "",
-    thumbSrc: btn.querySelector("img")?.getAttribute("src") || btn.getAttribute("data-full-src") || "",
-  }));
+  const slides = [
+    {
+      full: mainImg.getAttribute("src") || "",
+      alt: mainImg.getAttribute("alt") || "",
+      thumbSrc: mainImg.getAttribute("src") || "",
+      isMain: true,
+    },
+    ...Array.from(pageThumbs).map((btn) => ({
+      full: btn.getAttribute("data-full-src") || "",
+      alt: btn.getAttribute("data-alt") || "",
+      thumbSrc: btn.querySelector("img")?.getAttribute("src") || btn.getAttribute("data-full-src") || "",
+      isMain: false,
+    })),
+  ];
 
-  let currentIndex = Math.max(
-    0,
-    Array.from(pageThumbs).findIndex((b) => b.classList.contains("is-active"))
-  );
+  let currentIndex = 0;
+  let lightboxIndex = 0;
 
   function normalizeIndex(i) {
     const n = slides.length;
@@ -32,14 +64,15 @@
 
   function setPageGalleryIndex(i) {
     currentIndex = normalizeIndex(i);
-    const btn = pageThumbs[currentIndex];
-    if (!btn || !mainImg) return;
-    const src = btn.getAttribute("data-full-src");
-    if (src) mainImg.src = src;
-    mainImg.alt = btn.getAttribute("data-alt") || mainImg.alt;
+    const slide = slides[currentIndex];
+    if (!slide || !mainImg) return;
+
+    if (slide.full) mainImg.src = slide.full;
+    mainImg.alt = slide.alt || mainImg.alt;
 
     pageThumbs.forEach((b) => {
-      const on = b === btn;
+      const thumbIndex = Number(b.getAttribute("data-slide-index"));
+      const on = thumbIndex === currentIndex;
       b.classList.toggle("is-active", on);
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
@@ -47,14 +80,14 @@
 
   function updateLightboxThumbsActive() {
     lightboxThumbsRoot.querySelectorAll(".product-lightbox__thumb").forEach((tb, idx) => {
-      const on = idx === currentIndex;
+      const on = idx === lightboxIndex;
       tb.classList.toggle("is-active", on);
       tb.setAttribute("aria-selected", on ? "true" : "false");
     });
   }
 
   function updateLightboxImage() {
-    const s = slides[currentIndex];
+    const s = slides[lightboxIndex];
     if (!s) return;
     lightboxImg.src = s.full;
     lightboxImg.alt = s.alt;
@@ -82,7 +115,7 @@
     lightboxThumbsRoot.querySelectorAll("[data-lightbox-thumb]").forEach((tb) => {
       tb.addEventListener("click", () => {
         const i = Number(tb.getAttribute("data-lightbox-thumb"));
-        setPageGalleryIndex(i);
+        lightboxIndex = normalizeIndex(i);
         updateLightboxImage();
       });
     });
@@ -98,8 +131,7 @@
   }
 
   function openLightbox(index) {
-    currentIndex = normalizeIndex(index);
-    setPageGalleryIndex(currentIndex);
+    lightboxIndex = normalizeIndex(index);
     updateLightboxImage();
     updateNavVisibility();
     lightbox.classList.add("is-open");
@@ -120,7 +152,7 @@
   }
 
   function stepLightbox(delta) {
-    setPageGalleryIndex(currentIndex + delta);
+    lightboxIndex = normalizeIndex(lightboxIndex + delta);
     updateLightboxImage();
   }
 
@@ -128,14 +160,14 @@
 
   if (mainTrigger) {
     mainTrigger.addEventListener("click", () => {
-      const idx = Array.from(pageThumbs).findIndex((b) => b.classList.contains("is-active"));
-      openLightbox(idx >= 0 ? idx : 0);
+      openLightbox(currentIndex);
     });
   }
 
   pageThumbs.forEach((btn, i) => {
+    btn.setAttribute("data-slide-index", String(i + 1));
     btn.addEventListener("click", () => {
-      openLightbox(i);
+      openLightbox(i + 1);
     });
   });
 
@@ -149,6 +181,7 @@
   if (prevBtn) prevBtn.addEventListener("click", () => stepLightbox(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => stepLightbox(1));
   updateNavVisibility();
+  setPageGalleryIndex(0);
 
   document.addEventListener("keydown", (e) => {
     if (!lightbox.classList.contains("is-open")) return;
@@ -165,6 +198,40 @@
   });
 
   function initThickness() {
+    const specSizeEl = document.querySelector("#product-spec-size-value");
+    const specWeightEl = document.querySelector("#product-spec-weight-value");
+    const pricesRoot = document.querySelector("#product-price-rows");
+
+    function renderPrices(rows) {
+      if (!pricesRoot) return;
+      pricesRoot.innerHTML = "";
+
+      rows.forEach((row) => {
+        const priceRow = document.createElement("div");
+        priceRow.className = "product-price-row";
+
+        const label = document.createElement("p");
+        label.className = "product-price-label";
+        label.textContent = row.label || "";
+
+        const leader = document.createElement("span");
+        leader.className = "product-price-leader";
+        leader.setAttribute("aria-hidden", "true");
+
+        const value = document.createElement("p");
+        value.className = "product-price-value";
+        value.append(document.createTextNode(row.amount || ""));
+
+        const unit = document.createElement("span");
+        unit.textContent = row.unit || "";
+        value.append(document.createTextNode(" "));
+        value.append(unit);
+
+        priceRow.append(label, leader, value);
+        pricesRoot.append(priceRow);
+      });
+    }
+
     thicknessBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         thicknessBtns.forEach((b) => {
@@ -173,6 +240,22 @@
         });
         btn.classList.add("is-selected");
         btn.setAttribute("aria-pressed", "true");
+
+        if (specSizeEl) {
+          specSizeEl.textContent = btn.getAttribute("data-spec-size") || specSizeEl.textContent;
+        }
+        if (specWeightEl) {
+          specWeightEl.textContent = btn.getAttribute("data-spec-weight") || specWeightEl.textContent;
+        }
+
+        try {
+          const prices = JSON.parse(btn.getAttribute("data-prices") || "[]");
+          if (Array.isArray(prices)) {
+            renderPrices(prices);
+          }
+        } catch (error) {
+          // Ignore malformed admin data and keep current prices.
+        }
       });
     });
   }

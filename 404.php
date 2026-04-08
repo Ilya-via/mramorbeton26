@@ -1,13 +1,17 @@
+<?php
+http_response_code(404);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Проекты — MRAMORBETON</title>
+  <title>404 - Страница не найдена | MRAMORBETON</title>
   <meta
     name="description"
-    content="Реализованные объекты MRAMORBETON: жилые комплексы, частные дома, благоустройство с армированными бетонными изделиями."
+    content="Страница не найдена. Перейдите в каталог MRAMORBETON или свяжитесь с нами для подбора бетонных изделий."
   >
+  <meta name="robots" content="noindex,follow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -15,9 +19,10 @@
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="projects.css">
+  <link rel="stylesheet" href="lead-form.css">
+  <link rel="stylesheet" href="404.css">
 </head>
-<body class="page-projects">
+<body class="page-404">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="MRAMORBETON">
@@ -35,7 +40,7 @@
       <nav class="site-nav" id="site-nav">
         <a href="catalog.php">Каталог</a>
         <a href="index.html#about">О нас</a>
-        <a href="projects.html" aria-current="page">Проекты</a>
+        <a href="projects.html">Проекты</a>
         <a href="index.html#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
         <a href="contacts.html">Контакты</a>
@@ -51,108 +56,41 @@
     </div>
   </header>
 
-  <main class="projects-main">
-    <div class="container">
-      <nav class="projects-breadcrumbs" aria-label="Хлебные крошки">
-        <a href="index.html">Главная</a>
-        <span aria-hidden="true">/</span>
-        <span class="projects-breadcrumbs-current">Реализованные объекты</span>
-      </nav>
+  <main class="error-main">
+    <section class="error-hero">
+      <div class="container error-hero__container">
+        <div class="error-tag" aria-label="Ошибка">
+          <span class="error-tag__line" aria-hidden="true"></span>
+          <span class="error-tag__pill">
+            <img src="assets/404-error-icon.svg" alt="" aria-hidden="true">
+            <span>Ошибка</span>
+          </span>
+          <span class="error-tag__line" aria-hidden="true"></span>
+        </div>
 
-      <header class="projects-intro">
-        <p class="projects-kicker">Наш опыт</p>
-        <h1 class="projects-title">Готовые объекты с нашей продукцией</h1>
-        <p class="projects-lead">
-          Благоустроенные территории и реализованные решения с использованием армированных бетонных изделий
-        </p>
-      </header>
+        <div class="error-code" aria-hidden="true">
+          <span class="error-code__digit">4</span>
+          <span class="error-code__zero">
+            <span class="error-code__digit error-code__digit--zero">0</span>
+            <span class="error-code__zero-shell"></span>
+            <span class="error-code__icon">
+              <img src="assets/404-icon-center.svg" alt="" aria-hidden="true">
+            </span>
+          </span>
+          <span class="error-code__digit">4</span>
+          <span class="error-code__square error-code__square--left" aria-hidden="true"></span>
+          <span class="error-code__square error-code__square--right" aria-hidden="true"></span>
+        </div>
 
-      <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-1.png"
-              alt="Жилой комплекс «Индустриальный» — мощение и благоустройство"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">ЖК &laquo;Индустриальный&raquo;</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-2.png"
-              alt="Коттеджный посёлок «Лесной»"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Коттеджный посёлок &laquo;Лесной&raquo;</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-3.png"
-              alt="Частный дом, Минская область"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Частный дом, Минская область</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-4.png"
-              alt="Частный дом, Минская область — бордюры и мощение"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Частный дом, Минская область</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-5.png"
-              alt="Резиденция в посёлке Боровляны — ступени и дорожки"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Резиденция в пос. Боровляны</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-6.png"
-              alt="Офисный комплекс «Премиум»"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Офисный комплекс &laquo;Премиум&raquo;</h2>
-        </article>
+        <div class="error-copy">
+          <h1>Страница не найдена</h1>
+          <p>
+            Похоже, эта страница еще не построена или была демонтирована. Наши специалисты
+            работают над улучшением сайта.
+          </p>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -194,7 +132,7 @@
         <div class="footer-links">
           <a href="catalog.php">Каталог</a>
           <a href="index.html#about">О нас</a>
-          <a href="projects.html" aria-current="page">Проекты</a>
+          <a href="projects.html">Проекты</a>
           <a href="index.html#process">Как мы работаем</a>
           <a href="contacts.html">Контакты</a>
         </div>
@@ -211,7 +149,7 @@
             </span>
             <span class="footer-contact-body">
               <span class="footer-contact-primary">+375 29 325-82-59</span>
-              <span class="footer-contact-meta">Пн-Пт: 9:00 — 20:00</span>
+              <span class="footer-contact-meta">Пн-Пт: 9:00 - 20:00</span>
             </span>
           </a>
 

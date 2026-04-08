@@ -162,3 +162,50 @@
     max-width: none;
   }
 }
+
+@media (max-width: 767px) {
+  .page-home .lead-form {
+    min-height: 465px;
+    padding: 18px;
+    border-radius: 32px;
+  }
+
+  .page-home .lead-form__inner {
+    max-width: 321px;
+  }
+
+  .page-home .lead-form__label {
+    font-size: 14px;
+    line-height: 15px;
+  }
+
+  .page-home .lead-form__control {
+    min-height: 58px;
+    padding: 12px 18px;
+    border-bottom-width: 2px;
+    font-size: 18px;
+    line-height: normal;
+    letter-spacing: -0.3125px;
+  }
+
+  .page-home .lead-form__field + .lead-form__field {
+    margin-top: 25px;
+  }
+
+  .page-home .lead-form__submit {
+    gap: 7px;
+    min-height: 64px;
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.3125px;
+  }
+
+  .page-home .lead-form__policy {
+    margin-top: 12px;
+    padding: 0;
+    max-width: 360px;
+    font-size: 12px;
+    line-height: 14px;
+  }
+}

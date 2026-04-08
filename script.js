@@ -1,6 +1,6 @@
 const CATEGORY_PAGE_BASE = "category.php?c=";
 
-const homeCatalogItems = [
+const FALLBACK_HOME_CATALOG_ITEMS = [
   {
     slug: "nakladnye-prostupi",
     title: "Армированные накладные проступи",
@@ -49,51 +49,6 @@ const homeCatalogItems = [
     description: "Для садовых и ландшафтных дорожек",
     image: "assets/images/catalog-7.png",
     className: "catalog-card-bottom-center",
-  },
-];
-
-const catalogPageItems = [
-  {
-    slug: "trotuarnaya-plitka",
-    title: "Тротуарная плитка",
-    description: "Надёжные бетонные изделия для благоустройства и строительства",
-    image: "assets/images/catalog-1.png",
-  },
-  {
-    slug: "fasadnye-paneli",
-    title: "Фасадные панели",
-    description: "Декоративная отделка фасадов и цоколей",
-    image: "assets/images/catalog-2.png",
-  },
-  {
-    slug: "nakladnye-prostupi",
-    title: "Армированные накладные проступи",
-    description: "Бетонные элементы для облицовки лестниц",
-    image: "assets/images/catalog-3.png",
-  },
-  {
-    slug: "bordyury-i-vodostoki",
-    title: "Бордюры и водостоки",
-    description: "Организация границ и отвода воды",
-    image: "assets/images/catalog-4.png",
-  },
-  {
-    slug: "ritualnye-plity",
-    title: "Армированные ритуальные плиты",
-    description: "Плиты и элементы для благоустройства мемориальных зон",
-    image: "assets/images/catalog-5.png",
-  },
-  {
-    slug: "parapetnye-plity",
-    title: "Армированные парапетные плиты",
-    description: "Защитные бетонные крышки для заборов и ограждений",
-    image: "assets/images/catalog-6.png",
-  },
-  {
-    slug: "poshagovye-plity",
-    title: "Армированные пошаговые плиты",
-    description: "Плиты для декоративных садовых дорожек",
-    image: "assets/images/catalog-7.png",
   },
 ];
 
@@ -150,8 +105,18 @@ const processItems = [
 ];
 
 const PRODUCT_PAGE_BASE = "product.php?p=";
+const MOBILE_MENU_CATEGORIES = [
+  { href: "category.php?c=trotuarnaya-plitka", label: "Брусчатка" },
+  { href: "category.php?c=trotuarnaya-plitka", label: "Тротуарная плитка" },
+  { href: "category.php?c=fasadnye-paneli", label: "Фасадные панели" },
+  { href: "category.php?c=bordyury-i-vodostoki", label: "Бордюры и водостоки" },
+  { href: "category.php?c=nakladnye-prostupi", label: "Накладные проступи" },
+  { href: "category.php?c=ritualnye-plity", label: "Ритуальные плиты" },
+  { href: "category.php?c=poshagovye-plity", label: "Пошаговые плиты" },
+  { href: "category.php?c=parapetnye-plity", label: "Накрывные элементы" },
+];
 
-const productItems = [
+const FALLBACK_PRODUCT_ITEMS = [
   {
     slug: "fasad-tsvetok-elit",
     title: "Каменный цветок элит",
@@ -189,10 +154,13 @@ const productItems = [
 const PRODUCT_CARD_ARROW_SRC = "assets/images/arrow.svg";
 
 function formatProductPrice(item) {
+  if (item.priceText) {
+    return item.priceText;
+  }
   if (item.pricePerSqm) {
     return `${item.priceAmount}/m<sup class="product-price__sq">2</sup>`;
   }
-  return item.priceAmount;
+  return item.priceAmount || "";
 }
 
 function formatProductMeta(item) {
@@ -200,14 +168,26 @@ function formatProductMeta(item) {
   return lines.map((line) => `<p>${line}</p>`).join("");
 }
 
-function renderCatalog() {
+function getHomeCatalogClassName(index) {
+  const classes = [
+    "catalog-card-large",
+    "catalog-card-top-center",
+    "catalog-card-top-right",
+    "catalog-card-middle-center",
+    "catalog-card-middle-right",
+    "catalog-card-bottom-left",
+    "catalog-card-bottom-center",
+  ];
+
+  return classes[index] || "catalog-card-bottom-center";
+}
+
+function renderCatalog(items = FALLBACK_HOME_CATALOG_ITEMS) {
   const homeRoot = document.querySelector("#catalog-grid");
-  const pageRoot = document.querySelector("#catalog-page-grid");
 
   if (homeRoot) {
-    const items = homeCatalogItems;
-    const cardMarkup = (item) => `
-          <a class="catalog-card ${item.className} catalog-card-link" href="${CATEGORY_PAGE_BASE}${item.slug}">
+    const cardMarkup = (item, index) => `
+          <a class="catalog-card ${item.className || getHomeCatalogClassName(index)} catalog-card-link" href="${CATEGORY_PAGE_BASE}${item.slug}">
             <img src="${item.image}" alt="${item.title}" loading="lazy">
             <div class="catalog-card-content">
               <h3>${item.title}</h3>
@@ -216,30 +196,9 @@ function renderCatalog() {
             </div>
           </a>
         `;
-    const top = items.slice(0, 5).map((item) => cardMarkup(item)).join("");
-    const row3 = items
-      .slice(5, 7)
-      .map((item) => cardMarkup({ ...item, className: "catalog-card--row3-tile" }))
-      .join("");
-    homeRoot.innerHTML = `${top}<div class="catalog-grid__row3">${row3}</div>`;
-  }
-
-  if (pageRoot) {
-    pageRoot.innerHTML = catalogPageItems
-      .map(
-        (item) => `
-          <a class="catalog-card catalog-page-card catalog-card-link" href="${CATEGORY_PAGE_BASE}${item.slug}">
-            <div class="catalog-page-card-media">
-              <img src="${item.image}" alt="${item.title}" loading="lazy">
-            </div>
-            <div class="catalog-page-card-content">
-              <h3>${item.title}</h3>
-              <p class="catalog-card-desc">${item.description}</p>
-            </div>
-          </a>
-        `
-      )
-      .join("");
+    const normalized = items.slice(0, 7);
+    homeRoot.innerHTML = normalized.map((item, index) => cardMarkup(item, index)).join("");
+    markMissingImages();
   }
 }
 
@@ -277,6 +236,7 @@ function renderInstagram() {
       `
     )
     .join("");
+  setupScrollControls();
 }
 
 function renderProcess() {
@@ -306,11 +266,11 @@ function renderProcess() {
     .join("");
 }
 
-function renderProducts() {
+function renderProducts(items = FALLBACK_PRODUCT_ITEMS) {
   const root = document.querySelector("#products-grid");
   if (!root) return;
 
-  root.innerHTML = productItems
+  root.innerHTML = items
     .map(
       (item) => `
         <article class="product-card">
@@ -333,31 +293,232 @@ function renderProducts() {
       `
     )
     .join("");
+  markMissingImages();
+  setupScrollControls();
+}
+
+async function loadHomeCatalogData() {
+  const catalogRoot = document.querySelector("#catalog-grid");
+  const productsRoot = document.querySelector("#products-grid");
+  if (!catalogRoot && !productsRoot) return;
+
+  try {
+    const response = await fetch("api/home-data.php", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Home data request failed");
+    }
+
+    const data = await response.json();
+    if (catalogRoot && Array.isArray(data.categories) && data.categories.length) {
+      renderCatalog(data.categories);
+    } else if (catalogRoot) {
+      renderCatalog();
+    }
+
+    if (productsRoot && Array.isArray(data.featuredProducts) && data.featuredProducts.length) {
+      renderProducts(
+        data.featuredProducts.map((item) => ({
+          slug: item.slug,
+          title: item.title,
+          metaLines: item.metaLines || [],
+          priceText: item.priceText || "",
+          image: item.image,
+        }))
+      );
+    } else if (productsRoot) {
+      renderProducts();
+    }
+  } catch (error) {
+    if (catalogRoot) renderCatalog();
+    if (productsRoot) renderProducts();
+  }
 }
 
 function setupMenu() {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".site-nav");
-  if (!toggle || !nav) return;
+  const header = document.querySelector(".site-header");
+  const brand = header?.querySelector(".brand");
+  const phoneLink = header?.querySelector(".header-phone");
+  const phoneMeta = header?.querySelector(".header-phone-wrap span");
+  const callbackLink = header?.querySelector('.header-contacts .button, .header-contacts [href*="contact-form"]');
+
+  if (!toggle || !nav || !brand) return;
+
+  const navigationItems = Array.from(nav.querySelectorAll("a"))
+    .map((link) => ({
+      href: link.getAttribute("href") || "#",
+      label: (link.textContent || "").trim(),
+      current: link.getAttribute("aria-current") === "page",
+    }))
+    .filter((item) => item.label !== "");
+
+  const topItems = navigationItems.filter(
+    (item) => item.label !== "Каталог" && item.label !== "Полезная информация"
+  );
+  const callbackHref = callbackLink?.getAttribute("href") || "#contact-form";
+  const phoneHref = phoneLink?.getAttribute("href") || "tel:+375293258259";
+  const phoneText = (phoneLink?.textContent || "").trim() || "+375 29 325-82-59";
+  const phoneMetaText = (phoneMeta?.textContent || "").trim() || "9:00-20:00 Пн-Вс";
+
+  const popup = document.createElement("div");
+  popup.className = "mobile-menu";
+  popup.hidden = true;
+  popup.setAttribute("aria-hidden", "true");
+  popup.innerHTML = `
+    <div class="mobile-menu__backdrop" data-menu-close></div>
+    <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+      <div class="mobile-menu__header">
+        <a class="mobile-menu__brand brand" href="${brand.getAttribute("href") || "index.html"}" aria-label="MRAMORBETON" id="mobile-menu-title">
+          ${brand.innerHTML}
+        </a>
+        <button class="mobile-menu__close" type="button" data-menu-close aria-label="Закрыть меню">
+          <img src="assets/x.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <nav class="mobile-menu__nav" aria-label="Мобильная навигация">
+        <div class="mobile-menu__group">
+          <button class="mobile-menu__catalog-toggle" type="button" aria-expanded="true">
+            <span>Каталог</span>
+            <span class="mobile-menu__chevron" aria-hidden="true"></span>
+          </button>
+          <div class="mobile-menu__catalog-list">
+            ${MOBILE_MENU_CATEGORIES.map(
+              (item) => `<a href="${item.href}">${item.label}</a>`
+            ).join("")}
+          </div>
+        </div>
+        ${topItems
+          .map(
+            (item) =>
+              `<a href="${item.href}"${item.current ? ' aria-current="page"' : ""}>${item.label}</a>`
+          )
+          .join("")}
+      </nav>
+      <div class="mobile-menu__footer">
+        <div class="mobile-menu__contacts">
+          <a class="mobile-menu__phone" href="${phoneHref}">${phoneText}</a>
+          <p>${phoneMetaText}</p>
+        </div>
+        <a class="mobile-menu__button" href="${callbackHref}">Заказать звонок</a>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  const closeElements = popup.querySelectorAll("[data-menu-close]");
+  const catalogToggle = popup.querySelector(".mobile-menu__catalog-toggle");
+  const catalogGroup = popup.querySelector(".mobile-menu__group");
+  const focusTarget = popup.querySelector(".mobile-menu__brand");
+
+  function openMenu() {
+    popup.hidden = false;
+    popup.setAttribute("aria-hidden", "false");
+    popup.classList.add("is-open");
+    document.body.classList.add("mobile-menu-open");
+    toggle.setAttribute("aria-expanded", "true");
+    window.setTimeout(() => focusTarget?.focus(), 20);
+  }
+
+  function closeMenu() {
+    popup.classList.remove("is-open");
+    popup.setAttribute("aria-hidden", "true");
+    popup.hidden = true;
+    document.body.classList.remove("mobile-menu-open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
 
   toggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
+    if (popup.classList.contains("is-open")) {
+      closeMenu();
+      return;
+    }
+    openMenu();
   });
 
-  nav.querySelectorAll("a").forEach((link) => {
+  closeElements.forEach((element) => {
+    element.addEventListener("click", closeMenu);
+  });
+
+  popup.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      nav.classList.remove("is-open");
-      toggle.setAttribute("aria-expanded", "false");
+      closeMenu();
     });
+  });
+
+  catalogToggle?.addEventListener("click", () => {
+    const expanded = catalogToggle.getAttribute("aria-expanded") !== "true";
+    catalogToggle.setAttribute("aria-expanded", String(expanded));
+    catalogGroup?.classList.toggle("is-collapsed", !expanded);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!popup.classList.contains("is-open")) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeMenu();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1260 && popup.classList.contains("is-open")) {
+      closeMenu();
+    }
+  });
+}
+
+function setupScrollControls() {
+  document.querySelectorAll(".mobile-slider-controls").forEach((controls) => {
+    if (typeof controls._syncState === "function") {
+      controls._syncState();
+      return;
+    }
+
+    const prev = controls.querySelector(".mobile-slider-control--prev");
+    const next = controls.querySelector(".mobile-slider-control--next");
+    const targetId = prev?.getAttribute("data-scroll-target") || next?.getAttribute("data-scroll-target");
+    const target = targetId ? document.getElementById(targetId) : null;
+    if (!target) return;
+
+    function getStep() {
+      const firstChild = target.firstElementChild;
+      return firstChild ? firstChild.getBoundingClientRect().width + 24 : target.clientWidth;
+    }
+
+    function syncState() {
+      const maxScroll = target.scrollWidth - target.clientWidth;
+      const isScrollable = maxScroll > 8;
+      controls.hidden = !isScrollable;
+      if (!isScrollable) return;
+
+      if (prev) prev.disabled = target.scrollLeft <= 4;
+      if (next) next.disabled = target.scrollLeft >= maxScroll - 4;
+    }
+
+    controls._syncState = syncState;
+    controls.dataset.sliderReady = "true";
+
+    prev?.addEventListener("click", () => {
+      target.scrollBy({ left: -getStep(), behavior: "smooth" });
+    });
+
+    next?.addEventListener("click", () => {
+      target.scrollBy({ left: getStep(), behavior: "smooth" });
+    });
+
+    target.addEventListener("scroll", syncState, { passive: true });
+    window.addEventListener("resize", syncState);
+    window.setTimeout(syncState, 0);
   });
 }
 
 function setupPhoneMask() {
-  const input = document.querySelector('input[name="phone"]');
-  if (!input) return;
-
-  input.addEventListener("input", () => {
+  function applyPhoneMask(input) {
     const digits = input.value.replace(/\D/g, "").slice(0, 12);
     const normalized = digits.startsWith("375") ? digits : `375${digits}`;
     const value = normalized.slice(0, 12);
@@ -370,45 +531,288 @@ function setupPhoneMask() {
     if (value.length > 10) result += `-${value.slice(10, 12)}`;
 
     input.value = result;
+  }
+
+  document.querySelectorAll('input[name="phone"]').forEach((input) => {
+    if (input.dataset.phoneMaskReady === "true") return;
+    input.dataset.phoneMaskReady = "true";
+    input.addEventListener("input", () => applyPhoneMask(input));
   });
 }
 
 function setupForm() {
-  const form = document.querySelector("#contact-form");
-  const status = document.querySelector("#form-status");
-  if (!form || !status) return;
+  document.querySelectorAll('form[data-lead-form="true"], #contact-form').forEach((form) => {
+    if (form.dataset.formReady === "true") return;
+    form.dataset.formReady = "true";
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    status.textContent = "Заявка отправлена. Здесь можно подключить почту, Telegram-бота или CRM.";
-    form.reset();
+    const status = form.querySelector("[data-form-status]") || form.querySelector(".lead-form__status");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (status) {
+        status.textContent = "Заявка отправлена. Здесь можно подключить почту, Telegram-бота или CRM.";
+      }
+      form.reset();
+    });
   });
+}
+
+function setupLeadPopup() {
+  const callbackButtons = document.querySelectorAll(
+    '.button.button-accent.button-small[href="#contact-form"], .button.button-accent.button-small[href="index.html#contact-form"]'
+  );
+  const productButtons = document.querySelectorAll(".product-order-btn");
+
+  if (!callbackButtons.length && !productButtons.length) return;
+
+  const popup = document.createElement("div");
+  popup.className = "site-popup";
+  popup.id = "lead-popup";
+  popup.setAttribute("aria-hidden", "true");
+  popup.hidden = true;
+  popup.innerHTML = `
+    <div class="site-popup__backdrop" data-popup-close tabindex="-1"></div>
+    <div class="site-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="lead-popup-title">
+      <button type="button" class="site-popup__close" data-popup-close aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="site-popup__copy">
+        <h2 id="lead-popup-title" class="site-popup__title">Заказать звонок</h2>
+        <p class="site-popup__subtitle">Оставьте заявку, и менеджер свяжется с вами в ближайшее время</p>
+      </div>
+      <form class="site-popup-form" data-lead-form="true" novalidate>
+        <div class="site-popup-form__field">
+          <div class="site-popup-form__label-row">
+            <label class="site-popup-form__label" for="popup-contact-name">Ваше имя</label>
+          </div>
+          <input class="site-popup-form__control" type="text" name="name" id="popup-contact-name" placeholder="Введите имя" autocomplete="name">
+        </div>
+        <div class="site-popup-form__field">
+          <div class="site-popup-form__label-row">
+            <label class="site-popup-form__label" for="popup-contact-phone">Номер телефона</label>
+            <p class="site-popup-form__error" data-phone-error>*обязательное поле</p>
+          </div>
+          <input class="site-popup-form__control" type="tel" name="phone" id="popup-contact-phone" placeholder="+375 (___) ___-__-__" autocomplete="tel" inputmode="tel">
+        </div>
+        <div class="site-popup-form__field">
+          <div class="site-popup-form__label-row">
+            <label class="site-popup-form__label" for="popup-contact-message">Сообщение</label>
+          </div>
+          <textarea class="site-popup-form__control site-popup-form__control--message" name="message" id="popup-contact-message" rows="2" placeholder="Введите сообщение"></textarea>
+        </div>
+        <button class="site-popup-form__submit" type="submit">
+          <span>Отправить заявку</span>
+          <svg class="site-popup-form__submit-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"></path>
+          </svg>
+        </button>
+        <p class="site-popup-form__policy">
+          Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности и условиями обработки персональных данных.
+        </p>
+        <p class="site-popup-form__status" data-form-status aria-live="polite"></p>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  const title = popup.querySelector("#lead-popup-title");
+  const messageField = popup.querySelector("#popup-contact-message");
+  const firstInput = popup.querySelector("#popup-contact-name");
+  const phoneInput = popup.querySelector("#popup-contact-phone");
+  const popupForm = popup.querySelector("form");
+  const popupStatus = popup.querySelector("[data-form-status]");
+  const phoneError = popup.querySelector("[data-phone-error]");
+  let closeTimer = null;
+
+  if (popupForm) {
+    popupForm.dataset.formReady = "true";
+  }
+
+  const defaultState = {
+    title: "Заказать звонок",
+    message: "",
+  };
+
+  function openPopup(config = {}) {
+    const nextTitle = config.title || defaultState.title;
+    const nextMessage = config.message || defaultState.message;
+    if (closeTimer !== null) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+    if (title) title.textContent = nextTitle;
+    if (messageField) messageField.value = nextMessage;
+    if (popupStatus) popupStatus.textContent = "";
+    if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
+    if (phoneError) phoneError.classList.remove("is-visible");
+    popup.hidden = false;
+    popup.classList.add("is-open");
+    popup.setAttribute("aria-hidden", "false");
+    document.body.classList.add("site-popup-open");
+    if (firstInput) firstInput.focus();
+  }
+
+  function closePopup() {
+    popup.classList.remove("is-open");
+    popup.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("site-popup-open");
+    closeTimer = window.setTimeout(() => {
+      popup.hidden = true;
+      if (popupForm) popupForm.reset();
+      if (popupStatus) popupStatus.textContent = "";
+      if (title) title.textContent = defaultState.title;
+      if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
+      if (phoneError) phoneError.classList.remove("is-visible");
+      closeTimer = null;
+    }, 240);
+  }
+
+  function syncFilledState(input) {
+    input.classList.toggle("site-popup-form__control--filled", input.value.trim() !== "");
+  }
+
+  function validatePhoneField() {
+    if (!phoneInput) return true;
+    const digits = phoneInput.value.replace(/\D/g, "");
+    const valid = digits.length >= 12;
+    phoneInput.classList.toggle("site-popup-form__control--error", !valid);
+    if (phoneError) phoneError.classList.toggle("is-visible", !valid);
+    return valid;
+  }
+
+  popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
+    syncFilledState(input);
+    input.addEventListener("input", () => {
+      syncFilledState(input);
+      if (input === phoneInput && phoneError?.classList.contains("is-visible")) {
+        validatePhoneField();
+      }
+    });
+    input.addEventListener("blur", () => {
+      if (input === phoneInput && phoneInput.value.trim() !== "") {
+        validatePhoneField();
+      }
+    });
+  });
+
+  callbackButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openPopup(defaultState);
+    });
+  });
+
+  productButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const fallbackTitle = document.querySelector(".product-title")?.textContent?.trim() || "Товар";
+      openPopup({
+        title: button.getAttribute("data-lead-title") || fallbackTitle,
+        message: button.getAttribute("data-lead-message") || `Интересует товар: ${fallbackTitle}`,
+      });
+    });
+  });
+
+  popup.querySelectorAll("[data-popup-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      event.preventDefault();
+      closePopup();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!popup.classList.contains("is-open")) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closePopup();
+    }
+  });
+
+  if (popupForm) {
+    popupForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!validatePhoneField()) {
+        phoneInput?.focus();
+        return;
+      }
+      if (popupStatus) {
+        popupStatus.textContent = "Заявка отправлена. Здесь можно подключить почту, Telegram-бота или CRM.";
+      }
+      popupForm.reset();
+      popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
+        input.classList.remove("site-popup-form__control--filled");
+      });
+    });
+  }
 }
 
 function markMissingImages() {
   document.querySelectorAll("img").forEach((image) => {
-    image.addEventListener("error", () => {
-      const frame = image.closest(".image-frame") || image.parentElement;
-      if (frame) {
-        frame.classList.add("is-missing");
-      }
-    });
+    const frame =
+      image.closest(".image-frame, .catalog-card, .product-gallery__main, .product-thumb, .product-card__media") ||
+      image.parentElement;
 
-    if (image.complete && image.naturalWidth === 0) {
-      const frame = image.closest(".image-frame") || image.parentElement;
-      if (frame) {
-        frame.classList.add("is-missing");
-      }
+    if (!frame) return;
+
+    const showLoaded = () => {
+      frame.classList.remove("is-loading", "is-missing");
+    };
+
+    const showMissing = () => {
+      frame.classList.remove("is-loading");
+      frame.classList.add("is-missing");
+    };
+
+    if (image.dataset.imageStateReady !== "true") {
+      image.addEventListener("load", showLoaded);
+      image.addEventListener("error", showMissing);
+      image.dataset.imageStateReady = "true";
     }
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        showLoaded();
+      } else {
+        showMissing();
+      }
+      return;
+    }
+
+    frame.classList.remove("is-missing");
+    frame.classList.add("is-loading");
   });
 }
 
-renderCatalog();
+function setupMapLoading() {
+  document.querySelectorAll(".contacts-map iframe").forEach((frame) => {
+    const container = frame.parentElement;
+    if (!container) return;
+
+    const showReady = () => {
+      container.classList.remove("is-loading");
+      container.classList.add("is-ready");
+    };
+
+    if (frame.dataset.mapStateReady !== "true") {
+      frame.addEventListener("load", showReady, { once: true });
+      frame.dataset.mapStateReady = "true";
+    }
+
+    container.classList.remove("is-ready");
+    container.classList.add("is-loading");
+  });
+}
+
 renderFeatures();
 renderInstagram();
 renderProcess();
-renderProducts();
+loadHomeCatalogData();
 setupMenu();
+setupScrollControls();
+setupLeadPopup();
 setupPhoneMask();
 setupForm();
 markMissingImages();
+setupMapLoading();

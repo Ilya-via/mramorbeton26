@@ -117,6 +117,9 @@ if ($category === null) {
             <article class="paving-tile-card">
               <a class="paving-tile-card__link" href="<?= catalog_esc(catalog_product_link($product)) ?>">
                 <div class="paving-tile-card__media image-frame">
+                  <?php if (!empty($product['is_out_of_stock'])) : ?>
+                  <span class="product-stock-badge product-stock-badge--compact">Нет в наличии</span>
+                  <?php endif; ?>
                   <img
                     src="<?= catalog_esc($product['image']) ?>"
                     alt="<?= catalog_esc($product['title']) ?>"
@@ -154,6 +157,9 @@ if ($category === null) {
           <?php foreach ($category['products'] as $product) : ?>
             <a class="product-card product-card-link" href="<?= catalog_esc(catalog_product_link($product)) ?>">
               <div class="product-media image-frame">
+                <?php if (!empty($product['is_out_of_stock'])) : ?>
+                <span class="product-stock-badge product-stock-badge--compact">Нет в наличии</span>
+                <?php endif; ?>
                 <img src="<?= catalog_esc($product['image']) ?>" alt="<?= catalog_esc($product['title']) ?>" loading="lazy">
               </div>
               <div class="product-content">
@@ -267,7 +273,7 @@ if ($category === null) {
             <a class="social social--telegram" href="#" aria-label="Telegram">
               <img src="assets/images/footer-icon-3.svg" width="39" height="39" alt="" decoding="async">
             </a>
-            <a class="social social--instagram" href="#" aria-label="Instagram">
+            <a class="social social--photo" href="#" aria-label="Наш профиль">
               <img src="assets/images/footer-icon-4.svg" width="39" height="39" alt="" decoding="async">
             </a>
           </div>

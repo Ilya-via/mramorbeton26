@@ -77,6 +77,7 @@
 }
 
 .paving-tile-card__media {
+  position: relative;
   flex: 0 0 240px;
   height: 240px;
   background: #eceff1;
@@ -150,7 +151,7 @@
   min-height: 58px;
   padding: 0 20px;
   border: none;
-  border-radius: 16px;
+  border-radius: 22px;
   background: #2b2727;
   color: #fff;
   font-size: 18px;
@@ -158,6 +159,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   pointer-events: none;
+  transition: background-color 0.22s ease;
 }
 
 .paving-tile-card__cta-icon {
@@ -166,6 +168,7 @@
   height: 18px;
   flex: 0 0 18px;
   position: relative;
+  transition: transform 0.22s ease;
 }
 
 .paving-tile-card__cta-icon::before,
@@ -195,7 +198,20 @@
 }
 
 .paving-tile-card__link:hover .paving-tile-card__cta {
-  background: #1a1a1a;
+  background: #de6800;
+}
+
+.paving-tile-card__link:hover .paving-tile-card__cta-icon,
+.paving-tile-card__link:focus-visible .paving-tile-card__cta-icon {
+  transform: translateX(3px);
+}
+
+.paving-tile-card__link:active .paving-tile-card__cta {
+  background: #f47301;
+}
+
+.paving-tile-card__link:active .paving-tile-card__cta-icon {
+  transform: translateX(1px);
 }
 
 @media (max-width: 1240px) {

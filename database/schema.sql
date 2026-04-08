@@ -1,0 +1,130 @@
+CREATE TABLE IF NOT EXISTS admin_users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    display_name VARCHAR(150) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS categories (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(190) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    image_path VARCHAR(255) NOT NULL DEFAULT '',
+    layout VARCHAR(50) NOT NULL DEFAULT '',
+    kicker VARCHAR(255) NOT NULL DEFAULT '',
+    heading VARCHAR(255) NOT NULL DEFAULT '',
+    lead TEXT NOT NULL,
+    breadcrumbs_type VARCHAR(30) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 100,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS products (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    category_id INT UNSIGNED NOT NULL,
+    slug VARCHAR(190) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
+    subtitle_text TEXT NOT NULL,
+    description TEXT NOT NULL,
+    meta_text VARCHAR(255) NOT NULL DEFAULT '',
+    price_text VARCHAR(255) NOT NULL DEFAULT '',
+    image_path VARCHAR(255) NOT NULL DEFAULT '',
+    is_out_of_stock TINYINT(1) NOT NULL DEFAULT 0,
+    external_url VARCHAR(255) NOT NULL DEFAULT '',
+    page_type VARCHAR(50) NOT NULL DEFAULT '',
+    show_thickness TINYINT(1) NOT NULL DEFAULT 0,
+    spec_size TEXT NOT NULL,
+    spec_weight VARCHAR(255) NOT NULL DEFAULT '',
+    gabarity TEXT NOT NULL,
+    weight VARCHAR(255) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 100,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    is_featured TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_products_category
+        FOREIGN KEY (category_id) REFERENCES categories(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_images (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_id INT UNSIGNED NOT NULL,
+    full_path VARCHAR(255) NOT NULL,
+    thumb_path VARCHAR(255) NOT NULL DEFAULT '',
+    alt_text VARCHAR(255) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_images_product
+        FOREIGN KEY (product_id) REFERENCES products(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_color_prices (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_id INT UNSIGNED NOT NULL,
+    label VARCHAR(255) NOT NULL DEFAULT '',
+    amount VARCHAR(255) NOT NULL DEFAULT '',
+    unit VARCHAR(100) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_color_prices_product
+        FOREIGN KEY (product_id) REFERENCES products(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_thickness_options (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_id INT UNSIGNED NOT NULL,
+    option_key VARCHAR(100) NOT NULL DEFAULT '',
+    label VARCHAR(255) NOT NULL DEFAULT '',
+    value_text VARCHAR(255) NOT NULL DEFAULT '',
+    spec_size TEXT NOT NULL,
+    spec_weight VARCHAR(255) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_thickness_options_product
+        FOREIGN KEY (product_id) REFERENCES products(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_thickness_option_prices (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    thickness_option_id INT UNSIGNED NOT NULL,
+    label VARCHAR(255) NOT NULL DEFAULT '',
+    amount VARCHAR(255) NOT NULL DEFAULT '',
+    unit VARCHAR(100) NOT NULL DEFAULT '',
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_thickness_option_prices_option
+        FOREIGN KEY (thickness_option_id) REFERENCES product_thickness_options(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_related (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_id INT UNSIGNED NOT NULL,
+    related_product_id INT UNSIGNED NOT NULL,
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_product_related_pair (product_id, related_product_id),
+    CONSTRAINT fk_product_related_product
+        FOREIGN KEY (product_id) REFERENCES products(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_product_related_related_product
+        FOREIGN KEY (related_product_id) REFERENCES products(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

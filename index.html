@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="lead-form.css">
 </head>
-<body>
+<body class="page-home">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#hero" aria-label="MRAMORBETON">
@@ -69,11 +69,6 @@
               <span class="button-arrow" aria-hidden="true"></span>
             </a>
           </div>
-          <ul class="hero-features">
-            <li>Собственное производство</li>
-            <li>Доставка по всей Беларуси</li>
-            <li>Гарантия 3 года</li>
-          </ul>
         </div>
 
         <div class="hero-media image-frame image-frame-hero">
@@ -83,6 +78,12 @@
             loading="eager"
           >
         </div>
+
+        <ul class="hero-features">
+          <li>Собственное производство</li>
+          <li>Доставка по всей Беларуси</li>
+          <li>Гарантия 3 года</li>
+        </ul>
       </div>
     </section>
 
@@ -153,7 +154,7 @@
           <a class="button button-outline" href="projects.html">Смотреть все объекты</a>
         </div>
 
-        <div class="projects-grid">
+        <div class="projects-grid" id="projects-slider">
           <article class="project-card project-card-large">
             <img
               src="assets/images/project-industrial.png"
@@ -190,6 +191,11 @@
             </article>
           </div>
         </div>
+        <div class="mobile-slider-controls" aria-label="Навигация по объектам">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="projects-slider" aria-label="Предыдущий объект"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="projects-slider" aria-label="Следующий объект"></button>
+        </div>
+        <a class="button button-outline mobile-section-button" href="projects.html">Смотреть все объекты</a>
       </div>
     </section>
 
@@ -206,6 +212,11 @@
           <a class="button button-outline" href="#contact-form">Подписаться</a>
         </div>
         <div class="instagram-grid" id="instagram-grid"></div>
+        <div class="mobile-slider-controls" aria-label="Навигация по Instagram">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="instagram-grid" aria-label="Предыдущая публикация"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="instagram-grid" aria-label="Следующая публикация"></button>
+        </div>
+        <a class="button button-dark mobile-section-button" href="#contact-form">Подписаться</a>
       </div>
     </section>
 
@@ -233,6 +244,10 @@
           <h2>Популярные товары</h2>
         </div>
         <div class="products-grid" id="products-grid"></div>
+        <div class="mobile-slider-controls" aria-label="Навигация по товарам">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="products-grid" aria-label="Предыдущий товар"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="products-grid" aria-label="Следующий товар"></button>
+        </div>
       </div>
     </section>
 
@@ -406,7 +421,7 @@
             <a class="social social--telegram" href="#" aria-label="Telegram">
               <img src="assets/images/footer-icon-3.svg" width="39" height="39" alt="" decoding="async">
             </a>
-            <a class="social social--instagram" href="#" aria-label="Instagram">
+            <a class="social social--photo" href="#" aria-label="Наш профиль">
               <img src="assets/images/footer-icon-4.svg" width="39" height="39" alt="" decoding="async">
             </a>
           </div>

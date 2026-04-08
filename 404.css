@@ -1,0 +1,375 @@
+.page-404 {
+  background: #ffffff;
+}
+
+.error-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 33px 0 84px;
+}
+
+.error-hero__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.error-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 38px;
+  opacity: 0;
+  animation: error-fade-up 0.7s ease 0.08s forwards;
+}
+
+.error-tag__line {
+  width: 64px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.error-tag__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  background: rgba(230, 126, 34, 0.1);
+  color: var(--accent);
+}
+
+.error-tag__pill svg,
+.error-tag__pill img {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+.error-tag__pill span {
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+
+.error-code {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 38px;
+  color: var(--text);
+  opacity: 0;
+  animation: error-fade-up 0.9s ease 0.16s forwards;
+}
+
+.error-code__digit,
+.error-code__zero {
+  position: relative;
+  z-index: 1;
+}
+
+.error-code__digit {
+  font-size: clamp(160px, 23.4vw, 300px);
+  line-height: 0.86;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+.error-code__digit:first-child {
+  animation: error-digit-float 4.8s ease-in-out 1.1s infinite;
+}
+
+.error-code__digit:last-child {
+  animation: error-digit-float 4.8s ease-in-out 1.4s infinite reverse;
+}
+
+.error-code__zero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(156px, 18.6vw, 236px);
+  height: clamp(182px, 23.5vw, 300px);
+  margin: 0 clamp(-16px, -1.1vw, -8px);
+}
+
+.error-code__digit--zero {
+  position: relative;
+  z-index: 1;
+}
+
+.error-code__zero-shell {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(42px, 4.8vw, 62px);
+  height: clamp(96px, 10vw, 132px);
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  animation: error-ring-pulse 3.2s ease-in-out 0.7s infinite;
+}
+
+.error-code__icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(76px, 7.3vw, 106px);
+  height: clamp(76px, 7.3vw, 106px);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 25px 50px rgba(230, 126, 34, 0.25);
+  transform: translate(-50%, -50%);
+  animation: error-icon-bob 3.6s ease-in-out 0.55s infinite;
+}
+
+.error-code__icon svg,
+.error-code__icon img {
+  width: 50%;
+  height: 50%;
+  display: block;
+  object-fit: contain;
+}
+
+.error-code__square {
+  position: absolute;
+  width: clamp(72px, 7vw, 96px);
+  height: clamp(72px, 7vw, 96px);
+  border: 4px solid rgba(230, 126, 34, 0.22);
+  pointer-events: none;
+}
+
+.error-code__square--left {
+  left: 8%;
+  top: -4px;
+  transform: rotate(11deg);
+  animation: error-square-left 6s ease-in-out 0.9s infinite;
+}
+
+.error-code__square--right {
+  right: 6%;
+  bottom: -22px;
+  transform: rotate(-12deg);
+  animation: error-square-right 6.4s ease-in-out 1.1s infinite;
+}
+
+.error-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  max-width: 620px;
+  opacity: 0;
+  animation: error-fade-up 0.75s ease 0.28s forwards;
+}
+
+.error-copy h1 {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 45px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.027em;
+  color: #1a1a1a;
+}
+
+.error-copy p {
+  margin: 0;
+  max-width: 430px;
+  font-size: 18px;
+  line-height: 1.44;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-soft);
+}
+
+.page-404 .site-footer {
+  border-top: 1px solid rgba(138, 138, 138, 0.24);
+}
+
+@keyframes error-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes error-icon-bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 25px 50px rgba(230, 126, 34, 0.25);
+  }
+
+  50% {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 30px 58px rgba(230, 126, 34, 0.3);
+  }
+}
+
+@keyframes error-ring-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.96;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes error-square-left {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(11deg);
+  }
+
+  50% {
+    transform: translate3d(-8px, -10px, 0) rotate(17deg);
+  }
+}
+
+@keyframes error-square-right {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-12deg);
+  }
+
+  50% {
+    transform: translate3d(10px, 8px, 0) rotate(-18deg);
+  }
+}
+
+@keyframes error-digit-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-tag,
+  .error-code,
+  .error-copy {
+    opacity: 1;
+    animation: none;
+  }
+
+  .error-code__digit:first-child,
+  .error-code__digit:last-child,
+  .error-code__zero-shell,
+  .error-code__icon,
+  .error-code__square--left,
+  .error-code__square--right {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .error-hero {
+    padding: 32px 0 72px;
+  }
+
+  .error-tag {
+    margin-bottom: 32px;
+  }
+
+  .error-tag__line {
+    width: 44px;
+  }
+
+  .error-code {
+    margin-bottom: 34px;
+  }
+
+  .error-copy p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+@media (max-width: 680px) {
+  .error-hero {
+    padding: 44px 0 56px;
+  }
+
+  .error-tag {
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .error-tag__line {
+    width: 24px;
+    height: 2px;
+  }
+
+  .error-tag__pill {
+    min-height: 42px;
+    padding: 0 18px;
+    gap: 10px;
+  }
+
+  .error-tag__pill span {
+    letter-spacing: 0.28em;
+  }
+
+  .error-code {
+    margin-bottom: 28px;
+  }
+
+  .error-code__zero {
+    width: 108px;
+    height: 134px;
+    margin: 0 -6px;
+  }
+
+  .error-code__icon {
+    width: 76px;
+    height: 76px;
+  }
+
+  .error-code__square--left {
+    left: 2%;
+    top: -4px;
+  }
+
+  .error-code__square--right {
+    right: 0;
+    bottom: -14px;
+  }
+
+  .error-copy {
+    gap: 12px;
+  }
+
+  .error-copy h1 {
+    font-size: 32px;
+  }
+
+  .error-copy p {
+    font-size: 15px;
+    line-height: 22px;
+  }
+}

@@ -149,6 +149,7 @@
 }
 
 .contacts-map {
+  position: relative;
   width: 552px;
   max-width: 100%;
   height: 600px;
@@ -159,11 +160,44 @@
   box-sizing: border-box;
 }
 
+.contacts-map::before,
+.contacts-map::after {
+  position: absolute;
+  left: 50%;
+  z-index: 2;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.contacts-map.is-loading::before {
+  content: "";
+  top: 224px;
+  width: 99px;
+  height: 99px;
+  background: url("assets/images/map-loading.svg") center / contain no-repeat;
+}
+
+.contacts-map.is-loading::after {
+  content: "Загрузка карты...";
+  top: 341px;
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #4b5563;
+}
+
 .contacts-map iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.contacts-map.is-ready iframe {
+  opacity: 1;
 }
 
 @media (max-width: 1240px) {
@@ -189,6 +223,15 @@
   .contacts-map {
     height: 420px;
     order: 2;
+  }
+
+  .contacts-map.is-loading::before {
+    top: 136px;
+  }
+
+  .contacts-map.is-loading::after {
+    top: 252px;
+    font-size: 20px;
   }
 
   .contacts-info {

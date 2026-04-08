@@ -18,27 +18,34 @@ if ($found === null) {
     $pageTitle = $product['title'] . ' — MRAMORBETON';
 
     $gallery = $product['gallery'] ?? [];
-    if ($gallery === [] && !empty($product['image'])) {
-        $gallery = [
-            [
-                'full' => $product['image'],
-                'thumb' => $product['image'],
-                'alt' => $product['title'],
-            ],
-        ];
-    }
-    $singleGallery = count($gallery) <= 1;
-    $first = $gallery[0] ?? null;
+    $singleGallery = count($gallery) === 0;
+    $mainImage = !empty($product['image'])
+        ? [
+            'full' => $product['image'],
+            'thumb' => $product['image'],
+            'alt' => $product['title'],
+        ]
+        : ($gallery[0] ?? null);
 
     $specSize = $product['spec_size'] ?? $product['gabarity'] ?? '—';
     $specWeight = $product['spec_weight'] ?? $product['weight'] ?? '—';
-    $showThickness = !empty($product['show_thickness']);
+    $thicknessOptions = array_values($product['thickness_options'] ?? []);
+    $showThickness = !empty($product['show_thickness']) && $thicknessOptions !== [];
+    $subtitle = trim((string) ($product['subtitle'] ?? $product['subtitle_text'] ?? ''));
+    $isOutOfStock = !empty($product['is_out_of_stock']);
 
     $colorPrices = $product['color_prices'] ?? [
         ['label' => 'Серый', 'amount' => '30', 'unit' => 'руб/м²'],
         ['label' => 'Цветной', 'amount' => '36', 'unit' => 'руб/м²'],
         ['label' => 'Мраморный', 'amount' => '41', 'unit' => 'руб/м²'],
     ];
+
+    if ($showThickness) {
+        $selectedThickness = $thicknessOptions[0];
+        $specSize = $selectedThickness['spec_size'] ?: $specSize;
+        $specWeight = $selectedThickness['spec_weight'] ?: $specWeight;
+        $colorPrices = $selectedThickness['prices'] ?: $colorPrices;
+    }
 
     $metaDescription = $product['description'] ?? ($product['title'] . ' — MRAMORBETON.');
     $related = catalog_get_related_products_fallback($categorySlug, $product['slug'], 3);
@@ -61,8 +68,9 @@ if ($found === null) {
   >
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="product.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
-<body class="page-product">
+<body class="page-product<?= !$notFound ? ' page-product--loading' : '' ?>">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="MRAMORBETON">
@@ -120,6 +128,81 @@ if ($found === null) {
         <span class="product-breadcrumbs-current"><?= catalog_esc($product['title']) ?></span>
       </nav>
 
+      <div class="product-loading-shell" aria-hidden="true">
+        <div class="product-loading-layout">
+          <div class="product-loading-gallery">
+            <div class="product-loading-box product-loading-box--main"></div>
+            <div class="product-loading-thumbs">
+              <div class="product-loading-box product-loading-box--thumb"></div>
+              <div class="product-loading-box product-loading-box--thumb"></div>
+              <div class="product-loading-box product-loading-box--thumb"></div>
+            </div>
+          </div>
+
+          <div class="product-loading-info">
+            <span class="product-loading-line product-loading-line--title"></span>
+            <span class="product-loading-line product-loading-line--subtitle"></span>
+            <span class="product-loading-line product-loading-line--subtitle-short"></span>
+
+            <div class="product-loading-specs">
+              <div class="product-loading-spec-card">
+                <span class="product-loading-chip"></span>
+                <span class="product-loading-line product-loading-line--card-left"></span>
+                <span class="product-loading-line product-loading-line--card-right"></span>
+              </div>
+              <div class="product-loading-spec-card">
+                <span class="product-loading-chip"></span>
+                <span class="product-loading-line product-loading-line--card-left"></span>
+                <span class="product-loading-line product-loading-line--card-right"></span>
+              </div>
+            </div>
+
+            <div class="product-loading-prices">
+              <div class="product-loading-price-row">
+                <span class="product-loading-line product-loading-line--price-left"></span>
+                <span class="product-loading-line product-loading-line--price-center"></span>
+                <span class="product-loading-line product-loading-line--price-right"></span>
+              </div>
+              <div class="product-loading-price-row">
+                <span class="product-loading-line product-loading-line--price-left short"></span>
+                <span class="product-loading-line product-loading-line--price-center"></span>
+                <span class="product-loading-line product-loading-line--price-right short"></span>
+              </div>
+              <div class="product-loading-price-row">
+                <span class="product-loading-line product-loading-line--price-left"></span>
+                <span class="product-loading-line product-loading-line--price-center"></span>
+                <span class="product-loading-line product-loading-line--price-right"></span>
+              </div>
+              <div class="product-loading-price-row">
+                <span class="product-loading-line product-loading-line--price-left short"></span>
+                <span class="product-loading-line product-loading-line--price-center"></span>
+                <span class="product-loading-line product-loading-line--price-right short"></span>
+              </div>
+            </div>
+
+            <span class="product-loading-button"></span>
+          </div>
+        </div>
+
+        <section class="product-loading-related" aria-hidden="true">
+          <h2 class="product-related__title">Возможно вас заинтересует</h2>
+          <div class="product-loading-related__grid">
+            <?php for ($i = 0; $i < 3; $i++) : ?>
+            <article class="product-loading-card">
+              <div class="product-loading-box product-loading-box--card"></div>
+              <div class="product-loading-card__body">
+                <span class="product-loading-line product-loading-line--card-title"></span>
+                <span class="product-loading-line product-loading-line--card-text"></span>
+                <span class="product-loading-line product-loading-line--card-text short"></span>
+                <span class="product-loading-card__button"></span>
+              </div>
+            </article>
+            <?php endfor; ?>
+          </div>
+        </section>
+      </div>
+
+      <div class="product-page-content">
       <div class="product-layout">
         <div class="product-gallery<?= $singleGallery ? ' product-gallery--single' : '' ?>">
           <button
@@ -129,12 +212,23 @@ if ($found === null) {
           >
             <img
               id="product-main-img"
-              src="<?= catalog_esc($first['full'] ?? '') ?>"
-              alt="<?= catalog_esc($first['alt'] ?? $product['title']) ?>"
+              src="<?= catalog_esc($mainImage['full'] ?? '') ?>"
+              alt="<?= catalog_esc($mainImage['alt'] ?? $product['title']) ?>"
               width="634"
               height="396"
               loading="eager"
             >
+            <?php if ($isOutOfStock) : ?>
+            <div class="product-stock-banner" aria-label="Нет в наличии">
+              <div class="product-stock-banner__icon" aria-hidden="true">
+                <span></span>
+              </div>
+              <div class="product-stock-banner__text">
+                <strong>Нет в наличии</strong>
+                <span>Товар временно отсутствует на складе</span>
+              </div>
+            </div>
+            <?php endif; ?>
           </button>
           <div class="product-gallery__thumbs" role="group" aria-label="Дополнительные фото">
             <?php foreach ($gallery as $i => $slide) : ?>
@@ -154,6 +248,9 @@ if ($found === null) {
 
         <div class="product-info">
           <h1 class="product-title"><?= catalog_esc($product['title']) ?></h1>
+          <?php if ($subtitle !== '') : ?>
+          <p class="product-subtitle"><?= nl2br(catalog_esc($subtitle), false) ?></p>
+          <?php endif; ?>
 
           <div class="product-specs-wrap">
             <div class="product-spec-row">
@@ -166,7 +263,7 @@ if ($found === null) {
                 </div>
                 <p class="product-spec-label">Размер (мм)</p>
               </div>
-              <p class="product-spec-value"><?= catalog_esc($specSize) ?></p>
+              <p id="product-spec-size-value" class="product-spec-value"><?= catalog_esc($specSize) ?></p>
             </div>
             <div class="product-spec-row">
               <div class="product-spec-left">
@@ -179,7 +276,7 @@ if ($found === null) {
                 </div>
                 <p class="product-spec-label">Вес (кг/м²)</p>
               </div>
-              <p class="product-spec-value"><?= catalog_esc($specWeight) ?></p>
+              <p id="product-spec-weight-value" class="product-spec-value"><?= catalog_esc($specWeight) ?></p>
             </div>
           </div>
 
@@ -187,30 +284,27 @@ if ($found === null) {
           <div>
             <h2 class="product-block-title" id="thickness-heading">Выберите толщину</h2>
             <div class="product-thickness" role="group" aria-labelledby="thickness-heading">
+              <?php foreach ($thicknessOptions as $index => $option) : ?>
               <button
                 type="button"
-                class="product-thickness-option is-selected"
-                data-thickness-option="standard"
-                aria-pressed="true"
+                class="product-thickness-option<?= $index === 0 ? ' is-selected' : '' ?>"
+                data-thickness-option="<?= catalog_esc($option['key'] ?: ('option-' . $index)) ?>"
+                data-spec-size="<?= catalog_esc($option['spec_size'] ?? '') ?>"
+                data-spec-weight="<?= catalog_esc($option['spec_weight'] ?? '') ?>"
+                data-prices="<?= catalog_esc((string) json_encode($option['prices'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"
+                aria-pressed="<?= $index === 0 ? 'true' : 'false' ?>"
               >
-                <span class="product-thickness-option__label">Стандарт</span>
-                <span class="product-thickness-option__value">30, 35, 40 мм</span>
+                <span class="product-thickness-option__label"><?= catalog_esc($option['label'] ?? '') ?></span>
+                <span class="product-thickness-option__value"><?= catalog_esc($option['value'] ?? '') ?></span>
               </button>
-              <button
-                type="button"
-                class="product-thickness-option"
-                data-thickness-option="reinforced"
-                aria-pressed="false"
-              >
-                <span class="product-thickness-option__label">Усиленная</span>
-                <span class="product-thickness-option__value">45, 50, 60 мм</span>
-              </button>
+              <?php endforeach; ?>
             </div>
           </div>
           <?php endif; ?>
 
           <div class="product-prices">
             <h2 class="product-block-title">Стоимость по цветам:</h2>
+            <div id="product-price-rows">
             <?php foreach ($colorPrices as $row) : ?>
             <div class="product-price-row">
               <p class="product-price-label"><?= catalog_esc($row['label']) ?></p>
@@ -218,9 +312,16 @@ if ($found === null) {
               <p class="product-price-value"><?= catalog_esc($row['amount']) ?> <span><?= catalog_esc($row['unit']) ?></span></p>
             </div>
             <?php endforeach; ?>
+            </div>
           </div>
 
-          <a class="product-order-btn" href="index.html#contact-form">Заказать</a>
+          <a
+            class="product-order-btn"
+            href="index.html#contact-form"
+            data-lead-popup="product"
+            data-lead-title="<?= catalog_esc(trim(($category['title'] ?? '') !== '' ? ($category['title'] . ' «' . $product['title'] . '»') : $product['title'])) ?>"
+            data-lead-message="<?= catalog_esc('Интересует товар: ' . $product['title']) ?>"
+          >Заказать</a>
         </div>
       </div>
 
@@ -234,7 +335,10 @@ if ($found === null) {
             $rw = $rp['weight'] ?? '—';
             ?>
           <article class="product-card">
-            <div class="product-card__media">
+            <a class="product-card__media" href="<?= catalog_esc(catalog_product_link($rp)) ?>" aria-label="Открыть товар <?= catalog_esc($rp['title'] ?? '') ?>">
+              <?php if (!empty($rp['is_out_of_stock'])) : ?>
+              <span class="product-stock-badge product-stock-badge--compact">Нет в наличии</span>
+              <?php endif; ?>
               <img
                 src="<?= catalog_esc($rp['image'] ?? '') ?>"
                 alt=""
@@ -242,7 +346,7 @@ if ($found === null) {
                 width="378"
                 height="240"
               >
-            </div>
+            </a>
             <div class="product-card__body">
               <h3 class="product-card__title"><?= catalog_esc($rp['title'] ?? '') ?></h3>
               <dl class="product-card__meta">
@@ -273,6 +377,7 @@ if ($found === null) {
         </div>
       </section>
       <?php endif; ?>
+      </div>
 
       <?php endif; ?>
     </div>
@@ -372,7 +477,7 @@ if ($found === null) {
             <a class="social social--telegram" href="#" aria-label="Telegram">
               <img src="assets/images/footer-icon-3.svg" width="39" height="39" alt="" decoding="async">
             </a>
-            <a class="social social--instagram" href="#" aria-label="Instagram">
+            <a class="social social--photo" href="#" aria-label="Наш профиль">
               <img src="assets/images/footer-icon-4.svg" width="39" height="39" alt="" decoding="async">
             </a>
           </div>

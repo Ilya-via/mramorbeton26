@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/app.php';
+
 function catalog_esc(?string $s): string
 {
     return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
-function catalog_get_categories(): array
+function catalog_get_legacy_categories(): array
 {
     return [
         'trotuarnaya-plitka' => [
@@ -22,6 +24,7 @@ function catalog_get_categories(): array
                 [
                     'slug' => 'kaliforniya-kamen',
                     'title' => 'Калифорния камень',
+                    'subtitle' => "Высокопрочный бетон по технологии вибролитья\nс улучшенными показателями морозостойкости\nи истираемости",
                     'description' => 'Калифорния камень: тротуарная плитка 300×300×40 мм, вес 90 кг/м². Производство MRAMORBETON.',
                     'gabarity' => '300×300×40',
                     'weight' => '90 кг/м²',
@@ -190,6 +193,32 @@ function catalog_get_categories(): array
                         ['label' => 'Цветной', 'amount' => '36', 'unit' => 'руб/м²'],
                         ['label' => 'Мраморный', 'amount' => '41', 'unit' => 'руб/м²'],
                     ],
+                    'thickness_options' => [
+                        [
+                            'key' => 'standard',
+                            'label' => 'Стандарт',
+                            'value' => '30, 35, 40 мм',
+                            'spec_size' => '1210×320×40, 1350×320×35',
+                            'spec_weight' => '—',
+                            'prices' => [
+                                ['label' => 'Серый', 'amount' => '30', 'unit' => 'руб/м²'],
+                                ['label' => 'Цветной', 'amount' => '36', 'unit' => 'руб/м²'],
+                                ['label' => 'Мраморный', 'amount' => '41', 'unit' => 'руб/м²'],
+                            ],
+                        ],
+                        [
+                            'key' => 'reinforced',
+                            'label' => 'Усиленная',
+                            'value' => '45, 50, 60 мм',
+                            'spec_size' => '1500×350×50, 1500×300×60, 1550×350×50',
+                            'spec_weight' => '—',
+                            'prices' => [
+                                ['label' => 'Серый', 'amount' => '30', 'unit' => 'руб/м²'],
+                                ['label' => 'Цветной', 'amount' => '36', 'unit' => 'руб/м²'],
+                                ['label' => 'Мраморный', 'amount' => '41', 'unit' => 'руб/м²'],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'slug' => 'stupen-gladkaya-4-prorezi',
@@ -329,6 +358,309 @@ function catalog_get_categories(): array
     ];
 }
 
+function catalog_derive_price_from_rows(array $rows): string
+{
+    foreach ($rows as $row) {
+        $amount = trim((string) ($row['amount'] ?? ''));
+        $unit = trim((string) ($row['unit'] ?? ''));
+        if ($amount === '' && $unit === '') {
+            continue;
+        }
+
+        if ($amount !== '' && preg_match('/^(от|по|уточня)/ui', $amount)) {
+            return trim($amount . ' ' . $unit);
+        }
+
+        if ($amount === '') {
+            return $unit;
+        }
+
+        return trim('от ' . $amount . ' ' . $unit);
+    }
+
+    return '';
+}
+
+function catalog_finalize_product(array $product): array
+{
+    $thicknessOptions = array_values($product['thickness_options'] ?? []);
+    $priceRows = $product['color_prices'] ?? [];
+
+    if (!empty($product['show_thickness']) && $thicknessOptions !== []) {
+        $firstOption = $thicknessOptions[0];
+        if (!empty($firstOption['prices']) && is_array($firstOption['prices'])) {
+            $priceRows = $firstOption['prices'];
+        }
+        if (!empty($firstOption['spec_size'])) {
+            $product['spec_size'] = $firstOption['spec_size'];
+        }
+        if (!empty($firstOption['spec_weight'])) {
+            $product['spec_weight'] = $firstOption['spec_weight'];
+        }
+    }
+
+    $meta = trim((string) ($product['meta'] ?? ''));
+    if ($meta === '') {
+        $size = trim((string) ($product['spec_size'] ?? $product['gabarity'] ?? ''));
+        $meta = $size !== '' ? 'Размеры(мм): ' . $size : '';
+    }
+
+    $price = trim((string) ($product['price'] ?? ''));
+    if ($price === '') {
+        $price = catalog_derive_price_from_rows($priceRows);
+    }
+
+    $product['meta'] = $meta;
+    $product['price'] = $price;
+    $product['is_out_of_stock'] = !empty($product['is_out_of_stock']);
+
+    return $product;
+}
+
+function catalog_db_has_catalog_data(): bool
+{
+    static $hasData = null;
+
+    if ($hasData !== null) {
+        return $hasData;
+    }
+
+    if (!app_db_ready()) {
+        $hasData = false;
+        return false;
+    }
+
+    try {
+        $pdo = app_pdo();
+        $hasData = $pdo instanceof PDO && (int) $pdo->query('SELECT COUNT(*) FROM categories')->fetchColumn() > 0;
+    } catch (Throwable $e) {
+        $hasData = false;
+    }
+
+    return $hasData;
+}
+
+function catalog_build_db_categories(): array
+{
+    if (!catalog_db_has_catalog_data()) {
+        return [];
+    }
+
+    $pdo = app_pdo();
+    if (!$pdo instanceof PDO) {
+        return [];
+    }
+
+    try {
+        $categoryStmt = $pdo->query(
+            'SELECT id, slug, title, description, image_path, layout, kicker, heading, lead, breadcrumbs_type, sort_order
+             FROM categories
+             WHERE is_active = 1
+             ORDER BY sort_order ASC, id ASC'
+        );
+        $productStmt = $pdo->query(
+            'SELECT id, category_id, slug, title, subtitle_text, description, meta_text, price_text, image_path, is_out_of_stock, external_url, page_type,
+                    show_thickness, spec_size, spec_weight, gabarity, weight, is_featured, sort_order
+             FROM products
+             WHERE is_active = 1
+             ORDER BY sort_order ASC, id ASC'
+        );
+        $galleryStmt = $pdo->query(
+            'SELECT product_id, full_path, thumb_path, alt_text, sort_order
+             FROM product_images
+             ORDER BY sort_order ASC, id ASC'
+        );
+        $priceStmt = $pdo->query(
+            'SELECT product_id, label, amount, unit, sort_order
+             FROM product_color_prices
+             ORDER BY sort_order ASC, id ASC'
+        );
+        $thicknessStmt = $pdo->query(
+            'SELECT id, product_id, option_key, label, value_text, spec_size, spec_weight, sort_order
+             FROM product_thickness_options
+             ORDER BY sort_order ASC, id ASC'
+        );
+        $thicknessPriceStmt = $pdo->query(
+            'SELECT thickness_option_id, label, amount, unit, sort_order
+             FROM product_thickness_option_prices
+             ORDER BY sort_order ASC, id ASC'
+        );
+    } catch (Throwable $e) {
+        return [];
+    }
+
+    $categories = [];
+    $categoryIdsToSlug = [];
+
+    foreach ($categoryStmt->fetchAll() as $row) {
+        $slug = (string) $row['slug'];
+        $categoryIdsToSlug[(int) $row['id']] = $slug;
+        $categories[$slug] = [
+            'id' => (int) $row['id'],
+            'slug' => $slug,
+            'title' => (string) $row['title'],
+            'description' => (string) ($row['description'] ?? ''),
+            'image' => (string) ($row['image_path'] ?? ''),
+            'layout' => (string) ($row['layout'] ?? ''),
+            'kicker' => (string) ($row['kicker'] ?? ''),
+            'heading' => (string) ($row['heading'] ?? ''),
+            'lead' => (string) ($row['lead'] ?? ''),
+            'breadcrumbs' => (string) ($row['breadcrumbs_type'] ?? ''),
+            'sort_order' => (int) $row['sort_order'],
+            'products' => [],
+        ];
+    }
+
+    $imagesByProduct = [];
+    foreach ($galleryStmt->fetchAll() as $row) {
+        $imagesByProduct[(int) $row['product_id']][] = [
+            'full' => (string) $row['full_path'],
+            'thumb' => (string) ($row['thumb_path'] ?: $row['full_path']),
+            'alt' => (string) ($row['alt_text'] ?? ''),
+        ];
+    }
+
+    $pricesByProduct = [];
+    foreach ($priceStmt->fetchAll() as $row) {
+        $pricesByProduct[(int) $row['product_id']][] = [
+            'label' => (string) ($row['label'] ?? ''),
+            'amount' => (string) ($row['amount'] ?? ''),
+            'unit' => (string) ($row['unit'] ?? ''),
+        ];
+    }
+
+    $thicknessPricesByOption = [];
+    foreach ($thicknessPriceStmt->fetchAll() as $row) {
+        $thicknessPricesByOption[(int) $row['thickness_option_id']][] = [
+            'label' => (string) ($row['label'] ?? ''),
+            'amount' => (string) ($row['amount'] ?? ''),
+            'unit' => (string) ($row['unit'] ?? ''),
+        ];
+    }
+
+    $thicknessOptionsByProduct = [];
+    foreach ($thicknessStmt->fetchAll() as $row) {
+        $optionId = (int) $row['id'];
+        $thicknessOptionsByProduct[(int) $row['product_id']][] = [
+            'id' => $optionId,
+            'key' => (string) ($row['option_key'] ?? ''),
+            'label' => (string) ($row['label'] ?? ''),
+            'value' => (string) ($row['value_text'] ?? ''),
+            'spec_size' => (string) ($row['spec_size'] ?? ''),
+            'spec_weight' => (string) ($row['spec_weight'] ?? ''),
+            'prices' => $thicknessPricesByOption[$optionId] ?? [],
+        ];
+    }
+
+    foreach ($productStmt->fetchAll() as $row) {
+        $categoryId = (int) $row['category_id'];
+        $categorySlug = $categoryIdsToSlug[$categoryId] ?? null;
+        if ($categorySlug === null || !isset($categories[$categorySlug])) {
+            continue;
+        }
+
+        $productId = (int) $row['id'];
+        $product = [
+            'id' => $productId,
+            'slug' => (string) ($row['slug'] ?? ''),
+            'title' => (string) $row['title'],
+            'subtitle' => (string) ($row['subtitle_text'] ?? ''),
+            'description' => (string) ($row['description'] ?? ''),
+            'meta' => (string) ($row['meta_text'] ?? ''),
+            'price' => (string) ($row['price_text'] ?? ''),
+            'image' => (string) ($row['image_path'] ?? ''),
+            'is_out_of_stock' => (bool) ($row['is_out_of_stock'] ?? false),
+            'url' => (string) ($row['external_url'] ?? ''),
+            'page' => (string) ($row['page_type'] ?? ''),
+            'show_thickness' => (bool) $row['show_thickness'],
+            'spec_size' => (string) ($row['spec_size'] ?? ''),
+            'spec_weight' => (string) ($row['spec_weight'] ?? ''),
+            'gabarity' => (string) ($row['gabarity'] ?? ''),
+            'weight' => (string) ($row['weight'] ?? ''),
+            'is_featured' => (bool) $row['is_featured'],
+            'gallery' => $imagesByProduct[$productId] ?? [],
+            'color_prices' => $pricesByProduct[$productId] ?? [],
+            'thickness_options' => $thicknessOptionsByProduct[$productId] ?? [],
+        ];
+
+        $categories[$categorySlug]['products'][] = catalog_finalize_product($product);
+    }
+
+    return $categories;
+}
+
+function catalog_get_categories(): array
+{
+    static $categories = null;
+
+    if ($categories !== null) {
+        return $categories;
+    }
+
+    $categories = catalog_build_db_categories();
+    if ($categories !== []) {
+        return $categories;
+    }
+
+    $categories = catalog_get_legacy_categories();
+
+    return $categories;
+}
+
+function catalog_get_home_categories(int $limit = 7): array
+{
+    $rows = [];
+    foreach (catalog_get_categories() as $slug => $category) {
+        $rows[] = [
+            'slug' => $slug,
+            'title' => $category['title'],
+            'description' => $category['description'],
+            'image' => $category['image'],
+        ];
+    }
+
+    return array_slice($rows, 0, $limit);
+}
+
+function catalog_get_featured_products(int $limit = 4): array
+{
+    if (catalog_db_has_catalog_data()) {
+        $out = [];
+        foreach (catalog_get_categories() as $categorySlug => $category) {
+            foreach ($category['products'] as $product) {
+                if (!empty($product['is_featured'])) {
+                    $product['category_slug'] = $categorySlug;
+                    $out[] = $product;
+                }
+            }
+        }
+
+        if ($out !== []) {
+            return array_slice($out, 0, $limit);
+        }
+    }
+
+    $fallbackSlugs = [
+        'fasad-tsvetok-elit',
+        'kaliforniya-kamen',
+        'bordyur-1000-220',
+        'poshagovaya-gladkaya',
+    ];
+    $featured = [];
+
+    foreach ($fallbackSlugs as $slug) {
+        $found = catalog_find_product($slug);
+        if ($found === null) {
+            continue;
+        }
+        $product = $found['product'];
+        $product['category_slug'] = $found['category_slug'];
+        $featured[] = catalog_finalize_product($product);
+    }
+
+    return array_slice($featured, 0, $limit);
+}
+
 function catalog_find_category(string $slug): ?array
 {
     if ($slug === '' || !preg_match('/^[a-z0-9-]+$/', $slug)) {
@@ -369,6 +701,51 @@ function catalog_find_product(string $slug): ?array
 
 function catalog_get_related_products(string $categorySlug, string $excludeSlug, int $limit = 3): array
 {
+    if (catalog_db_has_catalog_data()) {
+        $pdo = app_pdo();
+        if ($pdo instanceof PDO) {
+            $stmt = $pdo->prepare(
+                'SELECT rp2.id, rp2.slug, rp2.title, rp2.subtitle_text, rp2.description, rp2.meta_text, rp2.price_text, rp2.image_path,
+                        rp2.is_out_of_stock,
+                        rp2.external_url, rp2.page_type, rp2.show_thickness, rp2.spec_size, rp2.spec_weight, rp2.gabarity,
+                        rp2.weight, rp2.is_featured
+                 FROM products source
+                 INNER JOIN product_related rel ON rel.product_id = source.id
+                 INNER JOIN products rp2 ON rp2.id = rel.related_product_id
+                 WHERE source.slug = :slug AND rp2.is_active = 1
+                 ORDER BY rel.sort_order ASC, rel.id ASC
+                 LIMIT ' . (int) $limit
+            );
+            $stmt->execute(['slug' => $excludeSlug]);
+            $manual = [];
+            foreach ($stmt->fetchAll() as $row) {
+                $manual[] = [
+                    'id' => (int) $row['id'],
+                    'slug' => (string) ($row['slug'] ?? ''),
+                    'title' => (string) $row['title'],
+                    'subtitle' => (string) ($row['subtitle_text'] ?? ''),
+                    'description' => (string) ($row['description'] ?? ''),
+                    'meta' => (string) ($row['meta_text'] ?? ''),
+                    'price' => (string) ($row['price_text'] ?? ''),
+                    'image' => (string) ($row['image_path'] ?? ''),
+                    'is_out_of_stock' => (bool) ($row['is_out_of_stock'] ?? false),
+                    'url' => (string) ($row['external_url'] ?? ''),
+                    'page' => (string) ($row['page_type'] ?? ''),
+                    'show_thickness' => (bool) $row['show_thickness'],
+                    'spec_size' => (string) ($row['spec_size'] ?? ''),
+                    'spec_weight' => (string) ($row['spec_weight'] ?? ''),
+                    'gabarity' => (string) ($row['gabarity'] ?? ''),
+                    'weight' => (string) ($row['weight'] ?? ''),
+                    'is_featured' => (bool) $row['is_featured'],
+                ];
+            }
+
+            if ($manual !== []) {
+                return array_map('catalog_finalize_product', $manual);
+            }
+        }
+    }
+
     $cat = catalog_get_categories()[$categorySlug] ?? null;
     if ($cat === null) {
         return [];
