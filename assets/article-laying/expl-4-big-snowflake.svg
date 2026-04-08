@@ -1,0 +1,14 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M125 250L109.375 218.75L75 225" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M125 50L109.375 81.25L75 75" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M175 250L190.625 218.75L225 225" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M175 50L190.625 81.25L225 75" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M212.5 262.5L175 187.5H125" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M212.5 37.5L175 112.5L193.75 150" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25 150H106.25L125 112.5" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M250 125L231.25 150L250 175" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M275 150H193.75L175 187.5" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M50 125L68.75 150L50 175" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M87.5 262.5L125 187.5L106.25 150" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M87.5 37.5L125 112.5H175" stroke="#6A7282" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

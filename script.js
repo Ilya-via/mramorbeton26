@@ -211,6 +211,7 @@ function renderCatalog() {
             <img src="${item.image}" alt="${item.title}" loading="lazy">
             <div class="catalog-card-content">
               <h3>${item.title}</h3>
+              <p class="catalog-card-desc">${item.description}</p>
               <span class="link-line">В каталог</span>
             </div>
           </a>
