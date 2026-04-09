@@ -23,11 +23,14 @@ function admin_checked(bool $value): string
 
 function admin_layout_name(?string $layout): string
 {
-    return match ((string) $layout) {
-        'paving' => 'Плитка / мощение',
-        'overhead_steps' => 'Накладные проступи',
-        default => 'Обычный список',
-    };
+    switch ((string) $layout) {
+        case 'paving':
+            return 'Плитка / мощение';
+        case 'overhead_steps':
+            return 'Накладные проступи';
+        default:
+            return 'Обычный список';
+    }
 }
 
 function admin_render_header(string $title, ?array $user = null): void

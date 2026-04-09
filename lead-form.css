@@ -123,6 +123,13 @@
 .lead-form__submit-icon {
   flex-shrink: 0;
   display: block;
+  width: 22.29px;
+  height: 22.29px;
+  background: url("assets/arrow-req.svg") center / contain no-repeat;
+}
+
+.lead-form__submit-icon path {
+  display: none;
 }
 
 .lead-form__policy {
@@ -193,12 +200,14 @@
   }
 
   .page-home .lead-form__submit {
-    gap: 7px;
+    gap: 8.668px;
     min-height: 64px;
     margin-top: 30px;
+    padding: 0 24px;
+    border-radius: 16px;
     font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.3125px;
+    line-height: 29.72px;
+    letter-spacing: -0.387px;
   }
 
   .page-home .lead-form__policy {

@@ -292,15 +292,355 @@
 }
 
 @media (max-width: 600px) {
+  .page-useful-info {
+    background: #fbfbfb;
+    overflow-x: hidden;
+  }
+
+  .page-useful-info .site-header {
+    border-bottom: 2px solid #e9e9e9;
+    background: #fefefe;
+    backdrop-filter: none;
+    overflow-x: hidden;
+  }
+
+  .page-useful-info .header-inner {
+    min-height: 74px;
+    padding: 12px 0;
+    align-items: center;
+  }
+
+  .page-useful-info .brand {
+    gap: 6.236px;
+    margin-left: 0;
+  }
+
+  .page-useful-info .brand-logo {
+    width: 40.091px;
+    height: 40.091px;
+    flex: 0 0 40.091px;
+  }
+
+  .page-useful-info .brand-copy {
+    gap: 0;
+  }
+
+  .page-useful-info .brand-copy strong {
+    font-size: 15.145px;
+    letter-spacing: -0.7573px;
+  }
+
+  .page-useful-info .brand-copy small {
+    font-size: 9.8px;
+    line-height: 1.25;
+    letter-spacing: -0.098px;
+  }
+
   .useful-main {
-    padding-top: 24px;
+    padding: 14px 0 50px;
+    overflow-x: hidden;
+  }
+
+  .useful-main > .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: min(var(--container), calc(100% - 36px));
+    min-width: 0;
+  }
+
+  .useful-breadcrumbs {
+    width: 100%;
+    max-width: 269px;
+    margin-bottom: 23px;
+  }
+
+  .useful-intro {
+    width: 100%;
+    gap: 4px;
+    margin-bottom: 24px;
+    max-width: 357px;
   }
 
   .useful-kicker {
     font-size: 16px;
+    line-height: normal;
+  }
+
+  .useful-title {
+    font-size: 25px;
+    line-height: normal;
+    letter-spacing: -0.5px;
+  }
+
+  .blog-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+    gap: 18px;
+    max-width: calc(100vw - 36px);
+    margin: 0 0 50px;
+  }
+
+  .blog-card,
+  .blog-card__surface {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    gap: 22px;
+  }
+
+  .blog-card__media {
+    width: 100%;
+    max-width: 100%;
+    height: 233px;
+    border-radius: 32px;
+  }
+
+  .blog-card__body {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .blog-card__heading {
+    max-width: 100%;
+    font-size: 20px;
+    line-height: 25px;
+    letter-spacing: -0.4492px;
+  }
+
+  .blog-card__read {
+    gap: 4px;
+    padding-top: 14px;
+    font-size: 18px;
+    line-height: 16px;
+  }
+
+  .section-useful-cta {
+    padding: 0;
+    background: #e67e22;
+    overflow-x: hidden;
+  }
+
+  .section-useful-cta > .container {
+    width: min(var(--container), 100%);
+    max-width: none;
+  }
+
+  .useful-contact-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    gap: 20px;
+    padding: 30px 18px;
+    border-radius: 0;
+    min-height: 0;
+  }
+
+  .useful-contact-banner > .contact-copy {
+    gap: 17px;
+    padding-top: 0;
+    min-width: 0;
+  }
+
+  .useful-contact-copy .contact-copy-lead {
+    gap: 4px;
+    max-width: 100%;
+  }
+
+  .page-useful-info .useful-contact-copy .contact-copy-lead h2 {
+    max-width: 100%;
+    font-size: 25px;
+    line-height: 37px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-useful-info .useful-contact-copy .contact-copy-lead > p:not(.section-tag) {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.4492px;
+  }
+
+  .useful-contact-phone {
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .useful-contact-phone .contact-icon {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+  }
+
+  .useful-contact-phone a {
+    font-size: 20px;
+    line-height: 32px;
   }
 
   .contact-form.contact-form--underline {
-    padding: 28px 20px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: calc(100vw - 36px);
+    min-height: 465px;
+    padding: 18px;
+    border-radius: 32px;
+    background: #fff;
+    color: #2b2727;
+  }
+
+  .contact-form.contact-form--underline label + label {
+    margin-top: 25px;
+  }
+
+  .contact-form.contact-form--underline label span {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 15px;
+    font-weight: 600;
+    letter-spacing: -0.14px;
+    text-transform: uppercase;
+  }
+
+  .contact-form.contact-form--underline input {
+    min-height: 58px;
+    padding: 12px 18px;
+    border: 2px solid #f5f5f5;
+    border-bottom-width: 2px;
+    border-radius: 16px;
+    background: #f5f5f5;
+    font-size: 18px;
+    line-height: normal;
+    font-weight: 700;
+    letter-spacing: -0.3125px;
+  }
+
+  .contact-form.contact-form--underline input::placeholder {
+    color: #2b2727;
+  }
+
+  .contact-form.contact-form--underline input[name="interest"]::placeholder {
+    color: #6a7282;
+    font-weight: 600;
+  }
+
+  .contact-form.contact-form--underline .lead-form__submit {
+    gap: 7px;
+    min-height: 64px;
+    margin-top: 25px;
+    padding: 20px 24px;
+    border-radius: 22px;
+  }
+
+  .contact-form.contact-form--underline .lead-form__submit > span {
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.3125px;
+  }
+
+  .page-useful-info .contact-form.contact-form--underline .lead-form__submit-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+  }
+
+  .useful-form-policy {
+    margin-top: 12px;
+    padding: 0;
+    max-width: 360px;
+  }
+
+  .page-useful-info .site-footer {
+    padding: 30px 0 23px;
+    background: #f8f9fa;
+    overflow-x: hidden;
+  }
+
+  .page-useful-info .site-footer .container {
+    width: min(var(--container), calc(100% - 36px));
+    min-width: 0;
+  }
+
+  .page-useful-info .footer-grid {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: 136px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 20px;
+  }
+
+  .page-useful-info .footer-brand {
+    grid-column: 1 / -1;
+    max-width: none;
+    row-gap: 13px;
+  }
+
+  .page-useful-info .footer-brand-text {
+    max-width: 357px;
+    line-height: 18px;
+  }
+
+  .page-useful-info .footer-column[aria-label="Продукция"] {
+    display: none;
+  }
+
+  .page-useful-info .footer-heading {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .page-useful-info .footer-column {
+    gap: 12px;
+  }
+
+  .page-useful-info .footer-links {
+    gap: 9px;
+  }
+
+  .page-useful-info .footer-contacts-stack {
+    gap: 14px;
+  }
+
+  .page-useful-info .footer-contact {
+    gap: 16px;
+  }
+
+  .page-useful-info .footer-column-contacts {
+    min-width: 0;
+  }
+
+  .page-useful-info .footer-grid > *,
+  .page-useful-info .footer-contact-body,
+  .page-useful-info .contact-phone-card__text {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .page-useful-info .footer-links a,
+  .page-useful-info .footer-contact-primary,
+  .page-useful-info .footer-contact:not(:has(.footer-contact-body)) strong {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .page-useful-info .footer-contact-meta,
+  .page-useful-info .footer-contact:not(:has(.footer-contact-body)) small {
+    font-size: 12px;
+    line-height: 14.286px;
+  }
+
+  .page-useful-info .site-footer .socials-contacts {
+    display: grid;
+    grid-template-columns: repeat(4, 38.737px);
+    justify-content: start;
+    gap: 9.684px;
+    width: max-content;
+    max-width: 100%;
   }
 }

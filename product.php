@@ -121,8 +121,8 @@ if ($found === null) {
       <nav class="product-breadcrumbs" aria-label="Хлебные крошки">
         <a href="index.html">Главная</a>
         <span aria-hidden="true">/</span>
-        <a href="catalog.php">Каталог</a>
-        <span aria-hidden="true">/</span>
+        <a class="product-breadcrumbs-catalog" href="catalog.php">Каталог</a>
+        <span class="product-breadcrumbs-catalog-separator" aria-hidden="true">/</span>
         <a class="product-breadcrumbs-category" href="category.php?c=<?= catalog_esc($categorySlug) ?>"><?= catalog_esc($category['title']) ?></a>
         <span aria-hidden="true">/</span>
         <span class="product-breadcrumbs-current"><?= catalog_esc($product['title']) ?></span>
@@ -203,6 +203,12 @@ if ($found === null) {
       </div>
 
       <div class="product-page-content">
+      <header class="product-mobile-intro">
+        <h1 class="product-mobile-intro__title"><?= catalog_esc($product['title']) ?></h1>
+        <?php if ($subtitle !== '') : ?>
+        <p class="product-mobile-intro__subtitle"><?= catalog_esc($subtitle) ?></p>
+        <?php endif; ?>
+      </header>
       <div class="product-layout">
         <div class="product-gallery<?= $singleGallery ? ' product-gallery--single' : '' ?>">
           <button
@@ -249,7 +255,7 @@ if ($found === null) {
         <div class="product-info">
           <h1 class="product-title"><?= catalog_esc($product['title']) ?></h1>
           <?php if ($subtitle !== '') : ?>
-          <p class="product-subtitle"><?= nl2br(catalog_esc($subtitle), false) ?></p>
+          <p class="product-subtitle"><?= catalog_esc($subtitle) ?></p>
           <?php endif; ?>
 
           <div class="product-specs-wrap">
@@ -328,7 +334,7 @@ if ($found === null) {
       <?php if ($related !== []) : ?>
       <section class="product-related" aria-labelledby="related-heading">
         <h2 id="related-heading" class="product-related__title">Возможно вас заинтересует</h2>
-        <div class="product-related__grid">
+        <div id="product-related-grid" class="product-related__grid">
           <?php foreach ($related as $rp) : ?>
             <?php
             $rg = $rp['gabarity'] ?? $rp['meta'] ?? '—';
@@ -374,6 +380,10 @@ if ($found === null) {
             </a>
           </article>
           <?php endforeach; ?>
+        </div>
+        <div class="mobile-slider-controls" aria-label="Навигация по похожим товарам">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="product-related-grid" aria-label="Предыдущий товар"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="product-related-grid" aria-label="Следующий товар"></button>
         </div>
       </section>
       <?php endif; ?>
@@ -507,7 +517,7 @@ if ($found === null) {
       <div class="product-lightbox__stage">
         <button type="button" class="product-lightbox__nav product-lightbox__nav--prev" data-lightbox-prev aria-label="Предыдущее фото">
           <svg viewBox="0 0 24 48" fill="none" aria-hidden="true">
-            <path d="M16 8L8 24l8 16" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 8L8 24l8 16" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="product-lightbox__frame">
@@ -515,7 +525,7 @@ if ($found === null) {
         </div>
         <button type="button" class="product-lightbox__nav product-lightbox__nav--next" data-lightbox-next aria-label="Следующее фото">
           <svg viewBox="0 0 24 48" fill="none" aria-hidden="true">
-            <path d="M8 8l8 16-8 16" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 8l8 16-8 16" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>

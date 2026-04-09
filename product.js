@@ -171,11 +171,23 @@
     });
   });
 
-  lightbox.querySelectorAll("[data-lightbox-close]").forEach((el) => {
-    el.addEventListener("click", (e) => {
+  lightbox.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+
+    if (target.closest("[data-lightbox-close]")) {
       e.preventDefault();
       closeLightbox();
-    });
+      return;
+    }
+
+    const isInteractive = target.closest(
+      ".product-lightbox__frame, .product-lightbox__nav, .product-lightbox__thumbs"
+    );
+
+    if (!isInteractive) {
+      closeLightbox();
+    }
   });
 
   if (prevBtn) prevBtn.addEventListener("click", () => stepLightbox(-1));

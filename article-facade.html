@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="lead-form.css">
   <link rel="stylesheet" href="article.css">
 </head>
-<body class="page-article">
+<body class="page-article page-article-facade">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="MRAMORBETON">
@@ -93,7 +93,7 @@
           они обладают целым рядом преимуществ:
         </p>
 
-        <div class="benefits-grid">
+        <div class="benefits-grid" id="article-benefits-grid">
           <article class="benefit-card">
             <img class="benefit-icon" src="assets/facade-1.svg" alt="" aria-hidden="true" decoding="async">
             <h3>Повышенная прочность</h3>
@@ -140,6 +140,10 @@
             <p>Облицовка придает дому респектабельный и современный вид.</p>
           </article>
         </div>
+        <div class="mobile-slider-controls article-mobile-slider-controls" data-benefits-grid="article-benefits-grid" data-benefits-page-size="3" aria-label="Навигация по преимуществам">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-benefits-prev aria-label="Предыдущие преимущества"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-benefits-next aria-label="Следующие преимущества"></button>
+        </div>
       </section>
     </div>
 
@@ -155,17 +159,17 @@
             </div>
           </article>
           <article class="usage-item">
-            <span class="usage-index" aria-hidden="true">3</span>
-            <div class="usage-copy">
-              <h3>Обрешетка</h3>
-              <p>Устанавливается обрешетка из металлопрофиля (рекомендуется для бетона) или дерева.</p>
-            </div>
-          </article>
-          <article class="usage-item">
             <span class="usage-index" aria-hidden="true">2</span>
             <div class="usage-copy">
               <h3>Изоляционный слой</h3>
               <p>При необходимости крепится пароизоляционная пленка и теплоизоляционный слой (утеплитель).</p>
+            </div>
+          </article>
+          <article class="usage-item">
+            <span class="usage-index" aria-hidden="true">3</span>
+            <div class="usage-copy">
+              <h3>Обрешетка</h3>
+              <p>Устанавливается обрешетка из металлопрофиля (рекомендуется для бетона) или дерева.</p>
             </div>
           </article>
           <article class="usage-item">
@@ -213,8 +217,8 @@
               <input type="tel" name="phone" placeholder="+375 (__) ___-__-__" autocomplete="tel">
             </label>
             <label>
-              <span>Что вас интересует?</span>
-              <input type="text" name="interest" autocomplete="off" required>
+              <span>Ваше сообщение</span>
+              <input type="text" name="interest" placeholder="Введите сообщение" autocomplete="off" required>
             </label>
             <button class="lead-form__submit" type="submit">
               <span>Отправить заявку</span>

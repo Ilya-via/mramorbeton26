@@ -357,9 +357,8 @@ function setupMenu() {
     }))
     .filter((item) => item.label !== "");
 
-  const topItems = navigationItems.filter(
-    (item) => item.label !== "Каталог" && item.label !== "Полезная информация"
-  );
+  const catalogItem = navigationItems.find((item) => item.label === "Каталог");
+  const topItems = navigationItems.filter((item) => item.label !== "Каталог");
   const callbackHref = callbackLink?.getAttribute("href") || "#contact-form";
   const phoneHref = phoneLink?.getAttribute("href") || "tel:+375293258259";
   const phoneText = (phoneLink?.textContent || "").trim() || "+375 29 325-82-59";
@@ -381,17 +380,11 @@ function setupMenu() {
         </button>
       </div>
       <nav class="mobile-menu__nav" aria-label="Мобильная навигация">
-        <div class="mobile-menu__group">
-          <button class="mobile-menu__catalog-toggle" type="button" aria-expanded="true">
-            <span>Каталог</span>
-            <span class="mobile-menu__chevron" aria-hidden="true"></span>
-          </button>
-          <div class="mobile-menu__catalog-list">
-            ${MOBILE_MENU_CATEGORIES.map(
-              (item) => `<a href="${item.href}">${item.label}</a>`
-            ).join("")}
-          </div>
-        </div>
+        ${
+          catalogItem
+            ? `<a href="${catalogItem.href}"${catalogItem.current ? ' aria-current="page"' : ""}>${catalogItem.label}</a>`
+            : ""
+        }
         ${topItems
           .map(
             (item) =>
@@ -412,8 +405,6 @@ function setupMenu() {
   document.body.appendChild(popup);
 
   const closeElements = popup.querySelectorAll("[data-menu-close]");
-  const catalogToggle = popup.querySelector(".mobile-menu__catalog-toggle");
-  const catalogGroup = popup.querySelector(".mobile-menu__group");
   const focusTarget = popup.querySelector(".mobile-menu__brand");
 
   function openMenu() {
@@ -449,12 +440,6 @@ function setupMenu() {
     link.addEventListener("click", () => {
       closeMenu();
     });
-  });
-
-  catalogToggle?.addEventListener("click", () => {
-    const expanded = catalogToggle.getAttribute("aria-expanded") !== "true";
-    catalogToggle.setAttribute("aria-expanded", String(expanded));
-    catalogGroup?.classList.toggle("is-collapsed", !expanded);
   });
 
   document.addEventListener("keydown", (event) => {
@@ -517,6 +502,60 @@ function setupScrollControls() {
   });
 }
 
+function setupArticleBenefitsPager() {
+  document.querySelectorAll(".article-mobile-slider-controls[data-benefits-grid]").forEach((controls) => {
+    const gridId = controls.getAttribute("data-benefits-grid");
+    const pageSizeAttr = Number(controls.getAttribute("data-benefits-page-size"));
+    const pageSizeDesktop = Number.isFinite(pageSizeAttr) && pageSizeAttr > 0 ? pageSizeAttr : 3;
+    const grid = gridId ? document.getElementById(gridId) : null;
+    const prev = controls.querySelector("[data-benefits-prev]");
+    const next = controls.querySelector("[data-benefits-next]");
+    const items = grid ? Array.from(grid.children) : [];
+    if (!grid || !prev || !next || items.length === 0) return;
+
+    let currentPage = 0;
+
+    function sync() {
+      const isMobile = window.innerWidth <= 600;
+      const pageSize = isMobile ? pageSizeDesktop : items.length;
+      const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+      currentPage = Math.min(currentPage, totalPages - 1);
+
+      items.forEach((item, index) => {
+        if (!isMobile) {
+          item.hidden = false;
+          return;
+        }
+
+        const start = currentPage * pageSize;
+        const end = start + pageSize;
+        item.hidden = index < start || index >= end;
+      });
+
+      const showSingle = controls.dataset.benefitsShowSingle === "true";
+      controls.hidden = !isMobile || (!showSingle && totalPages <= 1);
+      prev.disabled = currentPage === 0;
+      next.disabled = currentPage >= totalPages - 1;
+    }
+
+    if (controls.dataset.benefitsPagerReady !== "true") {
+      controls.dataset.benefitsPagerReady = "true";
+      prev.addEventListener("click", () => {
+        currentPage = Math.max(0, currentPage - 1);
+        sync();
+      });
+      next.addEventListener("click", () => {
+        const totalPages = Math.max(1, Math.ceil(items.length / pageSizeDesktop));
+        currentPage = Math.min(totalPages - 1, currentPage + 1);
+        sync();
+      });
+      window.addEventListener("resize", sync);
+    }
+
+    sync();
+  });
+}
+
 function setupPhoneMask() {
   function applyPhoneMask(input) {
     const digits = input.value.replace(/\D/g, "").slice(0, 12);
@@ -558,7 +597,7 @@ function setupForm() {
 
 function setupLeadPopup() {
   const callbackButtons = document.querySelectorAll(
-    '.button.button-accent.button-small[href="#contact-form"], .button.button-accent.button-small[href="index.html#contact-form"]'
+    '.button.button-accent.button-small[href="#contact-form"], .button.button-accent.button-small[href="index.html#contact-form"], .mobile-menu__button[href="#contact-form"], .mobile-menu__button[href="index.html#contact-form"]'
   );
   const productButtons = document.querySelectorAll(".product-order-btn");
 
@@ -581,6 +620,11 @@ function setupLeadPopup() {
         <h2 id="lead-popup-title" class="site-popup__title">Заказать звонок</h2>
         <p class="site-popup__subtitle">Оставьте заявку, и менеджер свяжется с вами в ближайшее время</p>
       </div>
+      <div class="site-popup__success" aria-live="polite">
+        <div class="site-popup__success-icon" aria-hidden="true"></div>
+        <h2 class="site-popup__success-title">Ваша заявка успешно отправлена!</h2>
+        <p class="site-popup__success-text">Мы перезвоним вам в течение 15 минут (в рабочее время 9:00-20:00)</p>
+      </div>
       <form class="site-popup-form" data-lead-form="true" novalidate>
         <div class="site-popup-form__field">
           <div class="site-popup-form__label-row">
@@ -591,9 +635,9 @@ function setupLeadPopup() {
         <div class="site-popup-form__field">
           <div class="site-popup-form__label-row">
             <label class="site-popup-form__label" for="popup-contact-phone">Номер телефона</label>
-            <p class="site-popup-form__error" data-phone-error>*обязательное поле</p>
           </div>
           <input class="site-popup-form__control" type="tel" name="phone" id="popup-contact-phone" placeholder="+375 (___) ___-__-__" autocomplete="tel" inputmode="tel">
+          <p class="site-popup-form__error" data-phone-error>Введите весь номер телефона в правильном формате: +375 XX XXX-XX-XX</p>
         </div>
         <div class="site-popup-form__field">
           <div class="site-popup-form__label-row">
@@ -624,6 +668,7 @@ function setupLeadPopup() {
   const popupForm = popup.querySelector("form");
   const popupStatus = popup.querySelector("[data-form-status]");
   const phoneError = popup.querySelector("[data-phone-error]");
+  const successScreen = popup.querySelector(".site-popup__success");
   let closeTimer = null;
 
   if (popupForm) {
@@ -635,6 +680,13 @@ function setupLeadPopup() {
     message: "",
   };
 
+  function setPopupSuccessState(isSuccess) {
+    popup.classList.toggle("is-success", isSuccess);
+    if (successScreen) {
+      successScreen.setAttribute("aria-hidden", isSuccess ? "false" : "true");
+    }
+  }
+
   function openPopup(config = {}) {
     const nextTitle = config.title || defaultState.title;
     const nextMessage = config.message || defaultState.message;
@@ -645,6 +697,7 @@ function setupLeadPopup() {
     if (title) title.textContent = nextTitle;
     if (messageField) messageField.value = nextMessage;
     if (popupStatus) popupStatus.textContent = "";
+    setPopupSuccessState(false);
     if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
     if (phoneError) phoneError.classList.remove("is-visible");
     popup.hidden = false;
@@ -662,6 +715,7 @@ function setupLeadPopup() {
       popup.hidden = true;
       if (popupForm) popupForm.reset();
       if (popupStatus) popupStatus.textContent = "";
+      setPopupSuccessState(false);
       if (title) title.textContent = defaultState.title;
       if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
       if (phoneError) phoneError.classList.remove("is-visible");
@@ -737,13 +791,14 @@ function setupLeadPopup() {
         phoneInput?.focus();
         return;
       }
-      if (popupStatus) {
-        popupStatus.textContent = "Заявка отправлена. Здесь можно подключить почту, Telegram-бота или CRM.";
-      }
       popupForm.reset();
       popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
         input.classList.remove("site-popup-form__control--filled");
       });
+      if (popupStatus) popupStatus.textContent = "";
+      if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
+      if (phoneError) phoneError.classList.remove("is-visible");
+      setPopupSuccessState(true);
     });
   }
 }
@@ -811,6 +866,7 @@ renderProcess();
 loadHomeCatalogData();
 setupMenu();
 setupScrollControls();
+setupArticleBenefitsPager();
 setupLeadPopup();
 setupPhoneMask();
 setupForm();

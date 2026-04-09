@@ -84,7 +84,7 @@
       <section class="article-section article-section--ritual-benefits" aria-labelledby="ritual-benefits-title">
         <h2 class="article-section-title" id="ritual-benefits-title">Преимущества плит мощения</h2>
 
-        <div class="benefits-grid">
+        <div class="benefits-grid" id="article-ritual-benefits-grid">
           <article class="benefit-card">
             <img class="benefit-icon" src="assets/article-ritual-1.svg" alt="" aria-hidden="true" decoding="async">
             <h3>Долговечность</h3>
@@ -115,6 +115,10 @@
             <h3>Высокая прочность</h3>
             <p>Цемент марки М500 без примесей и гранитный отсев обеспечивают монолитность конструкции.</p>
           </article>
+        </div>
+        <div class="mobile-slider-controls article-mobile-slider-controls" data-benefits-grid="article-ritual-benefits-grid" data-benefits-page-size="3" aria-label="Навигация по преимуществам">
+          <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-benefits-prev aria-label="Предыдущие преимущества"></button>
+          <button class="mobile-slider-control mobile-slider-control--next" type="button" data-benefits-next aria-label="Следующие преимущества"></button>
         </div>
       </section>
     </div>
@@ -204,8 +208,8 @@
               <input type="tel" name="phone" placeholder="+375 (__) ___-__-__" autocomplete="tel">
             </label>
             <label>
-              <span>Что вас интересует?</span>
-              <input type="text" name="interest" autocomplete="off" required>
+              <span>Ваше сообщение</span>
+              <input type="text" name="interest" placeholder="Введите сообщение" autocomplete="off" required>
             </label>
             <button class="lead-form__submit" type="submit">
               <span>Отправить заявку</span>

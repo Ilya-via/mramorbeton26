@@ -463,14 +463,18 @@ function catalog_admin_save_product(array $post, array $files = []): int
     if ($imagePath !== '') {
         $galleryRows = array_values(array_filter(
             $galleryRows,
-            static fn (array $row): bool => (string) ($row['full_path'] ?? '') !== $imagePath
+            static function (array $row) use ($imagePath): bool {
+                return (string) ($row['full_path'] ?? '') !== $imagePath;
+            }
         ));
     }
 
     $priceRows = catalog_admin_parse_price_input((string) ($post['prices_text'] ?? ''));
     $thicknessOptions = catalog_admin_parse_thickness_options((string) ($post['thickness_options_json'] ?? ''));
     $relatedIds = array_values(array_unique(array_map('intval', $post['related_ids'] ?? [])));
-    $relatedIds = array_values(array_filter($relatedIds, static fn (int $value): bool => $value > 0 && $value !== $id));
+    $relatedIds = array_values(array_filter($relatedIds, static function (int $value) use ($id): bool {
+        return $value > 0 && $value !== $id;
+    }));
     if (count($relatedIds) > 3) {
         throw new RuntimeException('Можно выбрать максимум 3 рекомендации для товара.');
     }
