@@ -119,17 +119,17 @@ button {
 
 .header-inner {
   display: grid;
-  grid-template-columns: 220px 1fr auto;
+  grid-template-columns: 210px 563px 349px;
   align-items: center;
   min-height: 80px;
-  gap: 28px;
+  gap: 39px;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-left: -12px;
+  gap: 7px;
+  margin-left: 0;
 }
 
 .brand-logo {
@@ -141,20 +141,22 @@ button {
 .brand-copy {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 0;
+  height: 39px;
+  padding-bottom: 10px;
 }
 
 .brand-copy strong {
   font-family: "Spectral SC", serif;
   font-size: 17px;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.85px;
   color: #000;
 }
 
 .brand-copy small {
   font-size: 11px;
-  line-height: 1.3;
+  line-height: 1.2;
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
@@ -170,9 +172,9 @@ button {
 
 .site-nav {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .site-nav a {
@@ -196,6 +198,7 @@ button {
   display: flex;
   align-items: center;
   gap: 24px;
+  justify-content: flex-end;
 }
 
 .header-phone-wrap {
@@ -208,7 +211,7 @@ button {
 .header-phone {
   font-size: 16px;
   line-height: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: #1a1a1a;
 }
 
@@ -256,9 +259,11 @@ button {
 
 .button-small {
   min-height: 44px;
-  padding: 12px 19px;
+  padding: 12px 20px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.1504px;
 }
 
 .button-accent {
@@ -791,18 +796,36 @@ body.site-popup-open {
 .hero-grid {
   display: grid;
   grid-template-columns: 583px 537px;
-  justify-content: space-between;
+  grid-template-areas:
+    "copy media"
+    "features media";
   align-items: start;
-  gap: 40px;
+  column-gap: 80px;
+  row-gap: 40px;
   min-height: 511px;
-  padding-top: 33px;
+  padding-top: 0;
+}
+
+.hero-copy {
+  grid-area: copy;
+  margin-top: 33px;
+}
+
+.hero-media {
+  grid-area: media;
+}
+
+.hero-features {
+  grid-area: features;
 }
 
 .hero-copy h1 {
   margin: 0;
-  font-size: clamp(44px, 4.6vw, 50px);
+  width: 556px;
+  max-width: 100%;
+  font-size: 50px;
   line-height: 0.96;
-  letter-spacing: -0.04em;
+  letter-spacing: -1px;
 }
 
 .hero-copy h1 span {
@@ -811,26 +834,31 @@ body.site-popup-open {
 
 .hero-description {
   max-width: 504px;
-  margin: 17px 0 33px;
+  margin: 17px 0 0;
   font-size: 22px;
   line-height: 1.25;
+  letter-spacing: -0.88px;
   color: var(--text-soft);
 }
 
 .hero-actions {
-  margin-bottom: 40px;
+  margin-top: 33px;
+  margin-bottom: 0;
 }
 
 .hero-actions .button {
   min-width: 287px;
   min-height: 71px;
   padding: 0 34px;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.16px;
 }
 
 .hero-features {
   display: flex;
   gap: 29px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -842,8 +870,8 @@ body.site-popup-open {
   padding-left: 25px;
   font-size: 18px;
   line-height: 1.25;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.54px;
 }
 
 .hero-features li::before {
