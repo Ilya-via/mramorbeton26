@@ -579,18 +579,101 @@ function setupPhoneMask() {
   });
 }
 
+function leadApiUrl() {
+  try {
+    return new URL("api/submit-lead.php", window.location.href).href;
+  } catch {
+    return "api/submit-lead.php";
+  }
+}
+
+function ensureLeadHoneypot(form) {
+  if (!form || form.querySelector('[data-lead-honeypot="1"]')) return;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.name = "lead_hp";
+  input.setAttribute("data-lead-honeypot", "1");
+  input.setAttribute("tabindex", "-1");
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("aria-hidden", "true");
+  Object.assign(input.style, {
+    position: "absolute",
+    left: "-9999px",
+    width: "1px",
+    height: "1px",
+    opacity: "0",
+  });
+  form.appendChild(input);
+}
+
+function getLeadStatusEl(form) {
+  return (
+    form.querySelector("[data-form-status]") ||
+    form.querySelector(".lead-form__status") ||
+    form.querySelector(".form-status")
+  );
+}
+
+function isLeadPhoneValid(value) {
+  return value.replace(/\D/g, "").length >= 12;
+}
+
+async function postLeadForm(form, extra = {}) {
+  const fd = new FormData(form);
+  fd.set("page_url", window.location.href);
+  if (extra.context) {
+    fd.set("context", String(extra.context));
+  }
+  const res = await fetch(leadApiUrl(), {
+    method: "POST",
+    body: fd,
+    credentials: "same-origin",
+  });
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    data = {};
+  }
+  if (!res.ok || !data.ok) {
+    throw new Error((data && data.error) || "Не удалось отправить заявку");
+  }
+}
+
 function setupForm() {
   document.querySelectorAll('form[data-lead-form="true"], #contact-form').forEach((form) => {
     if (form.dataset.formReady === "true") return;
     form.dataset.formReady = "true";
+    ensureLeadHoneypot(form);
 
-    const status = form.querySelector("[data-form-status]") || form.querySelector(".lead-form__status");
-    form.addEventListener("submit", (event) => {
+    const status = getLeadStatusEl(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (status) {
-        status.textContent = "Заявка отправлена. Здесь можно подключить почту, Telegram-бота или CRM.";
+      const phoneInput = form.querySelector('input[name="phone"]');
+      if (phoneInput && !isLeadPhoneValid(phoneInput.value)) {
+        if (status) {
+          status.textContent = "Введите полный номер телефона в формате +375 XX XXX-XX-XX.";
+        }
+        phoneInput.focus();
+        return;
       }
-      form.reset();
+      if (status) status.textContent = "";
+      if (submitBtn) submitBtn.disabled = true;
+      try {
+        await postLeadForm(form, {});
+        if (status) {
+          status.textContent = "Заявка отправлена. Мы свяжемся с вами в ближайшее время.";
+        }
+        form.reset();
+      } catch (err) {
+        if (status) {
+          status.textContent = err instanceof Error ? err.message : "Не удалось отправить заявку.";
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
   });
 }
@@ -673,6 +756,7 @@ function setupLeadPopup() {
 
   if (popupForm) {
     popupForm.dataset.formReady = "true";
+    ensureLeadHoneypot(popupForm);
   }
 
   const defaultState = {
@@ -785,20 +869,32 @@ function setupLeadPopup() {
   });
 
   if (popupForm) {
-    popupForm.addEventListener("submit", (event) => {
+    popupForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!validatePhoneField()) {
         phoneInput?.focus();
         return;
       }
-      popupForm.reset();
-      popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
-        input.classList.remove("site-popup-form__control--filled");
-      });
       if (popupStatus) popupStatus.textContent = "";
-      if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
-      if (phoneError) phoneError.classList.remove("is-visible");
-      setPopupSuccessState(true);
+      const submitBtn = popupForm.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+      const context = title?.textContent?.trim() || "";
+      try {
+        await postLeadForm(popupForm, { context });
+        popupForm.reset();
+        popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
+          input.classList.remove("site-popup-form__control--filled");
+        });
+        if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
+        if (phoneError) phoneError.classList.remove("is-visible");
+        setPopupSuccessState(true);
+      } catch (err) {
+        if (popupStatus) {
+          popupStatus.textContent = err instanceof Error ? err.message : "Не удалось отправить заявку.";
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
   }
 }
