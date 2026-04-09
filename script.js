@@ -361,8 +361,8 @@ function setupMenu() {
   const topItems = navigationItems.filter((item) => item.label !== "Каталог");
   const callbackHref = callbackLink?.getAttribute("href") || "#contact-form";
   const phoneHref = phoneLink?.getAttribute("href") || "tel:+375293258259";
-  const phoneText = (phoneLink?.textContent || "").trim() || "+375 29 325-82-59";
-  const phoneMetaText = (phoneMeta?.textContent || "").trim() || "9:00-20:00 Пн-Вс";
+  const phoneText = (phoneLink?.textContent || "").trim() || "+375 (29) 325-82-59";
+  const phoneMetaText = (phoneMeta?.textContent || "").trim() || "Пн-Вс: 09:00 — 20:00";
 
   const popup = document.createElement("div");
   popup.className = "mobile-menu";
@@ -623,7 +623,7 @@ function setupLeadPopup() {
       <div class="site-popup__success" aria-live="polite">
         <div class="site-popup__success-icon" aria-hidden="true"></div>
         <h2 class="site-popup__success-title">Ваша заявка успешно отправлена!</h2>
-        <p class="site-popup__success-text">Мы перезвоним вам в течение 15 минут (в рабочее время 9:00-20:00)</p>
+        <p class="site-popup__success-text">Мы перезвоним вам в течение 15 минут (в рабочее время Пн-Вс: 09:00 — 20:00)</p>
       </div>
       <form class="site-popup-form" data-lead-form="true" novalidate>
         <div class="site-popup-form__field">

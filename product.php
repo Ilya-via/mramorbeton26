@@ -96,8 +96,8 @@ if ($found === null) {
 
       <div class="header-contacts">
         <div class="header-phone-wrap">
-          <a class="header-phone" href="tel:+375293258259">+375 29 325-82-59</a>
-          <span>9:00-20:00 Пн-Вс</span>
+          <a class="header-phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
+          <span>Пн-Вс: 09:00 — 20:00</span>
         </div>
         <a class="button button-accent button-small" href="index.html#contact-form">Заказать звонок</a>
       </div>
@@ -448,12 +448,12 @@ if ($found === null) {
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">+375 29 325-82-59</span>
-              <span class="footer-contact-meta">Пн-Пт: 9:00 — 20:00</span>
+              <span class="footer-contact-primary">+375 (29) 325-82-59</span>
+              <span class="footer-contact-meta">Пн-Вс: 09:00 — 20:00</span>
             </span>
           </a>
 
-          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
+          <a class="footer-contact" href="mailto:mramorbeton@gmail.com">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -461,7 +461,7 @@ if ($found === null) {
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
+              <span class="footer-contact-primary">mramorbeton@gmail.com</span>
             </span>
           </a>
 
@@ -473,7 +473,7 @@ if ($found === null) {
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary footer-contact-primary--wide">Минский р-н, Хатежинский c.c., д.Васьковщина</span>
+              <span class="footer-contact-primary footer-contact-primary--wide">Минская обл., Минский р-н, Хатежинский с/с, д. Васьковщина</span>
             </span>
           </div>
 
@@ -487,7 +487,7 @@ if ($found === null) {
             <a class="social social--telegram" href="#" aria-label="Telegram">
               <img src="assets/images/footer-icon-3.svg" width="39" height="39" alt="" decoding="async">
             </a>
-            <a class="social social--photo" href="#" aria-label="Наш профиль">
+            <a class="social social--photo" href="https://www.instagram.com/mramorbetonminsk?igsh=MTBjd3dqODFic3J4Mw%3D%3D&amp;utm_source=qr" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
               <img src="assets/images/footer-icon-4.svg" width="39" height="39" alt="" decoding="async">
             </a>
           </div>
