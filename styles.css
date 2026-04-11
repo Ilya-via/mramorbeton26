@@ -969,6 +969,33 @@ body.site-popup-open {
   font-weight: 700;
 }
 
+#instagram .instagram-handle-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(230, 126, 34, 0.45);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#instagram .instagram-handle-link:hover,
+#instagram .instagram-handle-link:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+#instagram .section-heading-inline {
+  position: relative;
+  z-index: 2;
+}
+
+#instagram .section-heading-inline .button-outline,
+#instagram .mobile-section-button {
+  position: relative;
+  z-index: 2;
+}
+
 #instagram {
   background: var(--white);
 }
@@ -3379,8 +3406,7 @@ body.mobile-menu-open {
     display: block;
   }
 
-  .page-home .section-projects .section-heading-inline .button-outline,
-  .page-home #instagram .section-heading-inline .button-outline {
+  .page-home .section-projects .section-heading-inline .button-outline {
     display: none;
   }
 
@@ -3453,6 +3479,11 @@ body.mobile-menu-open {
   .page-home #instagram {
     padding-top: 0;
     padding-bottom: 50px;
+  }
+
+  .page-home #instagram .instagram-grid {
+    position: relative;
+    z-index: 0;
   }
 
   .page-home #instagram .section-heading-inline {
