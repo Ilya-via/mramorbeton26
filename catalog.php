@@ -21,8 +21,8 @@ $categories = catalog_get_categories();
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="styles.css?v=1.1">
+  <link rel="stylesheet" href="catalog.css?v=1.1">
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="page-catalog">
@@ -195,6 +195,6 @@ $categories = catalog_get_categories();
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.1"></script>
 </body>
 </html>

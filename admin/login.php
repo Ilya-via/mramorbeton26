@@ -30,7 +30,7 @@ if (app_is_post()) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Вход | Админка MRAMORBETON</title>
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="admin.css?v=1.1">
   <link rel="shortcut icon" href="../assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="admin-body">

@@ -66,8 +66,8 @@ if ($found === null) {
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="product.css">
+  <link rel="stylesheet" href="styles.css?v=1.1">
+  <link rel="stylesheet" href="product.css?v=1.1">
   <script>document.documentElement.classList.add('js');</script>
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
@@ -536,9 +536,9 @@ if ($found === null) {
   </div>
   <?php endif; ?>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.1"></script>
   <?php if (!$notFound) : ?>
-  <script src="product.js"></script>
+  <script src="product.js?v=1.1"></script>
   <?php endif; ?>
 </body>
 </html>

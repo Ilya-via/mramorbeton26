@@ -3492,6 +3492,13 @@ body.mobile-menu-open {
     display: none;
   }
 
+  /* Слайдеры с margin-right: -18px выходят за padding контейнера — без этого появляется горизонтальный скролл страницы */
+  .page-home .section-projects .container,
+  .page-home #instagram .container,
+  .page-home #shop .container {
+    overflow-x: hidden;
+  }
+
   .page-home .projects-grid,
   .page-home .instagram-grid,
   .page-home .products-grid {

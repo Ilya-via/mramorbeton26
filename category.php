@@ -37,14 +37,14 @@ if ($category === null) {
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="catalog.css">
-  <link rel="stylesheet" href="category.css">
+  <link rel="stylesheet" href="styles.css?v=1.1">
+  <link rel="stylesheet" href="catalog.css?v=1.1">
+  <link rel="stylesheet" href="category.css?v=1.1">
   <?php if ($isTileCatalogLayout) : ?>
-  <link rel="stylesheet" href="category-paving.css">
+  <link rel="stylesheet" href="category-paving.css?v=1.1">
   <?php endif; ?>
   <?php if ($isOverheadStepsLayout) : ?>
-  <link rel="stylesheet" href="category-overhead-steps.css">
+  <link rel="stylesheet" href="category-overhead-steps.css?v=1.1">
   <?php endif; ?>
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
@@ -283,6 +283,6 @@ if ($category === null) {
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.1"></script>
 </body>
 </html>

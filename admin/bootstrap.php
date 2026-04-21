@@ -49,8 +49,8 @@ function admin_render_header(string $title, ?array $user = null): void
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="admin.css">
-  <script defer src="admin.js"></script>
+  <link rel="stylesheet" href="admin.css?v=1.1">
+  <script defer src="admin.js?v=1.1"></script>
   <link rel="shortcut icon" href="../assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="admin-body">
