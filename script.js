@@ -380,14 +380,67 @@ function getInPageTargetIdFromHref(href) {
   }
 }
 
-function scrollToHomeSectionById(id, behavior) {
+const PENDING_HOME_SCROLL_KEY = "mb_pending_home_scroll";
+
+function getHomeScrollOffsetPx() {
+  const header = document.querySelector(".site-header");
+  if (!header) return 96;
+  return Math.round(header.getBoundingClientRect().height) + 10;
+}
+
+function scrollToHomeSectionById(id, smooth) {
   const el = document.getElementById(id);
   if (!el) return false;
-  el.scrollIntoView({ behavior: behavior || "smooth", block: "start" });
+  const y = el.getBoundingClientRect().top + window.scrollY - getHomeScrollOffsetPx();
+  window.scrollTo({ top: Math.max(0, y), behavior: smooth ? "smooth" : "auto" });
   return true;
 }
 
-/** Прокрутка к # после перехода с другой страницы; клики по index.html#… на главной без перезагрузки. */
+function stripHomeHashFromUrl() {
+  if (!window.history || !window.history.replaceState) return;
+  if (!window.location.hash) return;
+  window.history.replaceState(null, "", window.location.pathname + window.location.search);
+}
+
+/** Кнопки «Заказать звонок» — попап, не скролл к форме */
+function isLeadCallbackAnchor(a) {
+  const href = a.getAttribute("href") || "";
+  if (!href.includes("contact-form")) return false;
+  if (a.classList.contains("mobile-menu__button")) return true;
+  return a.classList.contains("button-accent") && a.classList.contains("button-small");
+}
+
+/** Прокрутка после входа с index.html#… (хеш снят inline-скриптом в head) и резервно по hash/hashchange */
+function consumePendingHomeScroll() {
+  if (!isCurrentDocumentHome()) return;
+  let id = null;
+  try {
+    id = sessionStorage.getItem(PENDING_HOME_SCROLL_KEY);
+    if (id) sessionStorage.removeItem(PENDING_HOME_SCROLL_KEY);
+  } catch {
+    id = null;
+  }
+  if (!id || !document.getElementById(id)) return;
+
+  const run = () => {
+    scrollToHomeSectionById(id, false);
+    stripHomeHashFromUrl();
+  };
+
+  const schedule = () => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(run);
+    });
+  };
+
+  if (document.readyState === "complete") {
+    schedule();
+  } else {
+    window.addEventListener("load", schedule, { once: true });
+  }
+}
+
+/** Прокрутка по внутренним ссылкам главной: только JS, без хеша в адресной строке */
 function setupHomeHashNavigation() {
   if (!isCurrentDocumentHome()) return;
 
@@ -402,7 +455,8 @@ function setupHomeHashNavigation() {
     }
     if (!id) return;
     const run = () => {
-      scrollToHomeSectionById(id, "auto");
+      scrollToHomeSectionById(id, false);
+      stripHomeHashFromUrl();
     };
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(run);
@@ -422,14 +476,14 @@ function setupHomeHashNavigation() {
     (e) => {
       const a = e.target.closest("a");
       if (!a) return;
+      if (a.closest(".mobile-menu")) return;
+      if (isLeadCallbackAnchor(a)) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const id = getInPageTargetIdFromHref(a.getAttribute("href") || "");
       if (!id || !document.getElementById(id)) return;
       e.preventDefault();
-      scrollToHomeSectionById(id, "smooth");
-      if (window.history && window.history.pushState) {
-        window.history.pushState(null, "", `#${id}`);
-      }
+      scrollToHomeSectionById(id, true);
+      stripHomeHashFromUrl();
     },
     true
   );
@@ -576,6 +630,10 @@ function setupMenu() {
 
   popup.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
+      if (event.defaultPrevented) {
+        closeMenu();
+        return;
+      }
       const href = (link.getAttribute("href") || "").trim();
       const id = getInPageTargetIdFromHref(href);
       const target = id ? document.getElementById(id) : null;
@@ -583,10 +641,10 @@ function setupMenu() {
         event.preventDefault();
         closeMenu();
         window.requestAnimationFrame(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState(null, "", `#${id}`);
-          }
+          window.requestAnimationFrame(() => {
+            scrollToHomeSectionById(id, true);
+            stripHomeHashFromUrl();
+          });
         });
         return;
       }
@@ -994,10 +1052,14 @@ function setupLeadPopup() {
   });
 
   callbackButtons.forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      openPopup(defaultState);
-    });
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        openPopup(defaultState);
+      },
+      true
+    );
   });
 
   productButtons.forEach((button) => {
@@ -1114,6 +1176,7 @@ renderInstagram();
 renderProcess();
 loadHomeCatalogData();
 setupHomeHashNavigation();
+consumePendingHomeScroll();
 setupMenu();
 setupScrollControls();
 setupArticleBenefitsPager();

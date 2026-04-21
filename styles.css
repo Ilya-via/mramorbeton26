@@ -60,8 +60,9 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  /* Якоря (#about, #process, #contact-form): шапка + вырез/status bar в Safari */
+  /* Плавный скролл только из script.js (window.scrollTo), без нативного smooth по # — меньше конфликтов на мобильных */
+  scroll-behavior: auto;
+  /* Отступ под шапку при программном скролле (JS дублирует логику по высоте header) */
   scroll-padding-top: calc(96px + env(safe-area-inset-top, 0px));
 }
 
@@ -86,6 +87,11 @@ body {
   font-weight: 500;
   /* Контент не уезжает под home indicator и панель Safari */
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Горизонтальный скролл от слайдеров, таблиц, фикс. ширин: шапка и подвал вне main — см. ниже */
+main {
+  overflow-x: hidden;
 }
 
 h1,
@@ -131,6 +137,8 @@ button {
   background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid #f1f3f6;
   backdrop-filter: blur(16px);
+  /* .brand { margin-left: -12px } на планшетах не расширяет документ */
+  overflow-x: clip;
 }
 
 .header-inner {
@@ -2273,6 +2281,7 @@ div.product-meta {
 }
 
 .site-footer {
+  overflow-x: hidden;
   padding: 42px 0 41px;
   background: var(--bg-soft);
 }
@@ -3490,13 +3499,6 @@ body.mobile-menu-open {
 
   .page-home .section-projects .section-heading-inline .button-outline {
     display: none;
-  }
-
-  /* Слайдеры с margin-right: -18px выходят за padding контейнера — без этого появляется горизонтальный скролл страницы */
-  .page-home .section-projects .container,
-  .page-home #instagram .container,
-  .page-home #shop .container {
-    overflow-x: hidden;
   }
 
   .page-home .projects-grid,

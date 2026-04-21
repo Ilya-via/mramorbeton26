@@ -21,7 +21,7 @@ $categories = catalog_get_categories();
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=1.1">
+  <link rel="stylesheet" href="styles.css?v=1.3">
   <link rel="stylesheet" href="catalog.css?v=1.1">
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
