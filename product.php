@@ -269,7 +269,7 @@ if ($found === null) {
                 </div>
                 <p class="product-spec-label">Размер (мм)</p>
               </div>
-              <p id="product-spec-size-value" class="product-spec-value"><?= catalog_esc($specSize) ?></p>
+              <p id="product-spec-size-value" class="product-spec-value"><?= catalog_format_dimension_stack_html((string) $specSize) ?></p>
             </div>
             <div class="product-spec-row">
               <div class="product-spec-left">
@@ -358,7 +358,7 @@ if ($found === null) {
               <dl class="product-card__meta">
                 <div class="product-card__row">
                   <dt>Габариты:</dt>
-                  <dd><?= catalog_esc($rg) ?></dd>
+                  <dd><?= catalog_format_dimension_stack_html((string) $rg) ?></dd>
                 </div>
                 <div class="product-card__row">
                   <dt>Вес(кг/м²):</dt>

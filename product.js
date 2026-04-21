@@ -209,6 +209,42 @@
     }
   });
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function setSpecDimensionValue(el, raw) {
+    if (!el) {
+      return;
+    }
+    const s = String(raw || "").trim();
+    if (!s || s === "—") {
+      el.textContent = s || "—";
+      return;
+    }
+    const parts = s
+      .split(",")
+      .map((p) => p.trim())
+      .filter(Boolean);
+    if (parts.length <= 1) {
+      el.textContent = s;
+      return;
+    }
+    el.innerHTML = `<span class="product-dimension-stack">${parts
+      .map((p, i) => {
+        const sep =
+          i < parts.length - 1
+            ? '<span class="product-dimension-sep" aria-hidden="true">, </span>'
+            : "";
+        return `<span class="product-dimension-part">${escapeHtml(p)}</span>${sep}`;
+      })
+      .join("")}</span>`;
+  }
+
   function initThickness() {
     const specSizeEl = document.querySelector("#product-spec-size-value");
     const specWeightEl = document.querySelector("#product-spec-weight-value");
@@ -254,7 +290,10 @@
         btn.setAttribute("aria-pressed", "true");
 
         if (specSizeEl) {
-          specSizeEl.textContent = btn.getAttribute("data-spec-size") || specSizeEl.textContent;
+          const nextSize = btn.getAttribute("data-spec-size");
+          if (nextSize != null && nextSize !== "") {
+            setSpecDimensionValue(specSizeEl, nextSize);
+          }
         }
         if (specWeightEl) {
           specWeightEl.textContent = btn.getAttribute("data-spec-weight") || specWeightEl.textContent;

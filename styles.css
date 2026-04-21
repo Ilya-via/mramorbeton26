@@ -61,6 +61,20 @@
 
 html {
   scroll-behavior: smooth;
+  /* Якоря (#about, #process, #contact-form): шапка + вырез/status bar в Safari */
+  scroll-padding-top: calc(96px + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: calc(100px + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (min-width: 1261px) {
+  html {
+    scroll-padding-top: calc(108px + env(safe-area-inset-top, 0px));
+  }
 }
 
 body {
@@ -70,6 +84,8 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   font-weight: 500;
+  /* Контент не уезжает под home indicator и панель Safari */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 h1,
@@ -1999,6 +2015,40 @@ div.product-meta {
   color: var(--text-soft);
 }
 
+/* Несколько габаритов через запятую: на широком экране в одну строку, на мобилке — столбик */
+.product-dimension-stack {
+  display: inline;
+}
+
+.product-dimension-part {
+  display: inline;
+}
+
+.product-dimension-sep {
+  display: inline;
+}
+
+@media (max-width: 767px) {
+  .product-dimension-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-dimension-part {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-dimension-sep {
+    display: none;
+  }
+}
+
 .product-bottom {
   display: flex;
   justify-content: space-between;
@@ -3322,7 +3372,7 @@ body.mobile-menu-open {
   }
 
   .page-home .section-tech {
-    padding: 30px 0;
+    padding: 30px 0 calc(30px + max(12px, env(safe-area-inset-bottom, 0px)));
   }
 
   .page-home .section-tech .features-grid {
@@ -3756,5 +3806,136 @@ body.mobile-menu-open {
 
   .page-home #instagram .mobile-section-button {
     margin-top: 19px;
+  }
+}
+
+/* Страница благодарности после заявки */
+.page-thanks {
+  background: var(--bg-soft);
+}
+
+.page-thanks .site-footer {
+  background: var(--bg-soft);
+}
+
+.thanks-main {
+  padding: 39px 0 80px;
+}
+
+.thanks-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 32px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.15px;
+  color: #1a1a1a;
+}
+
+.thanks-breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.thanks-breadcrumbs a:hover,
+.thanks-breadcrumbs a:focus-visible {
+  color: var(--accent);
+}
+
+.thanks-breadcrumbs-current {
+  color: var(--accent);
+}
+
+.thanks-panel {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 32px 52px;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.thanks-panel .section-tag {
+  margin: 0;
+}
+
+.thanks-panel .site-popup__success-icon {
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+
+.thanks-title {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(28px, 5vw, 38px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  color: var(--text);
+}
+
+.thanks-text {
+  margin: 0;
+  max-width: 440px;
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+.thanks-text--muted {
+  font-size: 16px;
+}
+
+.thanks-phone {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.thanks-phone:hover,
+.thanks-phone:focus-visible {
+  text-decoration: underline;
+}
+
+.thanks-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.thanks-actions .button {
+  min-width: 160px;
+}
+
+@media (max-width: 767px) {
+  .thanks-main {
+    padding: 28px 0 56px;
+  }
+
+  .thanks-panel {
+    padding: 36px 22px 40px;
+  }
+
+  .thanks-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .thanks-actions .button {
+    width: 100%;
+    min-width: 0;
   }
 }

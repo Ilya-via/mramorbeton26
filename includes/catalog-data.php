@@ -8,6 +8,73 @@ function catalog_esc(?string $s): string
     return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
+/**
+ * Внутренние span для списка размеров (части уже по отдельности экранированы).
+ *
+ * @param array<int, string> $parts
+ */
+function catalog_build_dimension_stack_html(array $parts): string
+{
+    $html = '';
+    $n = count($parts);
+    foreach ($parts as $i => $part) {
+        $html .= '<span class="product-dimension-part">' . catalog_esc($part) . '</span>';
+        if ($i < $n - 1) {
+            $html .= '<span class="product-dimension-sep" aria-hidden="true">, </span>';
+        }
+    }
+
+    return $html;
+}
+
+/** Несколько габаритов через запятую: на десктопе в строку, на мобилке — столбцом (см. styles.css). */
+function catalog_format_dimension_stack_html(string $raw): string
+{
+    $raw = trim($raw);
+    if ($raw === '') {
+        return catalog_esc('—');
+    }
+    if ($raw === '—') {
+        return catalog_esc('—');
+    }
+
+    $parts = array_values(array_filter(array_map('trim', explode(',', $raw)), static function ($p) {
+        return $p !== '';
+    }));
+    if (count($parts) <= 1) {
+        return catalog_esc($raw);
+    }
+
+    return '<span class="product-dimension-stack">' . catalog_build_dimension_stack_html($parts) . '</span>';
+}
+
+/**
+ * Строка вида «Размеры(мм): а, б, в» — запятые только в значении после двоеточия.
+ */
+function catalog_format_meta_line_html(string $line): string
+{
+    $line = trim($line);
+    if ($line === '') {
+        return '';
+    }
+    if (!preg_match('/^([^:]+:\s*)(.+)$/su', $line, $m)) {
+        return catalog_esc($line);
+    }
+    $value = trim($m[2]);
+    if (strpos($value, ',') === false) {
+        return catalog_esc($line);
+    }
+
+    $parts = array_values(array_filter(array_map('trim', explode(',', $value)), static function ($p) {
+        return $p !== '';
+    }));
+    if (count($parts) <= 1) {
+        return catalog_esc($line);
+    }
+
+    return catalog_esc($m[1]) . '<span class="product-dimension-stack">' . catalog_build_dimension_stack_html($parts) . '</span>';
+}
+
 function catalog_get_legacy_categories(): array
 {
     return [

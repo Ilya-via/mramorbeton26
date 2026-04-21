@@ -142,6 +142,20 @@
   font-weight: 600;
 }
 
+@media (max-width: 767px) {
+  .paving-tile-card__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .paving-tile-card__row dd {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 .paving-tile-card__cta {
   display: flex;
   align-items: center;

@@ -153,6 +153,49 @@ const FALLBACK_PRODUCT_ITEMS = [
 
 const PRODUCT_CARD_ARROW_SRC = "assets/images/arrow.svg";
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function buildDimensionStackHtml(parts) {
+  return parts
+    .map((p, i) => {
+      const sep =
+        i < parts.length - 1
+          ? '<span class="product-dimension-sep" aria-hidden="true">, </span>'
+          : "";
+      return `<span class="product-dimension-part">${escapeHtml(p)}</span>${sep}`;
+    })
+    .join("");
+}
+
+function formatMetaLineHtml(line) {
+  const s = String(line || "").trim();
+  if (!s) {
+    return "";
+  }
+  const m = s.match(/^([^:]+:\s*)(.+)$/);
+  if (!m) {
+    return escapeHtml(s);
+  }
+  const value = m[2].trim();
+  if (!value.includes(",")) {
+    return escapeHtml(s);
+  }
+  const parts = value
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (parts.length <= 1) {
+    return escapeHtml(s);
+  }
+  return escapeHtml(m[1]) + `<span class="product-dimension-stack">${buildDimensionStackHtml(parts)}</span>`;
+}
+
 function formatProductPrice(item) {
   if (item.priceText) {
     return item.priceText;
@@ -165,7 +208,7 @@ function formatProductPrice(item) {
 
 function formatProductMeta(item) {
   const lines = item.metaLines && item.metaLines.length ? item.metaLines : [item.meta || ""];
-  return lines.map((line) => `<p>${line}</p>`).join("");
+  return lines.map((line) => `<p>${formatMetaLineHtml(line)}</p>`).join("");
 }
 
 function getHomeCatalogClassName(index) {
@@ -437,7 +480,23 @@ function setupMenu() {
   });
 
   popup.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
+      const href = (link.getAttribute("href") || "").trim();
+      if (href.startsWith("#") && href.length > 1) {
+        const id = decodeURIComponent(href.slice(1));
+        const target = document.getElementById(id);
+        if (target) {
+          event.preventDefault();
+          closeMenu();
+          window.requestAnimationFrame(() => {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState(null, "", href);
+            }
+          });
+          return;
+        }
+      }
       closeMenu();
     });
   });
@@ -587,6 +646,14 @@ function leadApiUrl() {
   }
 }
 
+function leadThankYouPageUrl() {
+  try {
+    return new URL("thank-you.html", window.location.href).href;
+  } catch {
+    return "thank-you.html";
+  }
+}
+
 function ensureLeadHoneypot(form) {
   if (!form || form.querySelector('[data-lead-honeypot="1"]')) return;
   const input = document.createElement("input");
@@ -663,10 +730,8 @@ function setupForm() {
       if (submitBtn) submitBtn.disabled = true;
       try {
         await postLeadForm(form, {});
-        if (status) {
-          status.textContent = "Заявка отправлена. Мы свяжемся с вами в ближайшее время.";
-        }
-        form.reset();
+        window.location.assign(leadThankYouPageUrl());
+        return;
       } catch (err) {
         if (status) {
           status.textContent = err instanceof Error ? err.message : "Не удалось отправить заявку.";
@@ -881,13 +946,8 @@ function setupLeadPopup() {
       const context = title?.textContent?.trim() || "";
       try {
         await postLeadForm(popupForm, { context });
-        popupForm.reset();
-        popup.querySelectorAll(".site-popup-form__control").forEach((input) => {
-          input.classList.remove("site-popup-form__control--filled");
-        });
-        if (phoneInput) phoneInput.classList.remove("site-popup-form__control--error");
-        if (phoneError) phoneError.classList.remove("is-visible");
-        setPopupSuccessState(true);
+        window.location.assign(leadThankYouPageUrl());
+        return;
       } catch (err) {
         if (popupStatus) {
           popupStatus.textContent = err instanceof Error ? err.message : "Не удалось отправить заявку.";
