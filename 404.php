@@ -21,6 +21,7 @@ http_response_code(404);
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="lead-form.css">
   <link rel="stylesheet" href="404.css">
+  <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="page-404">
   <header class="site-header">
@@ -153,7 +154,7 @@ http_response_code(404);
             </span>
           </a>
 
-          <a class="footer-contact" href="mailto:mramorbeton@gmail.com">
+          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -161,7 +162,7 @@ http_response_code(404);
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">mramorbeton@gmail.com</span>
+              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
             </span>
           </a>
 

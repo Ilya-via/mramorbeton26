@@ -69,6 +69,7 @@ if ($found === null) {
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="product.css">
   <script>document.documentElement.classList.add('js');</script>
+  <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="page-product<?= !$notFound ? ' page-product--loading' : '' ?>">
   <header class="site-header">
@@ -453,7 +454,7 @@ if ($found === null) {
             </span>
           </a>
 
-          <a class="footer-contact" href="mailto:mramorbeton@gmail.com">
+          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -461,7 +462,7 @@ if ($found === null) {
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">mramorbeton@gmail.com</span>
+              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
             </span>
           </a>
 

@@ -51,6 +51,7 @@ function admin_render_header(string $title, ?array $user = null): void
   >
   <link rel="stylesheet" href="admin.css">
   <script defer src="admin.js"></script>
+  <link rel="shortcut icon" href="../assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="admin-body">
   <header class="admin-header">

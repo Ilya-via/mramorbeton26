@@ -46,6 +46,7 @@ if ($category === null) {
   <?php if ($isOverheadStepsLayout) : ?>
   <link rel="stylesheet" href="category-overhead-steps.css">
   <?php endif; ?>
+  <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="page-catalog page-category<?= $isTileCatalogLayout ? ' page-category-paving' : '' ?><?= $isOverheadStepsLayout ? ' page-category-overhead-steps' : '' ?>">
   <header class="site-header">
@@ -239,7 +240,7 @@ if ($category === null) {
             </span>
           </a>
 
-          <a class="footer-contact" href="mailto:mramorbeton@gmail.com">
+          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -247,7 +248,7 @@ if ($category === null) {
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">mramorbeton@gmail.com</span>
+              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
             </span>
           </a>
 
