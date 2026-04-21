@@ -340,6 +340,101 @@ function renderProducts(items = FALLBACK_PRODUCT_ITEMS) {
   setupScrollControls();
 }
 
+/** URL ведёт на index (главная в подпапке или в корне). */
+function isPathLikelyHomeTarget(pathname) {
+  const p = (pathname || "").replace(/\\/g, "/");
+  const lower = p.toLowerCase();
+  if (lower === "/" || lower === "") return true;
+  if (lower.endsWith("/index.html") || lower.endsWith("/index.htm")) return true;
+  const parts = p.split("/").filter(Boolean);
+  const last = (parts[parts.length - 1] || "").toLowerCase();
+  if (last === "index.html" || last === "index.htm") return true;
+  return false;
+}
+
+function isCurrentDocumentHome() {
+  return Boolean(document.getElementById("hero") && document.getElementById("catalog"));
+}
+
+/** Якорь на главной: #id или index.html#id, пока открыта главная страница. */
+function getInPageTargetIdFromHref(href) {
+  if (!href) return null;
+  const t = String(href).trim();
+  if (t.startsWith("#") && t.length > 1) {
+    try {
+      return decodeURIComponent(t.slice(1));
+    } catch {
+      return t.slice(1);
+    }
+  }
+  try {
+    const u = new URL(t, window.location.href);
+    if (u.origin !== window.location.origin) return null;
+    if (!u.hash || u.hash.length < 2) return null;
+    const here =
+      isPathLikelyHomeTarget(window.location.pathname) || isCurrentDocumentHome();
+    if (!here || !isPathLikelyHomeTarget(u.pathname)) return null;
+    return decodeURIComponent(u.hash.slice(1));
+  } catch {
+    return null;
+  }
+}
+
+function scrollToHomeSectionById(id, behavior) {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  el.scrollIntoView({ behavior: behavior || "smooth", block: "start" });
+  return true;
+}
+
+/** Прокрутка к # после перехода с другой страницы; клики по index.html#… на главной без перезагрузки. */
+function setupHomeHashNavigation() {
+  if (!isCurrentDocumentHome()) return;
+
+  function applyHashFromUrl() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    let id;
+    try {
+      id = decodeURIComponent(hash.slice(1));
+    } catch {
+      id = hash.slice(1);
+    }
+    if (!id) return;
+    const run = () => {
+      scrollToHomeSectionById(id, "auto");
+    };
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(run);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyHashFromUrl, { once: true });
+  } else {
+    applyHashFromUrl();
+  }
+
+  window.addEventListener("hashchange", applyHashFromUrl);
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      const a = e.target.closest("a");
+      if (!a) return;
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const id = getInPageTargetIdFromHref(a.getAttribute("href") || "");
+      if (!id || !document.getElementById(id)) return;
+      e.preventDefault();
+      scrollToHomeSectionById(id, "smooth");
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, "", `#${id}`);
+      }
+    },
+    true
+  );
+}
+
 async function loadHomeCatalogData() {
   const catalogRoot = document.querySelector("#catalog-grid");
   const productsRoot = document.querySelector("#products-grid");
@@ -482,20 +577,18 @@ function setupMenu() {
   popup.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
       const href = (link.getAttribute("href") || "").trim();
-      if (href.startsWith("#") && href.length > 1) {
-        const id = decodeURIComponent(href.slice(1));
-        const target = document.getElementById(id);
-        if (target) {
-          event.preventDefault();
-          closeMenu();
-          window.requestAnimationFrame(() => {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-            if (window.history && window.history.replaceState) {
-              window.history.replaceState(null, "", href);
-            }
-          });
-          return;
-        }
+      const id = getInPageTargetIdFromHref(href);
+      const target = id ? document.getElementById(id) : null;
+      if (target) {
+        event.preventDefault();
+        closeMenu();
+        window.requestAnimationFrame(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, "", `#${id}`);
+          }
+        });
+        return;
       }
       closeMenu();
     });
@@ -1020,6 +1113,7 @@ renderFeatures();
 renderInstagram();
 renderProcess();
 loadHomeCatalogData();
+setupHomeHashNavigation();
 setupMenu();
 setupScrollControls();
 setupArticleBenefitsPager();
