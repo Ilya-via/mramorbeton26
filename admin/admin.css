@@ -822,6 +822,28 @@ body.admin-body {
   font-size: 13px;
 }
 
+.admin-home-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-home-list__row {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-home-list__media {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-home-list__path {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
 .admin-thickness-editor {
   display: grid;
   gap: 20px;

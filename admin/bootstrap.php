@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/app.php';
 require_once __DIR__ . '/../includes/catalog-data.php';
 require_once __DIR__ . '/../includes/catalog-admin.php';
+require_once __DIR__ . '/../includes/projects-admin.php';
 require_once __DIR__ . '/../includes/admin-auth.php';
 
 function admin_e(?string $value): string
@@ -49,8 +50,8 @@ function admin_render_header(string $title, ?array $user = null): void
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="admin.css?v=1.1">
-  <script defer src="admin.js?v=1.1"></script>
+  <link rel="stylesheet" href="admin.css?v=1.2">
+  <script defer src="admin.js?v=1.2"></script>
   <link rel="shortcut icon" href="../assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="admin-body">
@@ -65,7 +66,9 @@ function admin_render_header(string $title, ?array $user = null): void
       </a>
       <?php if ($user !== null) : ?>
       <nav class="admin-nav">
-        <a href="index.php">Главная</a>
+        <a href="index.php">Дашборд</a>
+        <a href="home.php">Главная страница</a>
+        <a href="projects.php">Проекты</a>
         <a href="categories.php">Категории</a>
         <a href="products.php">Товары</a>
         <a href="../catalog.php" target="_blank" rel="noreferrer">Сайт</a>

@@ -159,6 +159,30 @@ function app_db_run_migrations(PDO $pdo): void
         return;
     }
 
+    $pdo->exec(
+        'CREATE TABLE IF NOT EXISTS site_settings (
+            setting_key VARCHAR(190) NOT NULL PRIMARY KEY,
+            setting_value LONGTEXT NOT NULL,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
+    $pdo->exec(
+        'CREATE TABLE IF NOT EXISTS projects (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(190) NOT NULL UNIQUE,
+            title VARCHAR(255) NOT NULL,
+            description TEXT NOT NULL,
+            image_path VARCHAR(255) NOT NULL DEFAULT "",
+            image_alt VARCHAR(255) NOT NULL DEFAULT "",
+            project_url VARCHAR(255) NOT NULL DEFAULT "",
+            sort_order INT NOT NULL DEFAULT 100,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
     if (app_db_table_exists($pdo, 'products') && !app_db_column_exists($pdo, 'products', 'subtitle_text')) {
         $pdo->exec("ALTER TABLE products ADD COLUMN subtitle_text TEXT NOT NULL AFTER title");
     }

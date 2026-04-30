@@ -1,3 +1,10 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/includes/projects-data.php';
+
+$projects = projects_get_items(true);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -14,14 +21,14 @@
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=1.3">
-  <link rel="stylesheet" href="projects.css?v=1.1">
+  <link rel="stylesheet" href="styles.css?v=1.4">
+  <link rel="stylesheet" href="projects.css?v=1.2">
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
 </head>
 <body class="page-projects">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="MRAMORBETON">
+      <a class="brand" href="index.php" aria-label="MRAMORBETON">
         <img class="brand-logo" src="assets/images/logo.svg" alt="Логотип MRAMORBETON">
         <span class="brand-copy">
           <strong>MRAMORBETON</strong>
@@ -35,9 +42,9 @@
 
       <nav class="site-nav" id="site-nav">
         <a href="catalog.php">Каталог</a>
-        <a href="index.html#about">О нас</a>
-        <a href="projects.html" aria-current="page">Проекты</a>
-        <a href="index.html#process">Как мы работаем</a>
+        <a href="index.php#about">О нас</a>
+        <a href="projects.php" aria-current="page">Проекты</a>
+        <a href="index.php#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
         <a href="contacts.html">Контакты</a>
       </nav>
@@ -47,7 +54,7 @@
           <a class="header-phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
           <span>Пн-Вс: 09:00 — 20:00</span>
         </div>
-        <a class="button button-accent button-small" href="index.html#contact-form">Заказать звонок</a>
+        <a class="button button-accent button-small" href="index.php#contact-form">Заказать звонок</a>
       </div>
     </div>
   </header>
@@ -55,7 +62,7 @@
   <main class="projects-main">
     <div class="container">
       <nav class="projects-breadcrumbs" aria-label="Хлебные крошки">
-        <a href="index.html">Главная</a>
+        <a href="index.php">Главная</a>
         <span aria-hidden="true">/</span>
         <span class="projects-breadcrumbs-current">Реализованные объекты</span>
       </nav>
@@ -69,89 +76,40 @@
       </header>
 
       <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-1.png"
-              alt="Жилой комплекс «Индустриальный» — мощение и благоустройство"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">ЖК &laquo;Индустриальный&raquo;</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-2.png"
-              alt="Коттеджный посёлок «Лесной»"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Коттеджный посёлок &laquo;Лесной&raquo;</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-3.png"
-              alt="Частный дом, Минская область"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Частный дом, Минская область</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-4.png"
-              alt="Частный дом, Минская область — бордюры и мощение"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Частный дом, Минская область</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-5.png"
-              alt="Резиденция в посёлке Боровляны — ступени и дорожки"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Резиденция в пос. Боровляны</h2>
-        </article>
-
-        <article class="project-card">
-          <div class="project-card__media">
-            <img
-              src="assets/images/projects-6.png"
-              alt="Офисный комплекс «Премиум»"
-              width="378"
-              height="382"
-              loading="lazy"
-            >
-          </div>
-          <div class="project-card__gradient" aria-hidden="true"></div>
-          <h2 class="project-card__title">Офисный комплекс &laquo;Премиум&raquo;</h2>
-        </article>
+        <?php foreach ($projects as $project) : ?>
+          <?php
+            $link = trim((string) ($project['project_url'] ?? ''));
+            $description = trim((string) ($project['description'] ?? ''));
+            $tag = $link !== '' ? 'a' : 'article';
+            $cardClass = 'project-card';
+            if ($link !== '') {
+                $cardClass .= ' project-card--link';
+            }
+            if ($description !== '') {
+                $cardClass .= ' project-card--with-description';
+            }
+          ?>
+          <<?= $tag ?>
+            class="<?= htmlspecialchars($cardClass, ENT_QUOTES | ENT_HTML5, 'UTF-8') ?>"
+            <?= $link !== '' ? 'href="' . htmlspecialchars($link, ENT_QUOTES | ENT_HTML5, 'UTF-8') . '"' : '' ?>
+            <?= $link !== '' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+          >
+            <div class="project-card__media">
+              <img
+                src="<?= htmlspecialchars((string) ($project['image_path'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8') ?>"
+                alt="<?= htmlspecialchars((string) ($project['image_alt'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8') ?>"
+                width="378"
+                height="382"
+                loading="lazy"
+              >
+            </div>
+            <div class="project-card__gradient" aria-hidden="true"></div>
+            <h2 class="project-card__title"><?= htmlspecialchars((string) ($project['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8') ?></h2>
+            <?php if ($description !== '') : ?>
+              <p class="project-card__text"><?= htmlspecialchars($description, ENT_QUOTES | ENT_HTML5, 'UTF-8') ?></p>
+            <?php endif; ?>
+          </<?= $tag ?>>
+        <?php endforeach; ?>
       </div>
     </div>
   </main>
@@ -160,7 +118,7 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <div class="footer-brand-top">
-          <a class="brand footer-brand-logo" href="index.html" aria-label="MRAMORBETON">
+          <a class="brand footer-brand-logo" href="index.php" aria-label="MRAMORBETON">
             <img class="brand-logo" src="assets/images/logo.svg" alt="" width="45" height="45" decoding="async">
             <span class="brand-copy">
               <strong>MRAMORBETON</strong>
@@ -194,9 +152,9 @@
         <p class="footer-heading">Компания</p>
         <div class="footer-links">
           <a href="catalog.php">Каталог</a>
-          <a href="index.html#about">О нас</a>
-          <a href="projects.html" aria-current="page">Проекты</a>
-          <a href="index.html#process">Как мы работаем</a>
+          <a href="index.php#about">О нас</a>
+          <a href="projects.php" aria-current="page">Проекты</a>
+          <a href="index.php#process">Как мы работаем</a>
           <a href="contacts.html">Контакты</a>
         </div>
       </nav>
@@ -259,6 +217,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=1.1"></script>
+  <script src="script.js?v=1.3"></script>
 </body>
 </html>

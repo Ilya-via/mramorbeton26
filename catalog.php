@@ -28,7 +28,7 @@ $categories = catalog_get_categories();
 <body class="page-catalog">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="MRAMORBETON">
+      <a class="brand" href="index.php" aria-label="MRAMORBETON">
         <img class="brand-logo" src="assets/images/logo.svg" alt="Логотип MRAMORBETON">
         <span class="brand-copy">
           <strong>MRAMORBETON</strong>
@@ -42,9 +42,9 @@ $categories = catalog_get_categories();
 
       <nav class="site-nav" id="site-nav">
         <a href="catalog.php" aria-current="page">Каталог</a>
-        <a href="index.html#about">О нас</a>
-        <a href="projects.html">Проекты</a>
-        <a href="index.html#process">Как мы работаем</a>
+        <a href="index.php#about">О нас</a>
+        <a href="projects.php">Проекты</a>
+        <a href="index.php#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
         <a href="contacts.html">Контакты</a>
       </nav>
@@ -54,7 +54,7 @@ $categories = catalog_get_categories();
           <a class="header-phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
           <span>Пн-Вс: 09:00 — 20:00</span>
         </div>
-        <a class="button button-accent button-small" href="index.html#contact-form">Заказать звонок</a>
+        <a class="button button-accent button-small" href="index.php#contact-form">Заказать звонок</a>
       </div>
     </div>
   </header>
@@ -62,7 +62,7 @@ $categories = catalog_get_categories();
   <main class="catalog-page-main">
     <div class="container">
       <nav class="catalog-breadcrumbs" aria-label="Хлебные крошки">
-        <a href="index.html">Главная</a>
+        <a href="index.php">Главная</a>
         <span aria-hidden="true">/</span>
         <span class="catalog-breadcrumbs-current">Каталог</span>
       </nav>
@@ -96,7 +96,7 @@ $categories = catalog_get_categories();
     <div class="container footer-grid">
       <div class="footer-brand">
         <div class="footer-brand-top">
-          <a class="brand footer-brand-logo" href="index.html" aria-label="MRAMORBETON">
+          <a class="brand footer-brand-logo" href="index.php" aria-label="MRAMORBETON">
             <img class="brand-logo" src="assets/images/logo.svg" alt="" width="45" height="45" decoding="async">
             <span class="brand-copy">
               <strong>MRAMORBETON</strong>
@@ -130,9 +130,9 @@ $categories = catalog_get_categories();
         <p class="footer-heading">Компания</p>
         <div class="footer-links">
           <a href="catalog.php">Каталог</a>
-          <a href="index.html#about">О нас</a>
-          <a href="projects.html">Проекты</a>
-          <a href="index.html#process">Как мы работаем</a>
+          <a href="index.php#about">О нас</a>
+          <a href="projects.php">Проекты</a>
+          <a href="index.php#process">Как мы работаем</a>
           <a href="contacts.html">Контакты</a>
         </div>
       </nav>

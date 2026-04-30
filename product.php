@@ -74,7 +74,7 @@ if ($found === null) {
 <body class="page-product<?= !$notFound ? ' page-product--loading' : '' ?>">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="MRAMORBETON">
+      <a class="brand" href="index.php" aria-label="MRAMORBETON">
         <img class="brand-logo" src="assets/images/logo.svg" alt="Логотип MRAMORBETON">
         <span class="brand-copy">
           <strong>MRAMORBETON</strong>
@@ -88,9 +88,9 @@ if ($found === null) {
 
       <nav class="site-nav" id="site-nav">
         <a href="catalog.php">Каталог</a>
-        <a href="index.html#about">О нас</a>
-        <a href="projects.html">Проекты</a>
-        <a href="index.html#process">Как мы работаем</a>
+        <a href="index.php#about">О нас</a>
+        <a href="projects.php">Проекты</a>
+        <a href="index.php#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
         <a href="contacts.html">Контакты</a>
       </nav>
@@ -100,7 +100,7 @@ if ($found === null) {
           <a class="header-phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
           <span>Пн-Вс: 09:00 — 20:00</span>
         </div>
-        <a class="button button-accent button-small" href="index.html#contact-form">Заказать звонок</a>
+        <a class="button button-accent button-small" href="index.php#contact-form">Заказать звонок</a>
       </div>
     </div>
   </header>
@@ -109,7 +109,7 @@ if ($found === null) {
     <div class="container">
       <?php if ($notFound) : ?>
         <nav class="product-breadcrumbs" aria-label="Хлебные крошки">
-          <a href="index.html">Главная</a>
+          <a href="index.php">Главная</a>
           <span aria-hidden="true">/</span>
           <span class="product-breadcrumbs-current">Не найдено</span>
         </nav>
@@ -120,7 +120,7 @@ if ($found === null) {
         </div>
       <?php else : ?>
       <nav class="product-breadcrumbs" aria-label="Хлебные крошки">
-        <a href="index.html">Главная</a>
+        <a href="index.php">Главная</a>
         <span aria-hidden="true">/</span>
         <a class="product-breadcrumbs-catalog" href="catalog.php">Каталог</a>
         <span class="product-breadcrumbs-catalog-separator" aria-hidden="true">/</span>
@@ -324,7 +324,7 @@ if ($found === null) {
 
           <a
             class="product-order-btn"
-            href="index.html#contact-form"
+            href="index.php#contact-form"
             data-lead-popup="product"
             data-lead-title="<?= catalog_esc(trim(($category['title'] ?? '') !== '' ? ($category['title'] . ' «' . $product['title'] . '»') : $product['title'])) ?>"
             data-lead-message="<?= catalog_esc('Интересует товар: ' . $product['title']) ?>"
@@ -398,7 +398,7 @@ if ($found === null) {
     <div class="container footer-grid">
       <div class="footer-brand">
         <div class="footer-brand-top">
-          <a class="brand footer-brand-logo" href="index.html" aria-label="MRAMORBETON">
+          <a class="brand footer-brand-logo" href="index.php" aria-label="MRAMORBETON">
             <img class="brand-logo" src="assets/images/logo.svg" alt="" width="45" height="45" decoding="async">
             <span class="brand-copy">
               <strong>MRAMORBETON</strong>
@@ -432,9 +432,9 @@ if ($found === null) {
         <p class="footer-heading">Компания</p>
         <div class="footer-links">
           <a href="catalog.php">Каталог</a>
-          <a href="index.html#about">О нас</a>
-          <a href="projects.html">Проекты</a>
-          <a href="index.html#process">Как мы работаем</a>
+          <a href="index.php#about">О нас</a>
+          <a href="projects.php">Проекты</a>
+          <a href="index.php#process">Как мы работаем</a>
           <a href="contacts.html">Контакты</a>
         </div>
       </nav>

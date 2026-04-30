@@ -89,6 +89,12 @@
   background: #fff;
 }
 
+.project-card--link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
 .project-card__media {
   position: absolute;
   inset: 0;
@@ -130,6 +136,22 @@
   letter-spacing: 0.0703px;
   color: #fff;
   z-index: 2;
+}
+
+.project-card__text {
+  position: absolute;
+  left: 26px;
+  right: 20px;
+  bottom: 8px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, 0.92);
+  z-index: 2;
+}
+
+.project-card--with-description .project-card__title {
+  bottom: 44px;
 }
 
 @media (max-width: 1240px) {

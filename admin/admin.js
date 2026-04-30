@@ -561,6 +561,241 @@ function setupThicknessVisibility() {
   update();
 }
 
+function buildHomeListPosixName(base, index, field) {
+  // base может быть видом "footer[products]" или "instagram"; нам нужно
+  // получить корректное имя input — base + [index] + [field] либо
+  // base + [index] (если field === '').
+  return field === ""
+    ? `${base}[${index}]`
+    : `${base}[${index}][${field}]`;
+}
+
+function setupHomeListEditor() {
+  document.querySelectorAll("[data-home-list-editor]").forEach((editor) => {
+    const baseName = editor.getAttribute("data-name") || "";
+    const fields = JSON.parse(editor.getAttribute("data-fields") || "[]");
+    const imageField = editor.getAttribute("data-image-field") || "";
+    const imageInputName = editor.getAttribute("data-image-input-name") || "";
+    const stateSelector = `[data-home-list-state="${baseName}"]`;
+    const stateTextarea = document.querySelector(stateSelector);
+    const rowsRoot = editor.querySelector("[data-home-list-rows]");
+    const addButton = editor.querySelector("[data-home-list-add]");
+    if (!rowsRoot || !addButton || !stateTextarea) return;
+
+    let initial = [];
+    try {
+      initial = JSON.parse(stateTextarea.value || "[]");
+      if (!Array.isArray(initial)) initial = [];
+    } catch {
+      initial = [];
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderRow(values = {}) {
+      const card = document.createElement("div");
+      card.className = "admin-home-list__row admin-collection__row";
+      card.dataset.homeListRow = "true";
+
+      const fragments = [];
+
+      if (imageField) {
+        const path = values[imageField] || "";
+        fragments.push(`
+          <div class="admin-home-list__media">
+            <div class="admin-image-preview" data-home-list-preview>
+              <div class="admin-image-preview__placeholder" data-home-list-preview-placeholder>Здесь будет показано изображение</div>
+              <img alt="Предпросмотр изображения" data-home-list-preview-img hidden>
+            </div>
+            <div class="admin-upload-dropzone admin-upload-dropzone--compact" data-home-list-dropzone>
+              <input class="admin-hidden" type="file" data-home-list-file accept="image/*">
+              <div class="admin-upload-dropzone__body">
+                <p class="admin-subtitle">Перетащите фото или выберите файл.</p>
+                <button class="admin-button--ghost" type="button" data-home-list-file-trigger>Выбрать файл</button>
+              </div>
+            </div>
+            <p class="admin-hint admin-home-list__path" data-home-list-path>${escapeHtml(path) || "Файл ещё не выбран"}</p>
+          </div>
+        `);
+      }
+
+      const fieldHtml = fields
+        .map((field) => {
+          const value = values[field.key] || "";
+          if (field.multiline) {
+            return `
+              <div class="admin-form__field">
+                <label>${escapeHtml(field.label)}</label>
+                <textarea data-home-list-field="${escapeHtml(field.key)}" rows="3" placeholder="${escapeHtml(field.placeholder || "")}">${escapeHtml(value)}</textarea>
+              </div>
+            `;
+          }
+          return `
+            <div class="admin-form__field">
+              <label>${escapeHtml(field.label)}</label>
+              <input type="text" data-home-list-field="${escapeHtml(field.key)}" value="${escapeHtml(value)}" placeholder="${escapeHtml(field.placeholder || "")}">
+            </div>
+          `;
+        })
+        .join("");
+
+      fragments.push(`<div class="admin-collection__fields">${fieldHtml}</div>`);
+      fragments.push(`<button class="admin-button--ghost admin-collection__remove" type="button" data-home-list-remove>Удалить</button>`);
+
+      card.innerHTML = fragments.join("");
+
+      if (imageField) {
+        const previewWrapper = card.querySelector("[data-home-list-preview]");
+        const previewImg = card.querySelector("[data-home-list-preview-img]");
+        const previewPlaceholder = card.querySelector("[data-home-list-preview-placeholder]");
+        const fileInput = card.querySelector("[data-home-list-file]");
+        const fileTrigger = card.querySelector("[data-home-list-file-trigger]");
+        const dropzone = card.querySelector("[data-home-list-dropzone]");
+        const pathInfo = card.querySelector("[data-home-list-path]");
+
+        const showPreview = (src) => {
+          const resolved = resolveAdminPreviewSrc(src);
+          if (resolved) {
+            previewImg.src = resolved;
+            previewImg.hidden = false;
+            previewPlaceholder.hidden = true;
+          } else {
+            previewImg.removeAttribute("src");
+            previewImg.hidden = true;
+            previewPlaceholder.hidden = false;
+          }
+        };
+
+        showPreview(values[imageField] || "");
+
+        if (fileTrigger) {
+          fileTrigger.addEventListener("click", () => fileInput.click());
+        }
+
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files?.[0];
+          if (file) {
+            showPreview(URL.createObjectURL(file));
+            if (pathInfo) pathInfo.textContent = `Будет загружен: ${file.name}`;
+          } else {
+            showPreview(values[imageField] || "");
+            if (pathInfo) pathInfo.textContent = values[imageField] || "Файл ещё не выбран";
+          }
+        });
+
+        dropzone.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          dropzone.classList.add("is-dragover");
+        });
+        dropzone.addEventListener("dragleave", () => dropzone.classList.remove("is-dragover"));
+        dropzone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          dropzone.classList.remove("is-dragover");
+          const file = event.dataTransfer?.files?.[0];
+          if (!file) return;
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          fileInput.files = dt.files;
+          fileInput.dispatchEvent(new Event("change"));
+        });
+
+        // Сохраняем текущий image_path в data-атрибут, чтобы при сериализации
+        // можно было его взять и положить в hidden input.
+        card.dataset.imagePath = values[imageField] || "";
+      }
+
+      card.querySelector("[data-home-list-remove]").addEventListener("click", () => card.remove());
+
+      return card;
+    }
+
+    function addRow(values = {}) {
+      rowsRoot.appendChild(renderRow(values));
+    }
+
+    if (initial.length) {
+      initial.forEach((row) => addRow(row));
+    }
+
+    addButton.addEventListener("click", () => addRow({}));
+
+    const form = editor.closest("form");
+    if (!form) return;
+
+    form.addEventListener("submit", () => {
+      // Удаляем все ранее созданные hidden-поля для этого редактора.
+      form.querySelectorAll(`[data-home-list-hidden="${baseName}"]`).forEach((node) => node.remove());
+
+      const rows = Array.from(rowsRoot.querySelectorAll("[data-home-list-row]"));
+
+      rows.forEach((row, index) => {
+        // Записываем поле image_path как hidden, чтобы PHP получил его.
+        if (imageField) {
+          const hidden = document.createElement("input");
+          hidden.type = "hidden";
+          hidden.name = buildHomeListPosixName(baseName, index, imageField);
+          hidden.value = row.dataset.imagePath || "";
+          hidden.dataset.homeListHidden = baseName;
+          form.appendChild(hidden);
+        }
+
+        // Текстовые поля.
+        fields.forEach((field) => {
+          const input = row.querySelector(`[data-home-list-field="${field.key}"]`);
+          const value = input ? input.value : "";
+          const hidden = document.createElement("input");
+          hidden.type = "hidden";
+          hidden.name = buildHomeListPosixName(baseName, index, field.key);
+          hidden.value = value;
+          hidden.dataset.homeListHidden = baseName;
+          form.appendChild(hidden);
+        });
+
+        // Файлы — нужно перенести их в файловый input с правильным именем.
+        if (imageField && imageInputName) {
+          const fileInput = row.querySelector("[data-home-list-file]");
+          if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            // Создаём отдельный input file с именем `<imageInputName>[INDEX]`,
+            // переносим в него файл, а исходный input очищаем (он не должен
+            // отправляться, имя у него отсутствует).
+            const transfer = document.createElement("input");
+            transfer.type = "file";
+            transfer.name = `${imageInputName}[${index}]`;
+            transfer.dataset.homeListHidden = baseName;
+            transfer.style.display = "none";
+
+            const dt = new DataTransfer();
+            dt.items.add(fileInput.files[0]);
+            transfer.files = dt.files;
+
+            form.appendChild(transfer);
+          }
+        }
+      });
+
+      // Сериализуем текущее состояние в JSON для отображения после reload.
+      const snapshot = rows.map((row) => {
+        const out = {};
+        fields.forEach((field) => {
+          const input = row.querySelector(`[data-home-list-field="${field.key}"]`);
+          out[field.key] = input ? input.value : "";
+        });
+        if (imageField) {
+          out[imageField] = row.dataset.imagePath || "";
+        }
+        return out;
+      });
+      stateTextarea.value = JSON.stringify(snapshot);
+    });
+  });
+}
+
 setupAutoSlug();
 setupImagePreviews();
 setupSingleImageUploaders();
@@ -570,3 +805,4 @@ setupRecommendationLimit();
 setupThicknessEditor();
 setupThicknessVisibility();
 setupGalleryManagers();
+setupHomeListEditor();

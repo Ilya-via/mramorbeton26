@@ -49,6 +49,24 @@ admin_render_header('Главная', $user);
   </section>
 
   <section class="admin-card">
+    <h2>Содержимое главной страницы</h2>
+    <p class="admin-page-lead">Редактирование текстов, фотографий и кнопок отдельных блоков главной: первый экран, особенности производства, «О нас», объекты, инстаграм, шаги работы, контактная форма и футер.</p>
+    <div class="admin-actions">
+      <a class="admin-button" href="home.php">Редактировать главную</a>
+      <a class="admin-button--ghost" href="../index.php" target="_blank" rel="noreferrer">Открыть главную</a>
+    </div>
+  </section>
+
+  <section class="admin-card">
+    <h2>Страница «Проекты»</h2>
+    <p class="admin-page-lead">Добавляйте новые проекты, меняйте фото, название, описание, ссылку и порядок показа карточек на странице проектов.</p>
+    <div class="admin-actions">
+      <a class="admin-button" href="projects.php">Управлять проектами</a>
+      <a class="admin-button--ghost" href="../projects.php" target="_blank" rel="noreferrer">Открыть страницу</a>
+    </div>
+  </section>
+
+  <section class="admin-card">
     <h2>Как пользоваться</h2>
     <div class="admin-helper-grid">
       <article class="admin-helper">

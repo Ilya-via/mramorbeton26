@@ -52,58 +52,6 @@ const FALLBACK_HOME_CATALOG_ITEMS = [
   },
 ];
 
-const featureItems = [
-  {
-    number: "01",
-    title: "Высокопрочный бетон",
-    text: "Использование бетона марки M500 со специальными добавками обеспечивает исключительную плотность и прочность изделий на протяжении десятилетий.",
-    tone: "",
-  },
-  {
-    number: "02",
-    title: "Морозостойкость",
-    text: "Особая структура бетона предотвращает образование трещин при резких перепадах температур, что критично для климата Минска.",
-    tone: "dark",
-  },
-  {
-    number: "03",
-    title: "Эстетика и стиль",
-    text: "Широкий ассортимент форм, размеров и цветов позволяет создавать уникальные и стильные покрытия для любых ландшафтных проектов.",
-    tone: "accent",
-  },
-];
-
-const instagramItems = [
-  { image: "assets/images/instagram-1.png", alt: "Фотография объекта из Instagram 1" },
-  { image: "assets/images/instagram-2.png", alt: "Фотография объекта из Instagram 2" },
-  { image: "assets/images/instagram-3.png", alt: "Фотография объекта из Instagram 3" },
-  { image: "assets/images/instagram-4.png", alt: "Фотография объекта из Instagram 4" },
-];
-
-const processItems = [
-  {
-    number: "01",
-    title: "Заявка и консультация",
-    text: "Оставляете заявку, наш специалист уточняет детали и помогает с выбором материалов под ваши задачи.",
-  },
-  {
-    number: "02",
-    title: "Расчет и договор",
-    text: "Составляем подробную смету, фиксируем сроки и стоимость в договоре.",
-    textExtra: "Никаких скрытых платежей.",
-  },
-  {
-    number: "03",
-    title: "Производство",
-    text: "Запускаем ваш заказ в работу. Вы можете в любой момент приехать на производство и увидеть процесс.",
-  },
-  {
-    number: "04",
-    title: "Доставка и приемка",
-    text: "Привозим готовую продукцию, разгружаем и подписываем акт приемки. Наслаждаетесь результатом.",
-  },
-];
-
 const PRODUCT_PAGE_BASE = "product.php?p=";
 const MOBILE_MENU_CATEGORIES = [
   { href: "category.php?c=trotuarnaya-plitka", label: "Брусчатка" },
@@ -245,70 +193,6 @@ function renderCatalog(items = FALLBACK_HOME_CATALOG_ITEMS) {
   }
 }
 
-function renderFeatures() {
-  const root = document.querySelector("#features-grid");
-  if (!root) return;
-
-  root.innerHTML = featureItems
-    .map(
-      (item) => `
-        <article class="feature-card ${item.tone}">
-          <div class="feature-card-top">
-            <h3>${item.title}</h3>
-            <span class="feature-card-badge" aria-hidden="true">${item.number}</span>
-          </div>
-          <p>${item.text}</p>
-        </article>
-      `
-    )
-    .join("");
-}
-
-function renderInstagram() {
-  const root = document.querySelector("#instagram-grid");
-  if (!root) return;
-
-  root.innerHTML = instagramItems
-    .map(
-      (item) => `
-        <article class="instagram-card">
-          <div class="image-frame">
-            <img src="${item.image}" alt="${item.alt}" loading="lazy">
-          </div>
-        </article>
-      `
-    )
-    .join("");
-  setupScrollControls();
-}
-
-function renderProcess() {
-  const root = document.querySelector("#process-steps");
-  if (!root) return;
-
-  root.innerHTML = processItems
-    .map(
-      (item, index) => {
-        const extra = item.textExtra
-          ? `<p class="process-step__text">${item.textExtra}</p>`
-          : "";
-        return `
-        <article class="process-step${index === 0 ? " process-step--current" : ""}">
-          <span class="process-step__number" aria-hidden="true">${item.number}</span>
-          <div class="process-step__body">
-            <h3 class="process-step__title">${item.title}</h3>
-            <div class="process-step__text-block">
-              <p class="process-step__text">${item.text}</p>
-              ${extra}
-            </div>
-          </div>
-        </article>
-      `;
-      }
-    )
-    .join("");
-}
-
 function renderProducts(items = FALLBACK_PRODUCT_ITEMS) {
   const root = document.querySelector("#products-grid");
   if (!root) return;
@@ -345,10 +229,16 @@ function isPathLikelyHomeTarget(pathname) {
   const p = (pathname || "").replace(/\\/g, "/");
   const lower = p.toLowerCase();
   if (lower === "/" || lower === "") return true;
-  if (lower.endsWith("/index.html") || lower.endsWith("/index.htm")) return true;
+  if (
+    lower.endsWith("/index.html") ||
+    lower.endsWith("/index.htm") ||
+    lower.endsWith("/index.php")
+  ) {
+    return true;
+  }
   const parts = p.split("/").filter(Boolean);
   const last = (parts[parts.length - 1] || "").toLowerCase();
-  if (last === "index.html" || last === "index.htm") return true;
+  if (last === "index.html" || last === "index.htm" || last === "index.php") return true;
   return false;
 }
 
@@ -564,7 +454,7 @@ function setupMenu() {
     <div class="mobile-menu__backdrop" data-menu-close></div>
     <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
       <div class="mobile-menu__header">
-        <a class="mobile-menu__brand brand" href="${brand.getAttribute("href") || "index.html"}" aria-label="MRAMORBETON" id="mobile-menu-title">
+        <a class="mobile-menu__brand brand" href="${brand.getAttribute("href") || "index.php"}" aria-label="MRAMORBETON" id="mobile-menu-title">
           ${brand.innerHTML}
         </a>
         <button class="mobile-menu__close" type="button" data-menu-close aria-label="Закрыть меню">
@@ -896,7 +786,7 @@ function setupForm() {
 
 function setupLeadPopup() {
   const callbackButtons = document.querySelectorAll(
-    '.button.button-accent.button-small[href="#contact-form"], .button.button-accent.button-small[href="index.html#contact-form"], .mobile-menu__button[href="#contact-form"], .mobile-menu__button[href="index.html#contact-form"]'
+    '.button.button-accent.button-small[href="#contact-form"], .button.button-accent.button-small[href="index.html#contact-form"], .button.button-accent.button-small[href="index.php#contact-form"], .mobile-menu__button[href="#contact-form"], .mobile-menu__button[href="index.html#contact-form"], .mobile-menu__button[href="index.php#contact-form"]'
   );
   const productButtons = document.querySelectorAll(".product-order-btn");
 
@@ -1171,9 +1061,6 @@ function setupMapLoading() {
   });
 }
 
-renderFeatures();
-renderInstagram();
-renderProcess();
 loadHomeCatalogData();
 setupHomeHashNavigation();
 consumePendingHomeScroll();

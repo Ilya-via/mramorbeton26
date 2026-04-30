@@ -1,3 +1,26 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/includes/home-content.php';
+
+$home = home_settings_get_all();
+
+$header = $home['header'];
+$hero = $home['hero'];
+$features = $home['features'];
+$about = $home['about'];
+$projectsHome = $home['projects_home'];
+$instagram = $home['instagram'];
+$process = $home['process'];
+$leadForm = $home['lead_form'];
+$footer = $home['footer'];
+
+$featureTones = ['', 'dark', 'accent'];
+
+$projectCards = $projectsHome['cards'] ?? [];
+$projectMain = $projectCards[0] ?? null;
+$projectStack = array_slice($projectCards, 1);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -14,7 +37,7 @@
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=1.3">
+  <link rel="stylesheet" href="styles.css?v=1.4">
   <link rel="stylesheet" href="lead-form.css?v=1.1">
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
   <script>
@@ -52,7 +75,7 @@
       <nav class="site-nav" id="site-nav">
         <a href="catalog.php">Каталог</a>
         <a href="#about">О нас</a>
-        <a href="projects.html">Проекты</a>
+        <a href="projects.php">Проекты</a>
         <a href="#process">Как мы работаем</a>
         <a href="useful-info.html">Полезная информация</a>
         <a href="contacts.html">Контакты</a>
@@ -60,8 +83,8 @@
 
       <div class="header-contacts">
         <div class="header-phone-wrap">
-          <a class="header-phone" href="tel:+375293258259">+375 (29) 325-82-59</a>
-          <span>Пн-Вс: 09:00 — 20:00</span>
+          <a class="header-phone" href="<?= home_e($header['phone_href']) ?>"><?= home_e($header['phone_text']) ?></a>
+          <span><?= home_e($header['hours_text']) ?></span>
         </div>
         <a class="button button-accent button-small" href="#contact-form">Заказать звонок</a>
       </div>
@@ -72,28 +95,26 @@
     <section class="hero" id="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <h1>
-            Производство<br>
-            бетонных изделий<br>
-            <span>под заказ</span>
-          </h1>
+          <h1><?= $hero['title_html'] !== '' ? $hero['title_html'] : home_e($hero['title_html']) ?></h1>
           <p class="hero-description">
-            Надёжные бетонные изделия для благоустройства и строительства
+            <?= home_e($hero['description']) ?>
           </p>
           <div class="hero-actions">
-            <a class="button button-dark button-icon" href="catalog.php">
-              <span>Перейти в каталог</span>
+            <a class="button button-dark button-icon" href="<?= home_attr_url($hero['button_url']) ?>">
+              <span><?= home_e($hero['button_text']) ?></span>
               <span class="button-arrow" aria-hidden="true"></span>
             </a>
           </div>
         </div>
 
         <div class="hero-media image-frame image-frame-hero">
+          <?php if (!empty($hero['image_path'])) : ?>
           <img
-            src="assets/images/hero-main.png"
-            alt="Бетонные ступени и благоустройство территории"
+            src="<?= home_e(home_image_src($hero['image_path'])) ?>"
+            alt="<?= home_e($hero['image_alt'] ?: 'Главное изображение') ?>"
             loading="eager"
           >
+          <?php endif; ?>
         </div>
 
         <ul class="hero-features">
@@ -117,10 +138,23 @@
     <section class="section section-tech">
       <div class="container">
         <div class="section-heading">
-          <p class="section-tag">Технологии</p>
-          <h2>Особенности производства</h2>
+          <p class="section-tag"><?= home_e($features['section_tag']) ?></p>
+          <h2><?= home_e($features['heading']) ?></h2>
         </div>
-        <div class="features-grid" id="features-grid"></div>
+        <div class="features-grid" id="features-grid">
+          <?php foreach (($features['items'] ?? []) as $i => $item) :
+            $tone = $featureTones[$i % count($featureTones)];
+            $number = str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT);
+          ?>
+          <article class="feature-card <?= home_e($tone) ?>">
+            <div class="feature-card-top">
+              <h3><?= home_e($item['title'] ?? '') ?></h3>
+              <span class="feature-card-badge" aria-hidden="true"><?= home_e($number) ?></span>
+            </div>
+            <p><?= home_e($item['text'] ?? '') ?></p>
+          </article>
+          <?php endforeach; ?>
+        </div>
       </div>
     </section>
 
@@ -130,11 +164,13 @@
           <div class="about-visual">
             <span class="about-visual__square" aria-hidden="true"></span>
             <div class="about-photo image-frame">
+              <?php if (!empty($about['image_path'])) : ?>
               <img
-                src="assets/images/about-production.png"
-                alt="Производство бетонных изделий"
+                src="<?= home_e(home_image_src($about['image_path'])) ?>"
+                alt="<?= home_e($about['image_alt'] ?: 'О нас') ?>"
                 loading="lazy"
               >
+              <?php endif; ?>
             </div>
             <div class="about-badge">
               <strong>100+</strong>
@@ -143,18 +179,12 @@
           </div>
 
           <div class="about-copy">
-            <p class="section-tag">о нас</p>
+            <p class="section-tag"><?= home_e($about['section_tag']) ?></p>
             <h2>
-              Промышленный масштаб с вниманием<br>
-              к деталям
+              <?= $about['heading_html'] !== '' ? $about['heading_html'] : home_e($about['heading_html']) ?>
             </h2>
             <p class="about-copy__lead">
-              Наша компания специализируется на производстве и продаже продукции из
-              высокопрочного бетона в Минске. Мы предлагаем широкий ассортимент
-              тротуарной плитки, брусчатки, искусственного камня и фасадных панелей.
-              Благодаря собственному производству, мы контролируем каждый этап
-              производства, что позволяет нам гарантировать высокое качество и долговечность
-              нашей продукции.
+              <?= home_e_multiline($about['lead']) ?>
             </p>
           </div>
         </div>
@@ -165,54 +195,60 @@
       <div class="container">
         <div class="section-heading section-heading-inline">
           <div>
-            <p class="section-tag">НАШ ОПЫТ</p>
-            <h2>Реализованные объекты</h2>
+            <p class="section-tag"><?= home_e($projectsHome['section_tag']) ?></p>
+            <h2><?= home_e($projectsHome['heading']) ?></h2>
           </div>
-          <a class="button button-outline" href="projects.html">Смотреть все объекты</a>
+          <a class="button button-outline" href="<?= home_attr_url($projectsHome['button_url']) ?>"><?= home_e($projectsHome['button_text']) ?></a>
         </div>
 
         <div class="projects-grid" id="projects-slider">
-          <article class="project-card project-card-large">
+          <?php if ($projectMain !== null) : ?>
+          <?php $mainTag = !empty($projectMain['link']) ? 'a' : 'article'; ?>
+          <<?= $mainTag ?> class="project-card project-card-large"<?= !empty($projectMain['link']) ? ' href="' . home_attr_url($projectMain['link']) . '"' : '' ?>>
+            <?php if (!empty($projectMain['image_path'])) : ?>
             <img
-              src="assets/images/project-industrial.png"
-              alt="ЖК Индустриальный"
+              src="<?= home_e(home_image_src($projectMain['image_path'])) ?>"
+              alt="<?= home_e($projectMain['image_alt'] ?: ($projectMain['title'] ?? '')) ?>"
               loading="lazy"
             >
+            <?php endif; ?>
             <div class="project-overlay">
-              <h3>ЖК "Индустриальный"</h3>
-              <p>Комплексное благоустройство территории</p>
+              <h3><?= home_e($projectMain['title'] ?? '') ?></h3>
+              <?php if (!empty($projectMain['subtitle'])) : ?>
+              <p><?= home_e($projectMain['subtitle']) ?></p>
+              <?php endif; ?>
             </div>
-          </article>
+          </<?= $mainTag ?>>
+          <?php endif; ?>
 
+          <?php if ($projectStack !== []) : ?>
           <div class="projects-stack">
-            <article class="project-card">
+            <?php foreach ($projectStack as $card) : ?>
+            <?php $tag = !empty($card['link']) ? 'a' : 'article'; ?>
+            <<?= $tag ?> class="project-card"<?= !empty($card['link']) ? ' href="' . home_attr_url($card['link']) . '"' : '' ?>>
+              <?php if (!empty($card['image_path'])) : ?>
               <img
-                src="assets/images/project-residence.png"
-                alt="Частная резиденция"
+                src="<?= home_e(home_image_src($card['image_path'])) ?>"
+                alt="<?= home_e($card['image_alt'] ?: ($card['title'] ?? '')) ?>"
                 loading="lazy"
               >
+              <?php endif; ?>
               <div class="project-overlay">
-                <h3>Частная резиденция</h3>
+                <h3><?= home_e($card['title'] ?? '') ?></h3>
+                <?php if (!empty($card['subtitle'])) : ?>
+                <p><?= home_e($card['subtitle']) ?></p>
+                <?php endif; ?>
               </div>
-            </article>
-
-            <article class="project-card">
-              <img
-                src="assets/images/project-park.png"
-                alt='Парк "Монолит"'
-                loading="lazy"
-              >
-              <div class="project-overlay">
-                <h3>Парк "Монолит"</h3>
-              </div>
-            </article>
+            </<?= $tag ?>>
+            <?php endforeach; ?>
           </div>
+          <?php endif; ?>
         </div>
         <div class="mobile-slider-controls" aria-label="Навигация по объектам">
           <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="projects-slider" aria-label="Предыдущий объект"></button>
           <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="projects-slider" aria-label="Следующий объект"></button>
         </div>
-        <a class="button button-outline mobile-section-button" href="projects.html">Смотреть все объекты</a>
+        <a class="button button-outline mobile-section-button" href="<?= home_attr_url($projectsHome['button_url']) ?>"><?= home_e($projectsHome['button_text']) ?></a>
       </div>
     </section>
 
@@ -220,39 +256,49 @@
       <div class="container">
         <div class="section-heading section-heading-inline">
           <div>
-            <p class="section-tag">соцсети</p>
-            <h2>Наш инстаграм</h2>
+            <p class="section-tag"><?= home_e($instagram['section_tag']) ?></p>
+            <h2><?= home_e($instagram['heading']) ?></h2>
             <p class="section-note">
-              Переходите в наш инстаграм
+              <?= home_e($instagram['note_prefix']) ?>
               <strong>
                 <a
                   class="instagram-handle-link"
-                  href="https://www.instagram.com/mramorbetonminsk/"
+                  href="<?= home_attr_url($instagram['handle_url']) ?>"
                   target="_blank"
                   rel="noopener noreferrer"
-                  >@mramorbetonminsk</a>
+                  ><?= home_e($instagram['handle_text']) ?></a>
               </strong>
-              для просмотра последних новинок!
+              <?= home_e($instagram['note_suffix']) ?>
             </p>
           </div>
           <a
             class="button button-outline"
-            href="https://www.instagram.com/mramorbetonminsk/"
+            href="<?= home_attr_url($instagram['button_url']) ?>"
             target="_blank"
             rel="noopener noreferrer"
-            >Подписаться</a>
+            ><?= home_e($instagram['button_text']) ?></a>
         </div>
-        <div class="instagram-grid" id="instagram-grid"></div>
+        <div class="instagram-grid" id="instagram-grid">
+          <?php foreach (($instagram['items'] ?? []) as $item) : ?>
+          <article class="instagram-card">
+            <div class="image-frame">
+              <?php if (!empty($item['image_path'])) : ?>
+              <img src="<?= home_e(home_image_src($item['image_path'])) ?>" alt="<?= home_e($item['image_alt'] ?? '') ?>" loading="lazy">
+              <?php endif; ?>
+            </div>
+          </article>
+          <?php endforeach; ?>
+        </div>
         <div class="mobile-slider-controls" aria-label="Навигация по Instagram">
           <button class="mobile-slider-control mobile-slider-control--prev" type="button" data-scroll-target="instagram-grid" aria-label="Предыдущая публикация"></button>
           <button class="mobile-slider-control mobile-slider-control--next" type="button" data-scroll-target="instagram-grid" aria-label="Следующая публикация"></button>
         </div>
         <a
           class="button button-dark mobile-section-button"
-          href="https://www.instagram.com/mramorbetonminsk/"
+          href="<?= home_attr_url($instagram['button_url']) ?>"
           target="_blank"
           rel="noopener noreferrer"
-          >Подписаться</a>
+          ><?= home_e($instagram['button_text']) ?></a>
       </div>
     </section>
 
@@ -260,14 +306,31 @@
       <div class="container">
         <div class="process-layout">
           <div class="process-copy">
-            <p class="section-tag">Процесс</p>
-            <h2>Как мы работаем</h2>
+            <p class="section-tag"><?= home_e($process['section_tag']) ?></p>
+            <h2><?= home_e($process['heading']) ?></h2>
             <p class="process-intro">
-              Мы выстроили прозрачную систему взаимодействия, чтобы вы получили идеальный результат точно в срок
+              <?= home_e($process['intro']) ?>
             </p>
           </div>
           <div class="process-steps-panel">
-            <div class="process-steps" id="process-steps"></div>
+            <div class="process-steps" id="process-steps">
+              <?php foreach (($process['items'] ?? []) as $i => $item) :
+                $number = str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT);
+              ?>
+              <article class="process-step<?= $i === 0 ? ' process-step--current' : '' ?>">
+                <span class="process-step__number" aria-hidden="true"><?= home_e($number) ?></span>
+                <div class="process-step__body">
+                  <h3 class="process-step__title"><?= home_e($item['title'] ?? '') ?></h3>
+                  <div class="process-step__text-block">
+                    <p class="process-step__text"><?= home_e($item['text'] ?? '') ?></p>
+                    <?php if (!empty($item['text_extra'])) : ?>
+                    <p class="process-step__text"><?= home_e($item['text_extra']) ?></p>
+                    <?php endif; ?>
+                  </div>
+                </div>
+              </article>
+              <?php endforeach; ?>
+            </div>
           </div>
         </div>
       </div>
@@ -292,9 +355,9 @@
         <div class="contact-banner">
           <div class="contact-copy">
             <div class="contact-copy-lead">
-              <h2>Готовы начать проект?<br />Давайте обсудим.</h2>
+              <h2><?= $leadForm['heading_html'] !== '' ? $leadForm['heading_html'] : home_e($leadForm['heading_html']) ?></h2>
               <p>
-                Заполните форму, и наш главный инженер свяжется с вами для бесплатной консультации по вашему объекту.
+                <?= home_e($leadForm['lead']) ?>
               </p>
             </div>
 
@@ -305,8 +368,8 @@
                 </svg>
               </span>
               <div class="contact-phone-card__text">
-                <small>связаться с нами</small>
-                <a href="tel:+375293258259">+375 (29) 325-82-59</a>
+                <small><?= home_e($leadForm['phone_label']) ?></small>
+                <a href="<?= home_attr_url($leadForm['phone_href']) ?>"><?= home_e($leadForm['phone_text']) ?></a>
               </div>
             </div>
           </div>
@@ -376,24 +439,16 @@
           </a>
         </div>
         <p class="footer-brand-text">
-          Профессиональное производство<br>
-          бетонных изделий для современной<br>
-          городской и частной инфраструктуры.<br>
-          Гарантия качества на века.
+          <?= $footer['brand_text_html'] !== '' ? $footer['brand_text_html'] : home_e($footer['brand_text_html']) ?>
         </p>
       </div>
 
       <nav class="footer-column" aria-label="Продукция">
         <p class="footer-heading">Продукция</p>
         <div class="footer-links">
-          <a href="category.php?c=trotuarnaya-plitka">Брусчатка</a>
-          <a href="category.php?c=trotuarnaya-plitka">Тротуарная плитка</a>
-          <a href="category.php?c=fasadnye-paneli">Фасадные панели</a>
-          <a href="category.php?c=bordyury-i-vodostoki">Бордюры и водостоки</a>
-          <a href="category.php?c=nakladnye-prostupi">Накладные проступи</a>
-          <a href="category.php?c=ritualnye-plity">Ритуальные плиты</a>
-          <a href="category.php?c=poshagovye-plity">Пошаговые плиты</a>
-          <a href="category.php?c=parapetnye-plity">Накрывные элементы</a>
+          <?php foreach (($footer['products'] ?? []) as $product) : ?>
+          <a href="<?= home_attr_url($product['href'] ?? '#') ?>"><?= home_e($product['label'] ?? '') ?></a>
+          <?php endforeach; ?>
         </div>
       </nav>
 
@@ -402,7 +457,7 @@
         <div class="footer-links">
           <a href="catalog.php">Каталог</a>
           <a href="#about">О нас</a>
-          <a href="projects.html">Проекты</a>
+          <a href="projects.php">Проекты</a>
           <a href="#process">Как мы работаем</a>
           <a href="contacts.html">Контакты</a>
         </div>
@@ -411,19 +466,22 @@
       <div class="footer-column footer-column-contacts">
         <p class="footer-heading">Контакты</p>
         <div class="footer-contacts-stack">
-          <a class="footer-contact" href="tel:+375293258259">
+          <a class="footer-contact" href="<?= home_attr_url($footer['contact_phone_href']) ?>">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7.5 4.5H4.8A1.8 1.8 0 0 0 3 6.3c0 8.118 6.582 14.7 14.7 14.7a1.8 1.8 0 0 0 1.8-1.8v-2.7a1.2 1.2 0 0 0-.87-1.154l-3.252-.93a1.2 1.2 0 0 0-1.214.353l-.713.871a12.035 12.035 0 0 1-5.084-5.084l.871-.713a1.2 1.2 0 0 0 .353-1.214l-.93-3.252A1.2 1.2 0 0 0 7.5 4.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">+375 (29) 325-82-59</span>
-              <span class="footer-contact-meta">Пн-Вс: 09:00 — 20:00</span>
+              <span class="footer-contact-primary"><?= home_e($footer['contact_phone_text']) ?></span>
+              <?php if (!empty($footer['contact_phone_meta'])) : ?>
+              <span class="footer-contact-meta"><?= home_e($footer['contact_phone_meta']) ?></span>
+              <?php endif; ?>
             </span>
           </a>
 
-          <a class="footer-contact" href="mailto:Mramorbeton.by@gmail.com">
+          <?php if (!empty($footer['contact_email_text'])) : ?>
+          <a class="footer-contact" href="<?= home_attr_url($footer['contact_email_href']) ?>">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -431,10 +489,12 @@
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary">Mramorbeton.by@gmail.com</span>
+              <span class="footer-contact-primary"><?= home_e($footer['contact_email_text']) ?></span>
             </span>
           </a>
+          <?php endif; ?>
 
+          <?php if (!empty($footer['contact_address_text'])) : ?>
           <div class="footer-contact">
             <span class="footer-contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
@@ -443,9 +503,10 @@
               </svg>
             </span>
             <span class="footer-contact-body">
-              <span class="footer-contact-primary footer-contact-primary--wide">Минская обл., Минский р-н, Хатежинский с/с, д. Васьковщина</span>
+              <span class="footer-contact-primary footer-contact-primary--wide"><?= home_e($footer['contact_address_text']) ?></span>
             </span>
           </div>
+          <?php endif; ?>
 
           <div class="socials socials-contacts" aria-label="Соцсети">
             <a class="social social--whatsapp" href="https://wa.me/375293258259" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
@@ -466,6 +527,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=1.2"></script>
+  <script src="script.js?v=1.3"></script>
 </body>
 </html>

@@ -1,1 +1,7 @@
 ErrorDocument 404 /404.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^index\.html$ index.php [R=301,L]
+  RewriteRule ^projects\.html$ projects.php [R=301,L]
+</IfModule>
