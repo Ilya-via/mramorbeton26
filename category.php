@@ -167,7 +167,7 @@ if ($category === null) {
                 <h3><?= catalog_esc($product['title']) ?></h3>
                 <p class="product-meta"><?= catalog_format_meta_line_html((string) ($product['meta'] ?? '')) ?></p>
                 <div class="product-bottom">
-                  <span class="product-price"><?= catalog_esc($product['price']) ?></span>
+                  <span class="product-price">Подробнее</span>
                   <span class="product-action" aria-hidden="true">
                     <img class="product-action__icon" src="assets/images/arrow.svg" width="18" height="18" alt="" decoding="async">
                   </span>

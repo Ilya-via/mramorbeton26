@@ -145,13 +145,7 @@ function formatMetaLineHtml(line) {
 }
 
 function formatProductPrice(item) {
-  if (item.priceText) {
-    return item.priceText;
-  }
-  if (item.pricePerSqm) {
-    return `${item.priceAmount}/m<sup class="product-price__sq">2</sup>`;
-  }
-  return item.priceAmount || "";
+  return "Подробнее";
 }
 
 function formatProductMeta(item) {
