@@ -281,7 +281,7 @@ if ($found === null) {
                     <path d="M9 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                   </svg>
                 </div>
-                <p class="product-spec-label">Вес (кг/м²)</p>
+                <p class="product-spec-label">Вес</p>
               </div>
               <p id="product-spec-weight-value" class="product-spec-value"><?= catalog_esc($specWeight) ?></p>
             </div>
@@ -362,7 +362,7 @@ if ($found === null) {
                   <dd><?= catalog_format_dimension_stack_html((string) $rg) ?></dd>
                 </div>
                 <div class="product-card__row">
-                  <dt>Вес(кг/м²):</dt>
+                  <dt>Вес:</dt>
                   <dd><?= catalog_esc($rw) ?></dd>
                 </div>
               </dl>

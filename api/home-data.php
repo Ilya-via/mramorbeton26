@@ -30,7 +30,7 @@ $payload = [
             }
 
             if (!empty($product['weight'])) {
-                $metaLines[] = 'Вес(кг/м2): ' . (string) $product['weight'];
+                $metaLines[] = 'Вес: ' . (string) $product['weight'];
             }
 
             return [

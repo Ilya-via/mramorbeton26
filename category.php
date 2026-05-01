@@ -135,7 +135,7 @@ if ($category === null) {
                       <dd><?= catalog_format_dimension_stack_html((string) ($product['gabarity'] ?? '')) ?></dd>
                     </div>
                     <div class="paving-tile-card__row">
-                      <dt>Вес(кг/m2):</dt>
+                      <dt>Вес:</dt>
                       <dd><?= catalog_esc($product['weight'] ?? '') ?></dd>
                     </div>
                   </dl>

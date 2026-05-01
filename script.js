@@ -68,7 +68,7 @@ const FALLBACK_PRODUCT_ITEMS = [
   {
     slug: "fasad-tsvetok-elit",
     title: "Каменный цветок элит",
-    metaLines: ["Размеры(мм): 40", "Вес(кг/м2): 90"],
+    metaLines: ["Размеры(мм): 40", "Вес: 90"],
     pricePerSqm: true,
     priceAmount: "от 30.00 руб.",
     image: "assets/images/product-flower-elite.png",
