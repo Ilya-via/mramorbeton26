@@ -2059,20 +2059,24 @@ div.product-meta {
 
 .product-bottom {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-top: auto;
-  padding-top: 18px;
-  min-height: 40px;
+  min-height: 58px;
+  padding: 0 21px;
+  border-radius: 22px;
+  background: #2b2727;
+  color: #fff;
+  transition: background-color 0.22s ease;
 }
 
 .product-price {
-  font-size: 20px;
-  line-height: 28px;
+  font-size: 18px;
+  line-height: 1.2;
   font-weight: 700;
-  letter-spacing: -0.4492px;
-  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
 
 .product-price__sq {
@@ -2087,20 +2091,61 @@ div.product-meta {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #2b2727;
-  color: var(--white);
+  width: 18px;
+  height: 18px;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  position: relative;
+  transition: transform 0.22s ease;
 }
 
 .product-action__icon {
+  display: none;
+}
+
+.product-action::before,
+.product-action::after {
+  content: "";
+  position: absolute;
   display: block;
-  width: 18px;
-  max-width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  object-fit: contain;
+  background: currentColor;
+}
+
+.product-action::before {
+  left: 1px;
+  top: 8px;
+  width: 14px;
+  height: 2px;
+}
+
+.product-action::after {
+  right: 1px;
+  top: 4px;
+  width: 7px;
+  height: 7px;
+  background: transparent;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.product-card-link:hover .product-bottom,
+.product-card-link:focus-visible .product-bottom {
+  background: #de6800;
+}
+
+.product-card-link:hover .product-action,
+.product-card-link:focus-visible .product-action {
+  transform: translateX(3px);
+}
+
+.product-card-link:active .product-bottom {
+  background: #f47301;
+}
+
+.product-card-link:active .product-action {
+  transform: translateX(1px);
 }
 
 .contact-banner {

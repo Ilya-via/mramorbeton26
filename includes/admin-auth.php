@@ -93,3 +93,116 @@ function admin_require_login(): void
     $redirect = $_SERVER['REQUEST_URI'] ?? '/admin/';
     app_redirect('login.php?redirect=' . urlencode((string) $redirect));
 }
+
+function admin_list_users(): array
+{
+    if (!app_db_ready()) {
+        return [];
+    }
+
+    $pdo = app_pdo();
+    if (!$pdo instanceof PDO) {
+        return [];
+    }
+
+    $stmt = $pdo->query(
+        'SELECT id, username, display_name, is_active, created_at
+         FROM admin_users
+         ORDER BY created_at ASC, id ASC'
+    );
+
+    $rows = $stmt->fetchAll();
+    return is_array($rows) ? $rows : [];
+}
+
+function admin_change_password(int $userId, string $currentPassword, string $newPassword, string $confirmPassword): void
+{
+    if ($userId <= 0) {
+        throw new RuntimeException('Пользователь не найден.');
+    }
+    if ($newPassword === '' || strlen($newPassword) < 8) {
+        throw new RuntimeException('Новый пароль должен быть не короче 8 символов.');
+    }
+    if (!hash_equals($newPassword, $confirmPassword)) {
+        throw new RuntimeException('Подтверждение пароля не совпадает.');
+    }
+
+    $pdo = app_pdo();
+    if (!$pdo instanceof PDO || !app_db_ready()) {
+        throw new RuntimeException('База данных недоступна.');
+    }
+
+    $stmt = $pdo->prepare(
+        'SELECT password_hash
+         FROM admin_users
+         WHERE id = :id AND is_active = 1
+         LIMIT 1'
+    );
+    $stmt->execute(['id' => $userId]);
+    $row = $stmt->fetch();
+    if (!is_array($row)) {
+        throw new RuntimeException('Пользователь не найден.');
+    }
+
+    if (!password_verify($currentPassword, (string) $row['password_hash'])) {
+        throw new RuntimeException('Текущий пароль указан неверно.');
+    }
+
+    $update = $pdo->prepare(
+        'UPDATE admin_users
+         SET password_hash = :password_hash
+         WHERE id = :id
+         LIMIT 1'
+    );
+    $update->execute([
+        'id' => $userId,
+        'password_hash' => password_hash($newPassword, PASSWORD_DEFAULT),
+    ]);
+}
+
+function admin_create_user(string $username, string $displayName, string $password, string $confirmPassword): void
+{
+    $username = trim($username);
+    $displayName = trim($displayName);
+
+    if ($username === '') {
+        throw new RuntimeException('Укажите логин пользователя.');
+    }
+    if (!preg_match('/^[a-zA-Z0-9._-]{3,100}$/', $username)) {
+        throw new RuntimeException('Логин: 3-100 символов, только латиница, цифры и ._-');
+    }
+    if ($displayName === '') {
+        throw new RuntimeException('Укажите отображаемое имя.');
+    }
+    if ($password === '' || strlen($password) < 8) {
+        throw new RuntimeException('Пароль должен быть не короче 8 символов.');
+    }
+    if (!hash_equals($password, $confirmPassword)) {
+        throw new RuntimeException('Подтверждение пароля не совпадает.');
+    }
+
+    $pdo = app_pdo();
+    if (!$pdo instanceof PDO || !app_db_ready()) {
+        throw new RuntimeException('База данных недоступна.');
+    }
+
+    $existsStmt = $pdo->prepare(
+        'SELECT COUNT(*)
+         FROM admin_users
+         WHERE username = :username'
+    );
+    $existsStmt->execute(['username' => $username]);
+    if ((int) $existsStmt->fetchColumn() > 0) {
+        throw new RuntimeException('Пользователь с таким логином уже существует.');
+    }
+
+    $insert = $pdo->prepare(
+        'INSERT INTO admin_users (username, password_hash, display_name, is_active)
+         VALUES (:username, :password_hash, :display_name, 1)'
+    );
+    $insert->execute([
+        'username' => $username,
+        'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+        'display_name' => $displayName,
+    ]);
+}

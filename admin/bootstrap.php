@@ -71,6 +71,7 @@ function admin_render_header(string $title, ?array $user = null): void
         <a href="projects.php">Проекты</a>
         <a href="categories.php">Категории</a>
         <a href="products.php">Товары</a>
+        <a href="users.php">Пользователи</a>
         <a href="../catalog.php" target="_blank" rel="noreferrer">Сайт</a>
         <a href="logout.php">Выйти</a>
       </nav>

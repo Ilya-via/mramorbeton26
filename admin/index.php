@@ -45,6 +45,7 @@ admin_render_header('Главная', $user);
       <a class="admin-button" href="product-edit.php">Добавить товар</a>
       <a class="admin-button--ghost" href="categories.php">Открыть категории</a>
       <a class="admin-button--ghost" href="products.php">Открыть товары</a>
+      <a class="admin-button--ghost" href="users.php">Пользователи</a>
     </div>
   </section>
 
