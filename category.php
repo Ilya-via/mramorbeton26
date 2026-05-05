@@ -37,7 +37,7 @@ if ($category === null) {
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=1.3">
+  <link rel="stylesheet" href="styles.css?v=1.4">
   <link rel="stylesheet" href="catalog.css?v=1.1">
   <link rel="stylesheet" href="category.css?v=1.1">
   <?php if ($isTileCatalogLayout) : ?>
@@ -164,8 +164,21 @@ if ($category === null) {
                 <img src="<?= catalog_esc($product['image']) ?>" alt="<?= catalog_esc($product['title']) ?>" loading="lazy">
               </div>
               <div class="product-content">
+                <?php
+                $metaText = trim((string) ($product['meta'] ?? ''));
+                $weightText = trim((string) ($product['weight'] ?? ''));
+                $metaHasWeight = mb_stripos($metaText, 'вес', 0, 'UTF-8') !== false;
+                $showWeight = $weightText !== '' && $weightText !== '—' && !$metaHasWeight;
+                ?>
                 <h3><?= catalog_esc($product['title']) ?></h3>
-                <p class="product-meta"><?= catalog_format_meta_line_html((string) ($product['meta'] ?? '')) ?></p>
+                <div class="product-meta">
+                  <?php if ($metaText !== '') : ?>
+                  <p><?= catalog_format_meta_line_html($metaText) ?></p>
+                  <?php endif; ?>
+                  <?php if ($showWeight) : ?>
+                  <p>Вес: <?= catalog_esc($weightText) ?></p>
+                  <?php endif; ?>
+                </div>
                 <div class="product-bottom">
                   <span class="product-price">Подробнее</span>
                   <span class="product-action" aria-hidden="true">
@@ -283,6 +296,6 @@ if ($category === null) {
     </div>
   </footer>
 
-  <script src="script.js?v=1.1"></script>
+  <script src="script.js?v=1.2"></script>
 </body>
 </html>

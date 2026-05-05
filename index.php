@@ -37,7 +37,7 @@ $projectStack = array_slice($projectCards, 1);
     href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=1.4">
+  <link rel="stylesheet" href="styles.css?v=1.5">
   <link rel="stylesheet" href="lead-form.css?v=1.1">
   <link rel="shortcut icon" href="assets/images/logo.svg" type="image/x-icon">
   <script>

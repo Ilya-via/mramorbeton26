@@ -2006,7 +2006,9 @@ div.product-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0;
+  gap: 4px;
+  margin-top: 6px;
+  margin-bottom: 10px;
   font-size: unset;
   line-height: unset;
   font-weight: unset;
@@ -2062,6 +2064,7 @@ div.product-meta {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 100%;
   margin-top: auto;
   min-height: 58px;
   padding: 0 21px;
@@ -2146,6 +2149,32 @@ div.product-meta {
 
 .product-card-link:active .product-action {
   transform: translateX(1px);
+}
+
+/* На главной в секции "Популярные товары" кнопка должна совпадать с каталогом. */
+.page-home #shop .product-bottom {
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 21px;
+  border-radius: 22px;
+  background: #2b2727;
+  color: #fff;
+}
+
+.page-home #shop .product-price {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #fff;
+}
+
+.page-home #shop .product-action {
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  color: #fff;
 }
 
 .contact-banner {
